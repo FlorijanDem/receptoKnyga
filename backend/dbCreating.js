@@ -2,7 +2,7 @@ const { sql } = require("./dbConnection");
 
 const createDBtables = async () => {
   try {
-    // This is SQL query disable notices 
+    // This is SQL query disable notices
     // (like table already exists) inside createDBtables function
     await sql`
           SET client_min_messages TO WARNING;
@@ -26,7 +26,7 @@ const createDBtables = async () => {
     // no information about this point in jira task
     await sql`
         CREATE TABLE IF NOT EXISTS characteristics (
-            user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+            user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
             height FLOAT,
             weight FLOAT,
             age INTEGER,
@@ -43,8 +43,14 @@ const createDBtables = async () => {
             title TEXT NOT NULL,
             description TEXT NOT NULL,
             method TEXT NOT NULL,
-            type VARCHAR(255),
-            products INTEGER []
+            type VARCHAR(255)
+        )
+    `;
+
+    await sql`
+        CREATE TABLE IF NOT EXISTS recipes_products (
+            recipe_id INTEGER PRIMARY KEY REFERENCES recipes(id) ON DELETE CASCADE ON UPDATE CASCADE,
+            products INTEGER [] 
         )
     `;
 
