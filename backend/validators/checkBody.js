@@ -19,5 +19,6 @@ exports.checkRegisterBody = [
     .trim()
     .notEmpty()
     .isString()
+    .isEmail()
     .withMessage("Must be a valid email format"),
 ]
