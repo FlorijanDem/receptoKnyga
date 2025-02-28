@@ -11,11 +11,14 @@ const {
   checkUpdateRecipesBody,
 } = require("../validators/checkRecipesBody");
 const { checkRecipeParams } = require("../validators/checkRecipesParams");
+const { checkRecipeQuery } = require("../validators/checkRecipesQuery");
 const { validate } = require("../validators/validate");
+
+// Need to add protect function to moct routes
 
 recipeRouter
   .route("/")
-  .get(getAllRecipesHandler)
+  .get(checkRecipeQuery, validate, getAllRecipesHandler)
   .post(checkCreateRecipesBody, validate, createRecipeHandler);
 
 recipeRouter

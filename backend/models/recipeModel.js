@@ -76,24 +76,99 @@ exports.getRecipeById = async (id) => {
 
 exports.createRecipe = async (recipe) => {
   // Needs refinement when DB is ready
-  const newRecipe = await sql`
-    INSERT INTO recipes ${sql(recipe)}
+  const newRecipe = await sql.begin(async () => {
+    const [newRecipe] = await sql`
+    INSERT INTO recipes ("title","photo","method","type","preparation_time","servings", "description", "user_id")
+    VALUES (${recipe.title}, ${recipe.photo}, ${recipe.method}, ${recipe.type}, ${recipe.preparation_time}, ${recipe.servings}, ${recipe.description}, ${recipe.user_id})
+
     RETURNING *
     `;
+
+    const productIDs = await Promise.all(
+      recipe.products.map(async (product) => {
+        let [productID] = await sql`
+        SELECT id
+        FROM products
+        WHERE title = ${product.title}
+        `;
+
+        if (!productID) {
+          [productID] = await sql`
+           INSERT INTO products ("title", "unit_of_meassurement",)
+           VALUES (${product.title}, ${product.unit_of_meassurement})
+
+           RETURNING id
+          `;
+        }
+
+        return productID;
+      })
+    );
+
+    await Promise.all(
+      productIDs.map(async (productID) => {
+        await sql`
+        INSERT INTO recipes_products (recipe_id, product_id)
+        VALUES (${newRecipe.id}, ${productID})
+        `;
+      })
+    );
+
+    return newRecipe;
+  });
 
   return newRecipe;
 };
 
 exports.updateRecipe = async (id, data) => {
-  const columns = Object.keys(data);
+  const columns = Object.keys(data).filter((key) => key !== "products");
 
-  //   Needs refinement when DB is ready
-  const updatedRecipe = await sql`
+  //   Needs testing when DB is ready
+  const updatedRecipe = await sql.begin(async () => {
+    const [updatedRecipe] = await sql`
     UPDATE recipes
     SET ${sql(data, columns)}
     WHERE id = ${id}
     RETURNING *
     `;
+
+    const productIDs = await Promise.all(
+      data.products.map(async (product) => {
+        let [productID] = await sql`
+        SELECT id
+        FROM products
+        WHERE title = ${product.title}
+        `;
+
+        if (!productID) {
+          [productID] = await sql`
+           INSERT INTO products ("title", "unit_of_meassurement",)
+           VALUES (${product.title}, ${product.unit_of_meassurement})
+
+           RETURNING id
+          `;
+        }
+
+        return productID;
+      })
+    );
+
+    await Promise.all(
+      productIDs.map(async (productID) => {
+        sql.begin(async () => {
+          await sql`
+            DELETE FROM recipes_products
+            WHERE recipe_id = ${updatedRecipe.id}
+            `;
+
+          await sql`
+            INSERT INTO recipes_products (recipe_id, product_id)
+            VALUES (${updatedRecipe.id}, ${productID})
+            `;
+        });
+      })
+    );
+  });
 
   return updatedRecipe;
 };
