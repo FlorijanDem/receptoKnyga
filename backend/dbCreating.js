@@ -42,7 +42,13 @@ const createDBtables = async () => {
             title TEXT NOT NULL,
             description TEXT NOT NULL,
             method TEXT NOT NULL,
-            type VARCHAR(255)
+            type VARCHAR(255),
+            photo VARCHAR,
+            -- Preperation time in minutes
+            preperation_time INTEGER,
+            servings INTEGER,
+            user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+            units_of_meassurement VARCHAR
         )
     `;
 
@@ -61,7 +67,7 @@ const createDBtables = async () => {
             id SERIAL PRIMARY KEY, 
             recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE ON UPDATE CASCADE,
             amount VARCHAR(255),
-            product INTEGER REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE
+            product_id INTEGER REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE
         )
     `;
   } catch (err) {
