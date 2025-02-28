@@ -14,12 +14,31 @@ exports.getAllRecipes = async (filter) => {
     JOIN products
     ON recipes_products.product_id = products.id
     ${searchString ? `WHERE ${searchString}` : ""}
+    GROUP BY recipes.id
     ORDER BY ${sortBy} ${order}
     LIMIT ${limit}
     OFFSET ${offset}
     `;
 
   return recipes;
+};
+
+exports.getRecipesCount = async (filter) => {
+  const { searchString } = filter;
+
+  // Needs more work on filtering
+  const [{ recipesCount }] = await sql`
+    SELECT COUNT(receipes.id) AS recipesCount
+    FROM recipes
+    JOIN recipes_products
+    ON recipes.id = recipes_products.recipe_id
+    JOIN products
+    ON recipes_products.product_id = products.id
+    ${searchString ? `WHERE ${searchString}` : ""}
+    GROUP BY recipes.id
+    `;
+
+  return recipesCount;
 };
 
 exports.getRecipeById = async (id) => {
