@@ -9,7 +9,6 @@ const createDBtables = async () => {
       `;
 
     // Create users table if not exists
-    // Max password length by validation rules 20
     // Role do not must be so long
     // Can not say anything about username and email long so 255
     await sql`
@@ -17,7 +16,7 @@ const createDBtables = async () => {
             id SERIAL PRIMARY KEY,
             username VARCHAR(255) UNIQUE NOT NULL,
             role VARCHAR(10) NOT NULL DEFAULT 'user',
-            password VARCHAR(20) NOT NULL,
+            password VARCHAR(255) NOT NULL,
             email VARCHAR(255) UNIQUE NOT NULL
     );`;
 
