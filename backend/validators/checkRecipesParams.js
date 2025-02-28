@@ -1,8 +1,8 @@
-const { params } = require("express-validator");
+const { param } = require("express-validator");
 const { getRecipeById } = require("../models/recipeModel");
 
 exports.checkRecipeParams = [
-  params("id")
+  param("id")
     .isInt({ min: 1 })
     .withMessage("Invalid recipe ID")
     .custom(async (id) => {
