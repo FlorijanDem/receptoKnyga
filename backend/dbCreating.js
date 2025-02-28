@@ -47,8 +47,7 @@ const createDBtables = async () => {
             -- Preperation time in minutes
             preperation_time INTEGER,
             servings INTEGER,
-            user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
-            units_of_meassurement VARCHAR
+            user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
         )
     `;
 
@@ -57,7 +56,8 @@ const createDBtables = async () => {
     await sql`
         CREATE TABLE IF NOT EXISTS products (
             id INTEGER PRIMARY KEY,
-            title TEXT NOT NULL
+            title TEXT NOT NULL,
+            units_of_meassurement VARCHAR
         )
     `;
 
