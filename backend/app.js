@@ -3,6 +3,7 @@ const cors = require("cors");
 const express = require("express");
 const AppError = require("./utils/appError");
 const errorHandler = require("./utils/errorHandler");
+const authRouter = require("./routes/authRouter");
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(
 );
 
 // Routes
+app.use("/api/v1/auth", authRouter);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
