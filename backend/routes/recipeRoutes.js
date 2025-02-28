@@ -15,7 +15,7 @@ const { checkRecipeParams } = require("../validators/checkRecipesParams");
 const { checkRecipeQuery } = require("../validators/checkRecipesQuery");
 const validate = require("../validators/validate");
 
-// Need to add protect function to moct routes
+// Need to add protect function to most routes
 
 recipeRouter
   .route("/")
