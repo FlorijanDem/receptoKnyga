@@ -7,3 +7,23 @@ exports.registerUser = async (data) => {
     `;
   return newUser;
 };
+
+exports.getUserByUsername = async (username) => {
+  const [user] = await sql`
+        SELECT *
+        FROM users
+        WHERE username=${username}
+    `;
+    console.log(user)
+  return user;
+};
+
+exports.getUserByEmail = async (email) => {
+  const [user] = await sql`
+        SELECT *
+        FROM users
+        WHERE email=${email}
+    `;
+    console.log(user)
+  return user;
+};

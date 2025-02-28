@@ -1,12 +1,22 @@
-const {body} = require("express-validator");
-
+const { body } = require("express-validator");
+const { getUserByUsername, getUserByEmail } = require("../models/userModel");
 exports.checkRegisterBody = [
-    body("username")
+  body("username")
     .trim()
     .notEmpty()
     .isLength({ min: 3 })
     .isString()
-    .withMessage("Minimum length of 3 characters"),
+    .withMessage("Minimum length of 3 characters")
+    .custom(async (username) => {
+      try {
+        const user = await getUserByUsername(username);
+
+        if (user) throw new Error("Username already exists");
+        return true;
+      } catch (err) {
+        throw new Error(err.message);
+      }
+    }),
 
   body("password")
     .trim()
@@ -20,5 +30,14 @@ exports.checkRegisterBody = [
     .notEmpty()
     .isString()
     .isEmail()
-    .withMessage("Must be a valid email format"),
-]
+    .withMessage("Must be a valid email format")
+    .custom(async (email) => {
+      try {
+        const user = await getUserByEmail(email);
+        if (user) throw new Error("Email already used");
+        return true;
+      } catch (err) {
+        throw new Error(err.message);
+      }
+    }),
+];
