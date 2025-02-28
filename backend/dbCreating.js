@@ -47,19 +47,22 @@ const createDBtables = async () => {
         )
     `;
 
-    await sql`
-        CREATE TABLE IF NOT EXISTS recipes_products (
-            recipe_id INTEGER PRIMARY KEY REFERENCES recipes(id) ON DELETE CASCADE ON UPDATE CASCADE,
-            products INTEGER [] 
-        )
-    `;
-
     // Create products table,
     // every product have own id who putted into "recipes.products" array
     await sql`
         CREATE TABLE IF NOT EXISTS products (
             id INTEGER PRIMARY KEY,
             title TEXT NOT NULL
+        )
+    `;
+
+    // If I understand correctly, the amount inside can be anything
+    await sql`
+        CREATE TABLE IF NOT EXISTS recipes_products (
+            id SERIAL PRIMARY KEY, 
+            recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE ON UPDATE CASCADE,
+            amount VARCHAR(255),
+            product INTEGER REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE
         )
     `;
   } catch (err) {
