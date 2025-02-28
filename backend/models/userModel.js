@@ -14,7 +14,6 @@ exports.getUserByUsername = async (username) => {
         FROM users
         WHERE username=${username}
     `;
-    console.log(user)
   return user;
 };
 
@@ -24,6 +23,5 @@ exports.getUserByEmail = async (email) => {
         FROM users
         WHERE email=${email}
     `;
-    console.log(user)
   return user;
 };
