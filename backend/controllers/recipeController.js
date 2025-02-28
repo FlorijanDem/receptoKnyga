@@ -50,14 +50,9 @@ exports.getRecipeByIdHandler = async (req, res, next) => {
 
 exports.createRecipeHandler = async (req, res, next) => {
   try {
-    const { title, description, method, type, products } = req.body;
-
     const newRecipe = await createRecipe({
-      title,
-      description,
-      method,
-      type,
-      products,
+      ...req.body,
+      user_id: req.user.id,
     });
 
     res.status(201).json({

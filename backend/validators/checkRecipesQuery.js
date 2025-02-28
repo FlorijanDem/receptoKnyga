@@ -1,5 +1,6 @@
 const { query } = require("express-validator");
 
+// Not finished yet, need to know exact fields
 exports.checkRecipeQuery = [
   query("page").optional().isInt({ min: 1 }).withMessage("Invalid page number"),
 

@@ -1,5 +1,7 @@
 const { body, checkExact } = require("express-validator");
 
+// Need to add validation by user
+
 exports.checkCreateRecipesBody = [
   body("title").trim().isString({ min: 3 }).withMessage("Title is required"),
 
@@ -22,7 +24,7 @@ exports.checkCreateRecipesBody = [
     .isArray({ min: 1 })
     .withMessage("At least one product is required"),
 
-  body("preparationTime")
+  body("preparation_time")
     .trim()
     .isNumeric({ min: 1 })
     .withMessage("Preparation time is required"),
@@ -51,7 +53,7 @@ exports.checkUpdateRecipesBody = [
 
   body("products").optional().isArray({ min: 1 }),
 
-  body("preparationTime").optional().trim().isNumeric({ min: 1 }),
+  body("preparation_time").optional().trim().isNumeric({ min: 1 }),
 
   body("servings").optional().trim().isNumeric({ min: 1 }),
 
