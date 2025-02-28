@@ -13,7 +13,10 @@ exports.registerUser = async (req, res, next) => {
     user.id = undefined;
     user.password = undefined;
 
-    res.status(201).json({ user });
+    res.status(201).json({
+      message: "User created",
+      user,
+    });
   } catch (err) {
     console.error(err);
   }

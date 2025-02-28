@@ -9,7 +9,7 @@ exports.checkRegisterBody = [
     .withMessage(`"username" must be string`)
     .isLength({ min: 3 })
     .withMessage(`"username" minimum length of 3 characters`)
-    // Username only 30 characters because inthe futere our team planned to make
+    // Username only 30 characters because in the futere our team planned to make
     // something like social network with public usernames.
     // Long username can just make some problems.
     .isLength({ max: 30 })
