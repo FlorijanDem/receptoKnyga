@@ -9,13 +9,13 @@ exports.getAllRecipes = async (filter) => {
   const recipes = await sql`
     SELECT recipes.*
     FROM recipes
-    JOIN recipes_products
+    LEFT JOIN recipes_products
     ON recipes.id = recipes_products.recipe_id
-    JOIN products
+    LEFT JOIN products
     ON recipes_products.product_id = products.id
-    ${searchString ? `WHERE ${searchString}` : ""}
+    ${searchString ? sql`WHERE ${searchString}` : sql``}
     GROUP BY recipes.id
-    ORDER BY ${sortBy} ${order}
+    ORDER BY ${sortBy} ${sql.unsafe(order)}
     LIMIT ${limit}
     OFFSET ${offset}
     `;
@@ -27,18 +27,18 @@ exports.getRecipesCount = async (filter) => {
   const { searchString } = filter;
 
   // Needs more work on filtering
-  const [{ recipesCount }] = await sql`
-    SELECT COUNT(receipes.id) AS recipesCount
+  const [recipesCount] = await sql`
+    SELECT COUNT(recipes.id)
     FROM recipes
-    JOIN recipes_products
+    LEFT JOIN recipes_products
     ON recipes.id = recipes_products.recipe_id
-    JOIN products
+    LEFT JOIN products
     ON recipes_products.product_id = products.id
-    ${searchString ? `WHERE ${searchString}` : ""}
+    ${searchString ? sql`WHERE ${searchString}` : sql``}
     GROUP BY recipes.id
     `;
 
-  return recipesCount;
+  return recipesCount?.count;
 };
 
 exports.getRecipeById = async (id) => {

@@ -12,7 +12,7 @@ const {
 } = require("../validators/checkRecipesBody");
 const { checkRecipeParams } = require("../validators/checkRecipesParams");
 const { checkRecipeQuery } = require("../validators/checkRecipesQuery");
-const { validate } = require("../validators/validate");
+const validate = require("../validators/validate");
 
 // Need to add protect function to moct routes
 
