@@ -1,5 +1,5 @@
 const AppError = require("../utils/appError");
-const { registerUser } = require("../models/userModel");
+const { registerUser, getUserByEmail } = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const argon2 = require("argon2");
 
@@ -38,6 +38,29 @@ exports.registerUser = async (req, res, next) => {
     res.status(201).json({
       message: "User created",
       user,
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+exports.loginUser = async (req, res, next) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await getUserByEmail(email);
+
+    const isPasswordCorrect = await argon2.verify(user.password, password);
+    if (!isPasswordCorrect) {
+      res.status(401).json({
+        message: "Invalid email or password",
+      });
+    }
+
+    const token = signToken(user.id);
+    sendCookie(token, res);
+    res.status(200).json({
+      message: "You are logged in!",
     });
   } catch (err) {
     console.error(err);
