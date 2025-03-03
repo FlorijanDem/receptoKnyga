@@ -1,5 +1,9 @@
 const AppError = require("../utils/appError");
-const { registerUser, getUserByEmail } = require("../models/userModel");
+const {
+  registerUser,
+  getUserByEmail,
+  getUserByid,
+} = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const argon2 = require("argon2");
 
@@ -72,4 +76,26 @@ exports.logout = async (req, res, next) => {
   res.status(200).json({
     message: "You are logout",
   });
+};
+
+exports.protect = async (req, res, next) => {
+  try {
+    const token = req.cookies?.jwt;
+
+    if (!token) {
+      return next(new AppError("You are not logged in", 401));
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await getUserByid(decoded.id);
+
+    if (!user) {
+      return next(new AppError("User not found", 401));
+    }
+
+    req.user = user;
+    next();
+  } catch (err) {
+    next(new AppError(err.message, 401));
+  }
 };
