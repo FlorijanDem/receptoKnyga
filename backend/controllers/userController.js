@@ -87,7 +87,7 @@ exports.protect = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await getUserByid(decoded.id);
+    const user = await getUserByid(decoded?.id);
 
     if (!user) {
       return next(new AppError("User not found", 401));

@@ -6,6 +6,7 @@ const {
   updateRecipeHandler,
   deleteRecipeHandler,
 } = require("../controllers/recipeController");
+const { protect } = require("../controllers/userController");
 const {
   checkCreateRecipesBody,
   checkUpdateRecipesBody,
@@ -19,11 +20,11 @@ const validate = require("../validators/validate");
 recipeRouter
   .route("/")
   .get(checkRecipeQuery, validate, getAllRecipesHandler)
-  .post(checkCreateRecipesBody, validate, createRecipeHandler);
+  .post(protect, checkCreateRecipesBody, validate, createRecipeHandler);
 
 recipeRouter
   .route("/:id")
-  .all(checkRecipeParams, validate)
+  .all(protect, checkRecipeParams, validate)
   .get(getRecipeByIdHandler)
   .patch(checkUpdateRecipesBody, validate, updateRecipeHandler)
   .delete(deleteRecipeHandler);
