@@ -25,3 +25,12 @@ exports.getUserByEmail = async (email) => {
     `;
   return user;
 };
+
+exports.getUserByid = async (id) => {
+  const [user] = await sql`
+        SELECT *
+        FROM users
+        WHERE id=${id}
+    `;
+  return user;
+};
