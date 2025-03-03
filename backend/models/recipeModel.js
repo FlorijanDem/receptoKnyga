@@ -50,10 +50,14 @@ exports.getRecipeById = async (id) => {
     WHERE id = ${id}
     `;
 
+    if (!recipe) {
+      throw new Error("Recipe not found");
+    }
+
     const productIDs = await sql`
     SELECT product_id
     FROM recipes_products
-    WHERE recipe_id = ${recipe.id}
+    WHERE recipe_id = ${recipe?.id}
     `;
 
     recipe.products = await Promise.all(
@@ -93,9 +97,12 @@ exports.createRecipe = async (recipe) => {
         `;
 
         if (!productID) {
+          const columns = Object.keys(product);
+          console.log(product);
+          console.log(columns);
+
           [productID] = await sql`
-           INSERT INTO products ("title", "unit_of_meassurement",)
-           VALUES (${product.title}, ${product.unit_of_meassurement})
+           INSERT INTO products ${sql(product)}
 
            RETURNING id
           `;
@@ -109,7 +116,7 @@ exports.createRecipe = async (recipe) => {
       productIDs.map(async (productID) => {
         await sql`
         INSERT INTO recipes_products (recipe_id, product_id)
-        VALUES (${newRecipe.id}, ${productID})
+        VALUES (${newRecipe.id}, ${productID?.id})
         `;
       })
     );

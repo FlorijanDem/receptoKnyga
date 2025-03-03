@@ -52,7 +52,7 @@ exports.createRecipeHandler = async (req, res, next) => {
   try {
     const newRecipe = await createRecipe({
       ...req.body,
-      user_id: req.user.id,
+      user_id: req.user?.id || null,
     });
 
     res.status(201).json({
