@@ -97,10 +97,6 @@ exports.createRecipe = async (recipe) => {
         `;
 
         if (!productID) {
-          const columns = Object.keys(product);
-          console.log(product);
-          console.log(columns);
-
           [productID] = await sql`
            INSERT INTO products ${sql(product)}
 
@@ -139,42 +135,45 @@ exports.updateRecipe = async (id, data) => {
     RETURNING *
     `;
 
-    const productIDs = await Promise.all(
-      data.products.map(async (product) => {
-        let [productID] = await sql`
+    if (data.products?.length > 0) {
+      const productIDs = await Promise.all(
+        data.products?.map(async (product) => {
+          let [productID] = await sql`
         SELECT id
         FROM products
         WHERE title = ${product.title}
         `;
 
-        if (!productID) {
-          [productID] = await sql`
-           INSERT INTO products ("title", "unit_of_meassurement",)
-           VALUES (${product.title}, ${product.unit_of_meassurement})
+          if (!productID) {
+            [productID] = await sql`
+           INSERT INTO products ${sql(product)}
 
            RETURNING id
           `;
-        }
+          }
 
-        return productID;
-      })
-    );
+          return productID;
+        })
+      );
 
-    await Promise.all(
-      productIDs.map(async (productID) => {
-        sql.begin(async () => {
-          await sql`
+      await Promise.all(
+        productIDs?.map(async (productID) => {
+          await sql.begin(async () => {
+            await sql`
             DELETE FROM recipes_products
             WHERE recipe_id = ${updatedRecipe.id}
             `;
 
-          await sql`
+            await sql`
             INSERT INTO recipes_products (recipe_id, product_id)
-            VALUES (${updatedRecipe.id}, ${productID})
+            VALUES (${updatedRecipe.id}, ${productID?.id})
             `;
-        });
-      })
-    );
+          });
+        })
+      );
+    }
+
+    return updatedRecipe;
   });
 
   return updatedRecipe;
