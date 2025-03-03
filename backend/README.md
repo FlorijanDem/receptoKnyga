@@ -86,7 +86,7 @@ node server.js
 
 | Method | Endpoint              | Description           | Auth Required |
 | ------ | --------------------- | --------------------- | ------------- |
-| GET    | `/api/v1/recipes`     | Get all recipes       | ✅ Yes        |
+| GET    | `/api/v1/recipes`     | Get all recipes       | ❌ No         |
 | GET    | `/api/v1/recipes/:id` | Get a specific recipe | ✅ Yes        |
 | POST   | `/api/v1/recipes`     | Create a new recipe   | ✅ Yes        |
 | PUT    | `/api/v1/recipes/:id` | Update a recipe       | ✅ Yes        |
