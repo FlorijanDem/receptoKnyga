@@ -34,7 +34,9 @@ exports.checkRegisterBody = [
     .isLength({ min: 6 })
     .withMessage(`"password" minimum length of 6 characters`)
     .isLength({ max: 20 })
-    .withMessage(`"password" maximum length of 20 characters`),
+    .withMessage(`"password" maximum length of 20 characters`)
+    .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/)
+    .withMessage("Password must contain only letters and at least one number"),
 
   body("password-confirm")
     .trim()
@@ -46,6 +48,8 @@ exports.checkRegisterBody = [
     .withMessage(`"password-confirm" minimum length of 6 characters`)
     .isLength({ max: 20 })
     .withMessage(`"password-confirm" maximum length of 20 characters`)
+    .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/)
+    .withMessage("Password must contain only letters and at least one number")
     .custom((value, { req }) => {
       if (value !== req.body.password) {
         throw new Error("Passwords do not match");
