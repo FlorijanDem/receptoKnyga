@@ -11,11 +11,12 @@ const {
   checkCreateRecipesBody,
   checkUpdateRecipesBody,
 } = require("../validators/checkRecipesBody");
-const { checkRecipeParams } = require("../validators/checkRecipesParams");
+const {
+  checkRecipeParams,
+  checkRecipeCreator,
+} = require("../validators/checkRecipesParams");
 const { checkRecipeQuery } = require("../validators/checkRecipesQuery");
 const validate = require("../validators/validate");
-
-// Need to add protect function to most routes
 
 recipeRouter
   .route("/")
@@ -26,7 +27,12 @@ recipeRouter
   .route("/:id")
   .all(protect, checkRecipeParams, validate)
   .get(getRecipeByIdHandler)
-  .patch(checkUpdateRecipesBody, validate, updateRecipeHandler)
-  .delete(deleteRecipeHandler);
+  .patch(
+    checkRecipeCreator,
+    checkUpdateRecipesBody,
+    validate,
+    updateRecipeHandler
+  )
+  .delete(checkRecipeCreator, validate, deleteRecipeHandler);
 
 module.exports = recipeRouter;
