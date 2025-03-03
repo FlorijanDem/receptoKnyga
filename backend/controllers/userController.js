@@ -66,3 +66,10 @@ exports.loginUser = async (req, res, next) => {
     console.error(err);
   }
 };
+
+exports.logout = async (req, res, next) => {
+  res.clearCookie("jwt");
+  res.status(200).json({
+    message: "You are logout",
+  });
+};
