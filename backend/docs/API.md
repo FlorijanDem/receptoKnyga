@@ -8,12 +8,17 @@ Welcome to the **Recipe Book API** documentation. This API allows you to manage 
 - **Formats:** JSON
 
 ---
-
 ### 🔑 Authentication
 
 Some requests require an JWT token in the cookies.
+### 🔗 Links
+- [Authentication Routes](#-authentication-routes)
+- [Recipes Routes](#-recipes-routes)
 
 # 🔐 Authentication Routes
+
+...
+[Back to API Documentation](#-api-documentation)
 
 ## Register a User (POST)
 
@@ -79,6 +84,9 @@ Some requests require an JWT token in the cookies.
 ```
 
 # 🍲 Recipes Routes
+
+...
+[Back to API Documentation](#-api-documentation)
 
 ## Get a Recipes (GET)
 
