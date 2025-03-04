@@ -1,17 +1,12 @@
 import { ErrorBoundary } from "react-error-boundary";
 import { Suspense } from "react";
 import ErrorFallback from "./components/ErrorFallback";
-import Header from "./components/Header";
-import Main from "./components/Main";
-import Footer from "./components/Footer";
-
+import WelcomePage from "./Pages/WelcomePage";
 function App() {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <Suspense fallback={<div>Loading...</div>}>
-        <Header />
-        <Main />
-        <Footer />
+        <WelcomePage></WelcomePage>
       </Suspense>
     </ErrorBoundary>
   );
