@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useErrorBoundary } from "react-error-boundary";
 import RecipesList from "./RecipesList";
+import SomethingAboutMacros from "./SomethingAboutMacros";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -14,7 +15,7 @@ const Home = () => {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const { data: response } = await axios.get(`${API_URL}/recipess`, {
+        const { data: response } = await axios.get(`${API_URL}/recipes`, {
           withCredentials: true,
         });
 
@@ -41,7 +42,7 @@ const Home = () => {
   }, []);
   return (
     <>
-      <h1>Recipes</h1>
+      <SomethingAboutMacros />
       {loading ? (
         <p>...Loading</p>
       ) : error ? (

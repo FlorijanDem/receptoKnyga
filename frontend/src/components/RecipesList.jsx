@@ -2,7 +2,7 @@ import RecipePreviewCard from "./RecipePreviewCard";
 
 const RecipesList = ({ recipes }) => {
   return (
-    <section>
+    <section className="recipes-list bg-gray-200 flex flex-col gap-5 items-center">
       <h1>Recipes List</h1>
       {recipes?.length === 0 && <p>No recipes found</p>}
       {recipes.map((recipe) => (
