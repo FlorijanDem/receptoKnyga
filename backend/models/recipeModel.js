@@ -104,15 +104,17 @@ exports.createRecipe = async (recipe) => {
           `;
         }
 
-        return productID;
+        const productObj = { id: productID.id, amount: product.amount };
+
+        return productObj;
       })
     );
 
     await Promise.all(
       productIDs.map(async (productID) => {
         await sql`
-        INSERT INTO recipes_products (recipe_id, product_id)
-        VALUES (${newRecipe.id}, ${productID?.id})
+        INSERT INTO recipes_products (recipe_id, product_id, amount)
+        VALUES (${newRecipe.id}, ${productID?.id}, ${productID?.amount})
         `;
       })
     );
@@ -152,7 +154,9 @@ exports.updateRecipe = async (id, data) => {
           `;
           }
 
-          return productID;
+          const productObj = { id: productID.id, amount: product.amount };
+
+          return productObj;
         })
       );
 
@@ -165,8 +169,8 @@ exports.updateRecipe = async (id, data) => {
             `;
 
             await sql`
-            INSERT INTO recipes_products (recipe_id, product_id)
-            VALUES (${updatedRecipe.id}, ${productID?.id})
+            INSERT INTO recipes_products (recipe_id, product_id, amount)
+            VALUES (${updatedRecipe.id}, ${productID?.id}, ${productID?.amount})
             `;
           });
         })
