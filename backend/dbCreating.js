@@ -45,7 +45,7 @@ const createDBtables = async () => {
             type VARCHAR(255),
             photo VARCHAR,
             -- Preperation time in minutes
-            preperation_time INTEGER,
+            preparation_time INTEGER,
             servings INTEGER,
             user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
         )
@@ -55,8 +55,9 @@ const createDBtables = async () => {
     // every product have own id who putted into "recipes.products" array
     await sql`
         CREATE TABLE IF NOT EXISTS products (
-            id INTEGER PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
             title TEXT NOT NULL,
+            amount TEXT,
             units_of_meassurement VARCHAR
         )
     `;
