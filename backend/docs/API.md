@@ -1,6 +1,6 @@
 # 🚀 API Documentation
 
-## 📌 Introduction
+### 📌 Introduction
 
 Welcome to the **Recipe Book API** documentation. This API allows you to manage users, retrieve data, and perform operations.
 
@@ -9,9 +9,11 @@ Welcome to the **Recipe Book API** documentation. This API allows you to manage 
 
 ---
 
-## 🔐 Authentication
+### 🔑 Authentication
 
 Some requests require an JWT token in the cookies.
+
+# 🔐 Authentication Routes
 
 ## Register a User (POST)
 
@@ -77,3 +79,4 @@ This endpoint requires authentication (JWT).
   "message": "You are logout!"
 }
 ```
+
