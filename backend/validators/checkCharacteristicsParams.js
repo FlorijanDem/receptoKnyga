@@ -9,8 +9,8 @@ exports.checkCharacteristicUser = [
         const user = await getUserByid(req.user?.id);
   
         if (user?.role !== "admin") {
-          const recipe = await getCharacteristicsById(id);
-          if (recipe?.user_id !== req.user?.id) {
+          const characteristic = await getCharacteristicsById(id);
+          if (characteristic?.user_id !== req.user?.id) {
             throw new Error("Error editing characteristic");
           }
         }

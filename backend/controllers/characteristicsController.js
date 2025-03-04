@@ -30,7 +30,7 @@ exports.postCharacteristic = async (req, res, next) => {
     try {
       const characteristics = await postCharacteristic({
         ...req.body,
-        user_id: req.user?.id || null,
+        user_id: req.user?.id,
       });
 
       res.status(201).json({
