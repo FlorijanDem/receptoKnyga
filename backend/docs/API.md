@@ -4,7 +4,7 @@
 
 Welcome to the **Recipe Book API** documentation. This API allows you to manage users, retrieve data, and perform operations.
 
-- **Authentication:** Bearer Token (JWT)
+- **Authentication:** JWT
 - **Formats:** JSON
 
 ---
@@ -68,7 +68,7 @@ Some requests require an JWT token in the cookies.
 
 ### 🔑 Authentication Required
 
-This endpoint requires authentication (Bearer Token).
+This endpoint requires authentication (JWT).
 
 ### 📌 Example Response
 
