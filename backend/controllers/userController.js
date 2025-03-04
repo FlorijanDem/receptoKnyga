@@ -33,7 +33,7 @@ exports.registerUser = async (req, res, next) => {
     newUser.password = hashedPassword;
     const user = await registerUser({ newUser });
 
-    const token = signToken(user);
+    const token = signToken(user.id);
     sendCookie(token, res);
 
     user.id = undefined;
@@ -87,6 +87,7 @@ exports.protect = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
     const user = await getUserByid(decoded?.id);
 
     if (!user) {
