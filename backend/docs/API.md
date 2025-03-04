@@ -8,12 +8,16 @@ Welcome to the **Recipe Book API** documentation. This API allows you to manage 
 - **Formats:** JSON
 
 ---
+
 ### 🔑 Authentication
 
 Some requests require an JWT token in the cookies.
+
 ### 🔗 Links
+
 - [Authentication Routes](#-authentication-routes)
 - [Recipes Routes](#-recipes-routes)
+- [Characteristics Routes](#-characteristics-routes)
 
 # 🔐 Authentication Routes
 
@@ -264,4 +268,51 @@ Some requests require an JWT token in the cookies.
     }
   ]
 }
+```
+
+# 📊 Characteristics Routes
+
+...
+[Back to API Documentation](#-api-documentation)
+
+## Get user characteristics (GET)
+
+#### Endpoint: `GET /api/v1/characteristics`
+
+### 📌 Example Response:
+
+```json
+{}
+```
+
+## Add user characteristics (POST)
+
+#### Endpoint: `POST /api/v1/characteristics`
+
+### 📌 Request Body:
+
+```json
+{}
+```
+
+### 📌 Example Response:
+
+```json
+{}
+```
+
+## Edit user characteristics (PUT)
+
+#### Endpoint: `PUT /api/v1/characteristics`
+
+### 📌 Request Body:
+
+```json
+{}
+```
+
+### 📌 Example Response:
+
+```json
+{}
 ```
