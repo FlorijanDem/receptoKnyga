@@ -120,7 +120,7 @@ After a successful user login, the server will generate a **JWT token** and send
 ```json
 {
   "status": "success",
-  "results": "1",
+  "results": "2",
   "data": [
     {
       "id": 17,
