@@ -62,9 +62,11 @@ exports.getRecipeById = async (id) => {
     recipe.products = await Promise.all(
       productIDs.map(async ({ product_id }) => {
         const [product] = await sql`
-          SELECT *
+          SELECT products.title, products.units_of_meassurement, recipes_products.amount
           FROM products
-          WHERE id = ${product_id}
+          JOIN recipes_products
+          ON products.id = recipes_products.product_id
+          WHERE products.id = ${product_id}
           `;
 
         return product;
