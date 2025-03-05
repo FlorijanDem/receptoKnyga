@@ -47,3 +47,11 @@ main {
     @apply mb-3 px-4;
   }
 }
+
+.pagination {
+  @apply flex justify-between p-4;
+
+  button {
+    @apply cursor-pointer;
+  }
+}
