@@ -53,10 +53,10 @@ const Navigation = () => {
             <img src={NavMenuIcon} alt="menu Icon" width="24" height="24" />
           </button>
         </div>
-        <div className="md:max-w-lg w-full mt-4 flex md:mt-0 md:ml-[4rem] search-bar-container flex-grow">
+        <div className="md:max-w-lg w-full mt-4 flex md:mt-0 md:ml-[4rem] search-bar-container items-center flex-grow">
           <SearchBar />
-          <div className="ml-[1rem] mr-[1.563rem] mb-[2.625rem] md:hidden">
-            <button className="md:hidden">
+          <div className="ml-[1rem] mr-[1.563rem]">
+            <button className="">
               <img
                 src={NavFilterIcon}
                 alt="Filter icon"
