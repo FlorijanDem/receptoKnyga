@@ -1,5 +1,5 @@
 import arrowIcon from "../assets/icons/arrow_forward_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg";
-
+import Footer from "../components/Footer";
 const WelcomePage = () => {
   const images = import.meta.glob("../assets/images/welcomepage/*.jpg", {
     eager: true,
@@ -90,6 +90,7 @@ const WelcomePage = () => {
           ))}
         </div>
       </main>
+      <Footer></Footer>
     </>
   );
 };
