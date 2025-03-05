@@ -5,11 +5,11 @@ const SearchBar = () => {
     <div className={`flex justify-center w-full`}>
       <div
         className="flex items-center bg-white border border-[#C3D4E9] rounded-full shadow-sm focus-within:ring-2 focus-within:ring-recipe-primary
-      w-full  h-[44px] 3xl:h-[5rem] "
+      w-full  h-[44px] 2xl:h-[5rem] 3xl:h-[6rem]"
       >
         <button className="p-4 text-gray-500">
           <svg
-            className="w-5 h-5 3xl:w-7 3xl:h-7"
+            className="w-5 h-5 3xl"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -25,7 +25,7 @@ const SearchBar = () => {
         </button>
         <input
           type="text"
-          className="w-full px-4 py-2 text-gray-700 focus:outline-none font-jakarta 3xl:text-[25px]"
+          className="w-full px-4 py-2 text-gray-700 focus:outline-none font-jakarta 2xl:text-[25px] 3xl:text-[30px]"
           placeholder="Search something..."
         />
       </div>
