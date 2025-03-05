@@ -26,9 +26,9 @@ characteristicsRouter
   .route("/admin")
   .get(protect, checkCharacteristicAdmin, validate, getUserCharacteristicsAll);
 
-//Get user characteristics by route /my
+//Get user characteristics by route /
 characteristicsRouter
-  .route("/my")
+  .route("/")
   .get(protect, getUserCharacteristicsMy)
   .post(protect, checkCreateCharacteristicsBody, validate, postCharacteristic)
   .patch(
