@@ -9,16 +9,17 @@ const {
 
 exports.getAllRecipesHandler = async (req, res, next) => {
   try {
-    // const searchString = Object.entries(req.query)
-    //   .map(([key, value]) => `${key} ILIKE '%${value}%'`)
-    //   .join(" AND ");
+    const searchString = Object.entries(req.query)
+      .filter(([key]) => !["limit", "page", "sortBy", "order"].includes(key))
+      .map(([key, value]) => `${key} ILIKE '%${value}%'`)
+      .join(" AND ");
 
     const filter = {
       limit: +req.query.limit || 12,
       offset: (+req.query.page - 1) * +req.query.limit || 0,
       sortBy: req.query.sortBy || "title",
       order: req.query.order || "asc",
-      // searchString,
+      searchString,
     };
 
     const recipes = await getAllRecipes(filter);
