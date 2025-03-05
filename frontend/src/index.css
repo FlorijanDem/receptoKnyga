@@ -1,14 +1,18 @@
 @import "tailwindcss";
 
+main {
+  @apply bg-gray-200;
+}
+
 .recipes-list-container {
-  @apply py-10 bg-gray-200;
+  @apply py-10 w-max mx-auto;
 
   h1 {
     @apply text-center text-3xl mb-6;
   }
 
   .recipes-list {
-    @apply w-max mx-auto flex flex-col gap-5 items-center md:grid md:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4;
+    @apply flex flex-col gap-5 items-center md:grid md:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4;
   }
 }
 
