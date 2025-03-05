@@ -41,12 +41,12 @@ const WelcomePage = () => {
   };
   return (
     <>
-      <header className="md:ml-[2.375rem] mt-[1rem] mb-[3.75rem]">
+      <header className=" ml-[2.375rem] mt-[1rem] mb-[3.75rem]">
         <div className="hidden md:block">{logintemp()}</div>
 
         <div className="md:flex justify-between">
           <h1
-            className={`${StyleText} text-[35px] md:text-[50px] lg:text-[60px] text-sm/[110%]`}
+            className={`${StyleText} text-[35px] md:text-[50px] lg:text-[60px] text-sm/[110%] mb-[1rem]`}
           >
             Hi,we are <span className="text-recipe-primary">Calibrium</span>,
             <br />
