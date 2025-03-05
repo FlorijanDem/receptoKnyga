@@ -44,7 +44,7 @@ exports.registerUser = async (req, res, next) => {
       user,
     });
   } catch (err) {
-    console.error(err);
+    next(new AppError(err.message, 401));
   }
 };
 
@@ -63,11 +63,16 @@ exports.loginUser = async (req, res, next) => {
 
     const token = signToken(user.id);
     sendCookie(token, res);
+
+    user.id = undefined;
+    user.password = undefined;
+    
     res.status(200).json({
-      message: "You are logged in!",
+      message: "User created",
+      user,
     });
   } catch (err) {
-    console.error(err);
+    next(new AppError(err.message, 401));
   }
 };
 
