@@ -37,8 +37,6 @@ exports.getRecipesCount = async (filter) => {
     ${searchString ? sql`WHERE ${searchString}` : sql``}
     `;
 
-  console.log(recipesCount);
-
   return recipesCount?.count;
 };
 
