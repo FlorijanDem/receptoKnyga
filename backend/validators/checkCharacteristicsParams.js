@@ -1,23 +1,18 @@
 const { param } = require("express-validator");
-const { getCharacteristicsById } = require("../models/characteristicsModel");
 const { getUserByid } = require("../models/userModel");
 
+exports.checkCharacteristicAdmin = [
+  param("id").custom(async (id, { req }) => {
+    try {
+      const user = await getUserByid(req.user?.id);
 
-exports.checkCharacteristicUser = [
-    param("id").custom(async (id, { req }) => {
-      try {
-        const user = await getUserByid(req.user?.id);
-  
-        if (user?.role !== "admin") {
-          const characteristic = await getCharacteristicsById(id);
-          if (characteristic?.user_id !== req.user?.id) {
-            throw new Error("Error editing characteristic");
-          }
-        }
-  
-        return true;
-      } catch (error) {
-        throw new Error(error.message);
+      if (user?.role !== "admin") {
+        throw new Error("Error geting characteristics");
       }
-    }),
-  ];
+
+      return true;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }),
+];

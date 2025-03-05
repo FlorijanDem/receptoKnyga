@@ -2,20 +2,18 @@ const express = require("express");
 const characteristicsRouter = express.Router();
 //import controller
 const {
-  getUserCharacteristics,
-  getUserCharacteristicsById,
-  postCharacteristic,
+  getUserCharacteristicsAll,
   updateCharacteristic,
   deleteCharacteristic,
+  getUserCharacteristicsMy,
 } = require("../controllers/characteristicsController");
 //import body validator
 const {
-  checkCreateCharacteristicsBody,
   checkUpdateCharacteristicsBody,
 } = require("../validators/checkCharacteristicsBody");
-//import params validator
+//import admin validator
 const {
-  checkCharacteristicUser,
+  checkCharacteristicAdmin,
 } = require("../validators/checkCharacteristicsParams");
 //import user protect controller
 const { protect } = require("../controllers/userController");
@@ -23,20 +21,19 @@ const { protect } = require("../controllers/userController");
 const validate = require("../validators/validate");
 
 characteristicsRouter
-  .route("/")
-  .get(protect, getUserCharacteristics)
-  .post(protect, checkCreateCharacteristicsBody, validate, postCharacteristic);
+  .route("/admin")
+  .get(protect, checkCharacteristicAdmin, validate, getUserCharacteristicsAll);
 
+//Get user characteristics by route /my
 characteristicsRouter
-  .route("/:id")
-  .get(protect, checkCharacteristicUser, validate, getUserCharacteristicsById)
+  .route("/my")
+  .get(protect, getUserCharacteristicsMy)
   .patch(
     protect,
-    checkCharacteristicUser,
     checkUpdateCharacteristicsBody,
     validate,
     updateCharacteristic
   )
-  .delete(protect, checkCharacteristicUser, validate, deleteCharacteristic);
+  .delete(protect, validate, deleteCharacteristic);
 
 module.exports = characteristicsRouter;
