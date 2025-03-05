@@ -35,7 +35,6 @@ exports.getRecipesCount = async (filter) => {
     LEFT JOIN products
     ON recipes_products.product_id = products.id
     ${searchString ? sql`WHERE ${searchString}` : sql``}
-    GROUP BY recipes.id
     `;
 
   return recipesCount?.count;
