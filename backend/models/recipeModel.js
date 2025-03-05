@@ -89,6 +89,8 @@ exports.createRecipe = async (recipe) => {
 
     const productIDs = await Promise.all(
       recipe.products.map(async (product) => {
+        console.log(product);
+
         let [productID] = await sql`
         SELECT id
         FROM products
@@ -96,8 +98,9 @@ exports.createRecipe = async (recipe) => {
         `;
 
         if (!productID) {
+          // Need to fix products table
           [productID] = await sql`
-           INSERT INTO products ${sql(product)}
+           INSERT INTO products ${sql(product, "title", "units_of_measurement")}
 
            RETURNING id
           `;
