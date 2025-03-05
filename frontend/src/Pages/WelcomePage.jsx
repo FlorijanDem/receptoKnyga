@@ -33,8 +33,14 @@ const WelcomePage = () => {
       <Link to="/login">
         <button className={`${StyleText} md:mb-[10px]`}>
           <span className="flex border-b-3 border-recipe-third mb-[-1px]">
-            <img src={arrowIcon} alt="Arrow Icon" className="md:w-[10px]" />
-            <span className="text-[24px] md:text-[10px]">LOGIN</span>
+            <img
+              src={arrowIcon}
+              alt="Arrow Icon"
+              className="w-[20px] md:w-[15px] 2xl:w-[20px]"
+            />
+            <span className="text-[24px] md:text-[10px] 2xl:text-[20px]">
+              LOGIN
+            </span>
           </span>
         </button>
       </Link>
@@ -47,7 +53,7 @@ const WelcomePage = () => {
 
         <div className="md:flex justify-between">
           <h1
-            className={`${StyleText} text-[35px] md:text-[50px] lg:text-[60px] text-sm/[110%] mb-[1rem]`}
+            className={`${StyleText} text-[35px] md:text-[50px] lg:text-[60px] 2xl:text-[80px] text-sm/[110%] mb-[1rem]`}
           >
             Hi,we are <span className="text-recipe-primary">Calibrium</span>,
             <br />
@@ -56,7 +62,7 @@ const WelcomePage = () => {
           </h1>
 
           <p
-            className={`${StyleText} md:text-[20px] lg:text-[24px] hidden md:block text-sm/[100%]`}
+            className={`${StyleText} md:text-[20px] lg:text-[24px] 2xl:text-[50px] hidden md:block text-sm/[100%]`}
           >
             We specialize in helping you achieve{" "}
             <br className="hidden md:block" /> your health goals through
@@ -72,7 +78,7 @@ const WelcomePage = () => {
         <div className="md:hidden">{logintemp()}</div>
       </header>
       <main>
-        <div className="columns-2 md:columns-3 lg:columns-4 gap-1.25">
+        <div className="columns-2 md:columns-3 lg:columns-4 2xl:columns-5 gap-1.25">
           {imageArray.map((src, index) => (
             <Link to="/login" key={index}>
               <div className="break-inside-avoid mb-1.25 group relative overflow-hidden bg-recipe-third">
