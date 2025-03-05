@@ -38,6 +38,8 @@ Some requests require an JWT token in the cookies.
 
 #### Endpoint: `POST /api/v1/auth/register`
 
+After a successful user registration, the server will generate a **JWT token** and send it inside an **HTTP-only cookie** for secure authentication.
+
 ### 📌 Request Body:
 
 ```json
@@ -65,6 +67,8 @@ Some requests require an JWT token in the cookies.
 ## Login a User (POST)
 
 #### Endpoint: `POST /api/v1/auth/login`
+
+After a successful user login, the server will generate a **JWT token** and send it inside an **HTTP-only cookie** for secure authentication.
 
 ### 📌 Request Body:
 
