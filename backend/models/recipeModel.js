@@ -29,12 +29,16 @@ exports.getRecipesCount = async (filter) => {
   // Needs more work on filtering
   const [recipesCount] = await sql`
     SELECT COUNT(recipes.id)
-    FROM recipes
-    LEFT JOIN recipes_products
-    ON recipes.id = recipes_products.recipe_id
-    LEFT JOIN products
-    ON recipes_products.product_id = products.id
-    ${searchString ? sql`WHERE ${searchString}` : sql``}
+    FROM (
+      SELECT recipes.id
+      FROM recipes
+      LEFT JOIN recipes_products
+      ON recipes.id = recipes_products.recipe_id
+      LEFT JOIN products
+      ON recipes_products.product_id = products.id
+      ${searchString ? sql`WHERE ${searchString}` : sql``}
+      GROUP BY recipes.id
+    ) AS recipes
     `;
 
   return recipesCount?.count;
