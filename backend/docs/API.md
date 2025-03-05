@@ -69,7 +69,12 @@ Some requests require an JWT token in the cookies.
 
 ```json
 {
-  "message": "You are logged in!"
+    "message": "User created",
+    "user": {
+        "username": "john",
+        "role": "user",
+        "email": "john@example.com"
+    }
 }
 ```
 
