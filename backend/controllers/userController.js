@@ -44,7 +44,7 @@ exports.registerUser = async (req, res, next) => {
       user,
     });
   } catch (err) {
-    next(new AppError(err.message, 401));
+    next(new AppError(err.message, 500));
   }
 };
 
@@ -72,7 +72,7 @@ exports.loginUser = async (req, res, next) => {
       user,
     });
   } catch (err) {
-    next(new AppError(err.message, 401));
+    next(new AppError(err.message, 500));
   }
 };
 
