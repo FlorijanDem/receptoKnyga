@@ -29,12 +29,16 @@ exports.getRecipesCount = async (filter) => {
   // Needs more work on filtering
   const [recipesCount] = await sql`
     SELECT COUNT(recipes.id)
-    FROM recipes
-    LEFT JOIN recipes_products
-    ON recipes.id = recipes_products.recipe_id
-    LEFT JOIN products
-    ON recipes_products.product_id = products.id
-    ${searchString ? sql`WHERE ${searchString}` : sql``}
+    FROM (
+      SELECT recipes.id
+      FROM recipes
+      LEFT JOIN recipes_products
+      ON recipes.id = recipes_products.recipe_id
+      LEFT JOIN products
+      ON recipes_products.product_id = products.id
+      ${searchString ? sql`WHERE ${searchString}` : sql``}
+      GROUP BY recipes.id
+    ) AS recipes
     `;
 
   return recipesCount?.count;
@@ -62,9 +66,11 @@ exports.getRecipeById = async (id) => {
     recipe.products = await Promise.all(
       productIDs.map(async ({ product_id }) => {
         const [product] = await sql`
-          SELECT *
+          SELECT products.title, products.units_of_meassurement, recipes_products.amount
           FROM products
-          WHERE id = ${product_id}
+          JOIN recipes_products
+          ON products.id = recipes_products.product_id
+          WHERE products.id = ${product_id}
           `;
 
         return product;
@@ -89,6 +95,8 @@ exports.createRecipe = async (recipe) => {
 
     const productIDs = await Promise.all(
       recipe.products.map(async (product) => {
+        console.log(product);
+
         let [productID] = await sql`
         SELECT id
         FROM products
@@ -96,8 +104,9 @@ exports.createRecipe = async (recipe) => {
         `;
 
         if (!productID) {
+          // Need to fix products table
           [productID] = await sql`
-           INSERT INTO products ${sql(product)}
+           INSERT INTO products ${sql(product, "title", "units_of_meassurement")}
 
            RETURNING id
           `;
@@ -147,7 +156,7 @@ exports.updateRecipe = async (id, data) => {
 
           if (!productID) {
             [productID] = await sql`
-           INSERT INTO products ${sql(product)}
+           INSERT INTO products ${sql(product, "title", "units_of_meassurement")}
 
            RETURNING id
           `;
