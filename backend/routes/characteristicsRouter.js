@@ -3,6 +3,7 @@ const characteristicsRouter = express.Router();
 //import controller
 const {
   getUserCharacteristicsAll,
+  postCharacteristic,
   updateCharacteristic,
   deleteCharacteristic,
   getUserCharacteristicsMy,
@@ -10,6 +11,7 @@ const {
 //import body validator
 const {
   checkUpdateCharacteristicsBody,
+  checkCreateCharacteristicsBody,
 } = require("../validators/checkCharacteristicsBody");
 //import admin validator
 const {
@@ -28,6 +30,7 @@ characteristicsRouter
 characteristicsRouter
   .route("/my")
   .get(protect, getUserCharacteristicsMy)
+  .post(protect, checkCreateCharacteristicsBody, validate, postCharacteristic)
   .patch(
     protect,
     checkUpdateCharacteristicsBody,
