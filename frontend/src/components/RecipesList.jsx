@@ -42,6 +42,7 @@ const RecipesList = () => {
         setRecipeCount(+response.results);
         setError(null);
         setLoading(false);
+        window.scrollTo({ top: 0, behavior: "smooth" });
       } catch (error) {
         setLoading(false);
         if (axios.isAxiosError(error)) {
