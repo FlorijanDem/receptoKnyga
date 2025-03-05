@@ -156,7 +156,7 @@ exports.updateRecipe = async (id, data) => {
 
           if (!productID) {
             [productID] = await sql`
-           INSERT INTO products ${sql(product)}
+           INSERT INTO products ${sql(product, "title", "units_of_meassurement")}
 
            RETURNING id
           `;
