@@ -13,6 +13,16 @@ Welcome to the **Recipe Book API** documentation. This API allows you to manage 
 
 Some requests require an JWT token in the cookies.
 
+#### Common JWT Verification Errors
+
+| **Error**                    | **Cause**                                            |
+| ---------------------------- | ---------------------------------------------------- |
+| **Token missing**            | No token was provided in the request.                |
+| **Invalid token**            | The token was modified or signed with the wrong key. |
+| **Token expired**            | The `exp` claim has passed.                          |
+| **Invalid issuer (`iss`)**   | The token is from an unknown or incorrect issuer.    |
+| **Invalid audience (`aud`)** | The token is meant for another application.          |
+
 ### 🔗 Links
 
 - [Authentication Routes](#-authentication-routes)
@@ -69,12 +79,12 @@ Some requests require an JWT token in the cookies.
 
 ```json
 {
-    "message": "User created",
-    "user": {
-        "username": "john",
-        "role": "user",
-        "email": "john@example.com"
-    }
+  "message": "User created",
+  "user": {
+    "username": "john",
+    "role": "user",
+    "email": "john@example.com"
+  }
 }
 ```
 
