@@ -99,3 +99,7 @@ node server.js
 | GET    | `/api/v1/characteristics` | Get user characteristics  | ✅ Yes        |
 | POST   | `/api/v1/characteristics` | Add user characteristics  | ✅ Yes        |
 | PUT    | `/api/v1/characteristics` | Edit user characteristics | ✅ Yes        |
+
+### 🍽️ Recipes search
+
+| GET    | `/api/v1/recipes/search?q=paieškos_tekstas`     | Search recipes       | ❌ No         |

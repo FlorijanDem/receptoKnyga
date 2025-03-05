@@ -1,12 +1,13 @@
 require("dotenv").config();
 const server = require("./app");
 const { sql, testDBConnection } = require("./dbConnection");
-const { createDBtables } = require("./dbCreating");
+const { createDBtables, dbSettings } = require("./dbCreating");
 
 (async () => {
   try {
     await testDBConnection();
     await createDBtables();
+    await dbSettings();
     server.listen(process.env.PORT, () => {
       console.log(`Server is running on port ${process.env.PORT}`);
     });

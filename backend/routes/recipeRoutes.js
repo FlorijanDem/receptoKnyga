@@ -5,6 +5,7 @@ const {
   createRecipeHandler,
   updateRecipeHandler,
   deleteRecipeHandler,
+  searchRecipesHandler,
 } = require("../controllers/recipeController");
 const { protect } = require("../controllers/userController");
 const {
@@ -17,6 +18,9 @@ const {
 } = require("../validators/checkRecipesParams");
 const { checkRecipeQuery } = require("../validators/checkRecipesQuery");
 const validate = require("../validators/validate");
+
+// Search endpoint should be above other routes to avoid authentication
+recipeRouter.get("/search", searchRecipesHandler);
 
 recipeRouter
   .route("/")
