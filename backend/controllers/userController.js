@@ -68,7 +68,7 @@ exports.loginUser = async (req, res, next) => {
     user.password = undefined;
     
     res.status(200).json({
-      message: "User created",
+      message: "You are login",
       user,
     });
   } catch (err) {
