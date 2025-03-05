@@ -4,16 +4,23 @@ import NavSettingIcon from "../assets/icons/Settings.svg";
 import NavCartIcon from "../assets/icons/Cart.svg";
 import NavProfileIcon from "../assets/icons/Profil.svg";
 import { IoClose } from "react-icons/io5";
+import { Link } from "react-router";
+
+const ICON_SIZE = 44;
+
+const IconButton = ({ icon, to, onClick }) => (
+  <Link to={to} onClick={onClick}>
+    <button className="transition-transform duration-300 hover:scale-110 active:scale-90 mx-1 mb-3">
+      <img src={icon} alt={icon} width={ICON_SIZE} height={ICON_SIZE} />
+    </button>
+  </Link>
+);
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const sidebarRef = useRef(null);
 
   const handleClickOutside = (event) => {
-    if (
-      isOpen &&
-      sidebarRef.current &&
-      !sidebarRef.current.contains(event.target)
-    ) {
+    if (isOpen && !sidebarRef.current.contains(event.target)) {
       toggleSidebar();
     }
   };
@@ -24,9 +31,6 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
-
-  const iconStyle =
-    "transition-transform duration-300 hover:scale-110 active:scale-90 mx-1 mb-3";
 
   return (
     <>
@@ -46,30 +50,26 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           <IoClose className={`h-[25px] w-[25px]`} />
         </button>
 
-        <button
-          onClick={() => console.log("Redirecting to Like Page...")}
-          className={iconStyle}
-        >
-          <img src={NavLikeIcon} alt="like Icon" width="44" height="44" />
-        </button>
-        <button
-          onClick={() => console.log("Redirecting to Settings Page...")}
-          className={iconStyle}
-        >
-          <img src={NavSettingIcon} alt="setting Icon" width="44" height="44" />
-        </button>
-        <button
-          onClick={() => console.log("Redirecting to Cart Page...")}
-          className={iconStyle}
-        >
-          <img src={NavCartIcon} alt="cart Icon" width="44" height="44" />
-        </button>
-        <button
-          onClick={() => console.log("Redirecting to Profile Page...")}
-          className={iconStyle}
-        >
-          <img src={NavProfileIcon} alt="profile Icon" width="44" height="44" />
-        </button>
+        <IconButton
+          icon={NavLikeIcon}
+          to="/Favourite"
+          onClick={toggleSidebar}
+        />
+        <IconButton
+          icon={NavSettingIcon}
+          to="/Settings"
+          onClick={toggleSidebar}
+        />
+        <IconButton
+          icon={NavCartIcon}
+          to="/ShoppingList"
+          onClick={toggleSidebar}
+        />
+        <IconButton
+          icon={NavProfileIcon}
+          to="/Profile"
+          onClick={toggleSidebar}
+        />
       </div>
     </>
   );

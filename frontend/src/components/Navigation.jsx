@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router";
 import NavLikeIcon from "../assets/icons/Like.svg";
 import NavSettingIcon from "../assets/icons/Settings.svg";
 import NavCartIcon from "../assets/icons/Cart.svg";
@@ -10,10 +11,25 @@ import SearchBar from "./SearchBar";
 import Sidebar from "./Sidebar";
 
 const icons = [
-  { src: NavLikeIcon, alt: "like Icon", pagename: "Like" },
-  { src: NavSettingIcon, alt: "setting Icon", pagename: "Settings" },
-  { src: NavCartIcon, alt: "cart Icon", pagename: "Cart" },
-  { src: NavProfileIcon, alt: "profile Icon", pagename: "Profile" },
+  { src: NavLikeIcon, alt: "like Icon", pagename: "Like", path: "/Favourite" },
+  {
+    src: NavSettingIcon,
+    alt: "setting Icon",
+    pagename: "Settings",
+    path: "/settings",
+  },
+  {
+    src: NavCartIcon,
+    alt: "cart Icon",
+    pagename: "Cart",
+    path: "/ShoppingList",
+  },
+  {
+    src: NavProfileIcon,
+    alt: "profile Icon",
+    pagename: "Profile",
+    path: "/profile",
+  },
 ];
 
 const Navigation = () => {
@@ -28,9 +44,11 @@ const Navigation = () => {
     <nav>
       <div className="flex flex-col md:flex-row items-center mx-[1.563rem] mt-[2rem] mb-[2rem]">
         <div className="flex justify-between items-center w-full md:w-auto">
-          <h1 className="font-jakarta text-recipe-primary font-bold tracking-[-1px] text-[24px] md:text-[32px] md:ml-[3.75rem]">
-            Calibrium
-          </h1>
+          <Link to="/">
+            <h1 className="font-jakarta text-recipe-primary font-bold tracking-[-1px] text-[24px] md:text-[32px] md:ml-[3.75rem]">
+              Calibrium
+            </h1>
+          </Link>
           <button className="md:hidden" onClick={toggleSidebar}>
             <img src={NavMenuIcon} alt="menu Icon" width="24" height="24" />
           </button>
@@ -50,13 +68,11 @@ const Navigation = () => {
 
         <div className="hidden md:flex md:ml-auto md:justify-end md:mr-[3.75rem] desktop-icons flex-shrink-0">
           {icons.map((icon, index) => (
-            <button
-              key={index}
-              className={iconStyle}
-              onClick={() => console.log(`Redirecting to ${icon.pagename}...`)}
-            >
-              <img src={icon.src} alt={icon.alt} width="44" height="44" />
-            </button>
+            <Link to={icon.path} key={index}>
+              <button className={iconStyle}>
+                <img src={icon.src} alt={icon.alt} width="44" height="44" />
+              </button>
+            </Link>
           ))}
         </div>
       </div>
