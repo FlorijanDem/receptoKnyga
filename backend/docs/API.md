@@ -299,37 +299,31 @@ After a successful user login, the server will generate a **JWT token** and send
 #### Endpoint: `GET /api/v1/characteristics`
 
 ### 📌 Example Response:
-
+If you will not have characteristics you get
 ```json
 {}
 ```
+If you have
 
-## Add user characteristics (POST)
 
-#### Endpoint: `POST /api/v1/characteristics`
+
+## Edit or add user characteristics (PATCH)
+
+#### Endpoint: `PATCH /api/v1/characteristics`
 
 ### 📌 Request Body:
 
 ```json
-{}
+{
+  "height": 180,
+  "weight": 75,
+  "age": 25,
+  "gender": "male"
+}
 ```
-
-### 📌 Example Response:
 
 ```json
-{}
 ```
-
-## Edit user characteristics (PUT)
-
-#### Endpoint: `PUT /api/v1/characteristics`
-
-### 📌 Request Body:
-
-```json
-{}
-```
-
 ### 📌 Example Response:
 
 ```json
