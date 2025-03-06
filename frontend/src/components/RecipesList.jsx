@@ -67,7 +67,7 @@ const RecipesList = () => {
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
-        <p>{error}</p>
+        <p className="error">{error}</p>
       ) : (
         <section className="recipes-list-container">
           <h1>Recipes List</h1>

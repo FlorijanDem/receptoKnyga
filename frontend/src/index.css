@@ -55,3 +55,19 @@ main {
     @apply cursor-pointer;
   }
 }
+
+.error {
+  @apply text-red-500 w-max max-w-1/2 mx-auto pt-20;
+}
+
+.error-fallback {
+  @apply w-max mx-auto mt-20;
+
+  pre {
+    @apply text-red-500;
+  }
+
+  button {
+    @apply cursor-pointer border px-2 rounded;
+  }
+}
