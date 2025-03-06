@@ -1,6 +1,6 @@
 # 🚀 API Documentation
 
-### 📌 Introduction
+## 📌 Introduction
 
 Welcome to the **Recipe Book API** documentation. This API allows you to manage users, retrieve data, and perform operations.
 
@@ -29,18 +29,18 @@ Some requests require an JWT token in the cookies.
 - [Recipes Routes](#-recipes-routes)
 - [Characteristics Routes](#-characteristics-routes)
 
-# 🔐 Authentication Routes
+## 🔐 Authentication Routes
 
 ...
 [Back to API Documentation](#-api-documentation)
 
 ## Register a User (POST)
 
-#### Endpoint: `POST /api/v1/auth/register`
+### Endpoint: `POST /api/v1/auth/register`
 
 After a successful user registration, the server will generate a **JWT token** and send it inside an **HTTP-only cookie** for secure authentication.
 
-### 📌 Request Body:
+📌 Request Body: (Required Fields: `username`, `password`, `password-confirm`, `email`)
 
 ```json
 {
@@ -51,7 +51,7 @@ After a successful user registration, the server will generate a **JWT token** a
 }
 ```
 
-### 📌 Example Response:
+📌 Example Response:
 
 ```json
 {
@@ -66,11 +66,11 @@ After a successful user registration, the server will generate a **JWT token** a
 
 ## Login a User (POST)
 
-#### Endpoint: `POST /api/v1/auth/login`
+### Endpoint: `POST /api/v1/auth/login`
 
 After a successful user login, the server will generate a **JWT token** and send it inside an **HTTP-only cookie** for secure authentication.
 
-### 📌 Request Body:
+📌 Request Body: (Required Fields: `email`, `password`)
 
 ```json
 {
@@ -79,7 +79,7 @@ After a successful user login, the server will generate a **JWT token** and send
 }
 ```
 
-### 📌 Example Response:
+📌 Example Response:
 
 ```json
 {
@@ -94,11 +94,11 @@ After a successful user login, the server will generate a **JWT token** and send
 
 ## Logout a User (POST)
 
-#### Endpoint: `POST /api/v1/auth/logout`
+### Endpoint: `POST /api/v1/auth/logout`
 
-### 🔑 Authentication Required
+🔑 Authentication Required
 
-### 📌 Example Response:
+📌 Example Response: (Requires JWT Token in Cookie, this just delete it)
 
 ```json
 {
@@ -106,16 +106,16 @@ After a successful user login, the server will generate a **JWT token** and send
 }
 ```
 
-# 🍲 Recipes Routes
+## 🍲 Recipes Routes
 
 ...
 [Back to API Documentation](#-api-documentation)
 
-## Get a Recipes (GET)
+## Get Recipes (GET)
 
-#### Endpoint: `GET /api/v1/recipes`
+### Endpoint: `GET /api/v1/recipes`
 
-### 📌 Example Response:
+📌 Example Response:
 
 ```json
 {
@@ -148,13 +148,13 @@ After a successful user login, the server will generate a **JWT token** and send
 }
 ```
 
-## Get one Recipe (GET)
+## Get a Single Recipe (GET)
 
-#### Endpoint: `GET /api/v1/recipes/:id`
+### Endpoint: `GET /api/v1/recipes/:id`
 
-### 🔑 Authentication Required
+🔑 Authentication Required
 
-### 📌 Example Response:
+📌 Example Response:
 
 ```json
 {
@@ -176,11 +176,11 @@ After a successful user login, the server will generate a **JWT token** and send
 
 ## Add Recipe (POST)
 
-#### Endpoint: `POST /api/v1/recipes`
+### Endpoint: `POST /api/v1/recipes`
 
-### 🔑 Authentication Required
+🔑 Authentication Required
 
-### 📌 Request Body:
+📌 Request Body: (Required Fields: `title`, `photo`, `method`, `type`, `preparation_time`, `servings`, `description`, `products`)
 
 ```json
 {
@@ -198,7 +198,7 @@ After a successful user login, the server will generate a **JWT token** and send
 }
 ```
 
-### 📌 Example Response:
+📌 Example Response:
 
 ```json
 {
@@ -219,11 +219,11 @@ After a successful user login, the server will generate a **JWT token** and send
 
 ## Edit Recipe (PATCH)
 
-#### Endpoint: `PATCH /api/v1/recipes/:id`
+### Endpoint: `PATCH /api/v1/recipes/:id`
 
-### 🔑 Authentication Required
+🔑 Authentication Required
 
-### 📌 Request Body:
+📌 Request Body:
 
 ```json
 {
@@ -241,7 +241,7 @@ After a successful user login, the server will generate a **JWT token** and send
 }
 ```
 
-### 📌 Example Response:
+📌 Example Response:
 
 ```json
 {
@@ -262,11 +262,11 @@ After a successful user login, the server will generate a **JWT token** and send
 
 ## Delete one Recipe (DELETE)
 
-#### Endpoint: `DELETE /api/v1/recipes/:id`
+### Endpoint: `DELETE /api/v1/recipes/:id`
 
-### 🔑 Authentication Required
+🔑 Authentication Required
 
-### 📌 Example Response:
+📌 Example Response:
 
 (I think in the future can be change to 204 status code)
 
@@ -289,16 +289,18 @@ After a successful user login, the server will generate a **JWT token** and send
 }
 ```
 
-# 📊 Characteristics Routes
+## 📊 Characteristics Routes
 
 ...
 [Back to API Documentation](#-api-documentation)
 
 ## Get user characteristics (GET)
 
-#### Endpoint: `GET /api/v1/characteristics`
+### Endpoint: `GET /api/v1/characteristics`
 
-### 📌 Example Response:
+🔑 Authentication Required
+
+📌 Example Response:
 
 If you do not have characteristics, you will get
 
@@ -323,9 +325,11 @@ If you have characteristics, you will get (values can be null)
 
 ## Edit or add user characteristics (PATCH)
 
-#### Endpoint: `PATCH /api/v1/characteristics`
+### Endpoint: `PATCH /api/v1/characteristics`
 
-### 📌 Request Body:
+🔑 Authentication Required
+
+📌 Request Body:
 
 ```json
 {
@@ -343,7 +347,7 @@ If you have characteristics, you will get (values can be null)
 }
 ```
 
-### 📌 Example Response:
+📌 Example Response:
 
 ```json
 {
