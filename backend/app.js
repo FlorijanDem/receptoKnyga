@@ -5,6 +5,8 @@ const AppError = require("./utils/appError");
 const errorHandler = require("./utils/errorHandler");
 const authRouter = require("./routes/authRouter");
 const recipeRouter = require("./routes/recipeRoutes");
+const characteristicsRouter = require("./routes/characteristicsRouter");
+
 
 const app = express();
 
@@ -20,6 +22,7 @@ app.use(
 // Routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/recipes", recipeRouter);
+app.use("/api/v1/characteristics", characteristicsRouter)
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
