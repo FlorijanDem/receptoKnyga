@@ -58,6 +58,7 @@ const RecipePage = () => {
             <p className="text-sm text-gray-600">{recipe.data.description}</p>
             <p className="text-sm text-gray-600">{recipe.data.method}</p>
             <p className="text-sm text-gray-600">Type: {recipe.data.type}</p>
+            <p className="text-sm text-gray-600">Preparation time: {recipe.data.preparation_time} m.</p>
             <div className="flex justify-between text-sm mt-2">
               <span>Protein: 34g</span>
               <span>Fat: 30g</span>
