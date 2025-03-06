@@ -9,6 +9,7 @@ const RecipePage = () => {
   const [recipe, setRecipe] = useState(null);
   const [error, setError] = useState(null);
   const { id } = useParams();
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
@@ -16,7 +17,10 @@ const RecipePage = () => {
           withCredentials: true,
         });
         setRecipe(response.data);
+        setError(null);
+        setLoading(false)
       } catch (err) {
+        setLoading(false)
         if (axios.isAxiosError(error)) {
           if (error.response) {
             setError(error.response.data.message);
@@ -26,44 +30,52 @@ const RecipePage = () => {
             setError("Network error. Please check your internet connection.");
           }
         } else {
-          showBoundary(error);
+          setError(error)
         }
       }
     };
     fetchRecipe();
   }, [id]);
-  console.log(recipe.data);
   return (
-    <div className="p-4 max-w-md mx-auto">
-      {/* Recipe Card */}
-      <div className="bg-white shadow-md rounded-lg p-4">
-        <img
-          src={recipe.data.photo}
-          alt={recipe.data.title}
-          className="w-full rounded-lg mb-2"
-        />
-        <div className="flex justify-between items-center">
-          <h2 className="text-lg font-bold">{recipe.data.title}</h2>
-          <FaHeart className="text-red-500" />
+    <>
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p>{error}</p>
+      ) : (
+        <div className="p-4 max-w-md mx-auto">
+          {/* Recipe Card */}
+          <div className="bg-white shadow-md rounded-lg p-4">
+            <img
+              src={recipe.data.photo}
+              alt={recipe.data.title}
+              className="w-full rounded-lg mb-2"
+            />
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-bold">{recipe.data.title}</h2>
+              <FaHeart className="text-red-500" />
+            </div>
+            <p className="text-sm text-gray-600">{recipe.data.description}</p>
+            <p className="text-sm text-gray-600">{recipe.data.method}</p>
+            <p className="text-sm text-gray-600">Type: {recipe.data.type}</p>
+            <div className="flex justify-between text-sm mt-2">
+              <span>Protein: 34g</span>
+              <span>Fat: 30g</span>
+              <span>Carbs: 104g</span>
+            </div>
+            <div className="mt-2 flex justify-between">
+              <p className="text-xl font-bold">642 Cals</p>
+              <button className="bg-blue-500 text-white px-4 py-1 rounded-lg">
+                Instructions
+              </button>
+            </div>
+          </div>
         </div>
-        <p className="text-sm text-gray-600">{recipe.data.description}</p>
-        <p className="text-sm text-gray-600">{recipe.data.method}</p>
-        <p className="text-sm text-gray-600">Type: {recipe.data.type}</p>
-        <div className="flex justify-between text-sm mt-2">
-          <span>Protein: 34g</span>
-          <span>Fat: 30g</span>
-          <span>Carbs: 104g</span>
-        </div>
-        <div className="mt-2 flex justify-between">
-          <p className="text-xl font-bold">642 Cals</p>
-          <button className="bg-blue-500 text-white px-4 py-1 rounded-lg">
-            Instructions
-          </button>
-        </div>
-      </div>
+      )}
+    </>
 
-      {/* Reviews */}
-      {/* <h3 className="text-lg font-bold mt-4">Reviews (13)</h3>
+    /* Reviews */
+    /* <h3 className="text-lg font-bold mt-4">Reviews (13)</h3>
       <div className="border p-2 rounded-lg mt-2">
         <div className="flex items-center">
           <img
@@ -79,11 +91,11 @@ const RecipePage = () => {
         <p className="text-sm mt-2">
           This recipe is amazing! The pasta sauce is rich and creamy...
         </p>
-      </div> */}
+      </div> */
 
-      {/* Recent Recipes */}
-      {/* <h3 className="text-lg font-bold mt-4">Recent Recipes</h3> */}
-      {/* {[1, 2, 3].map((_, i) => (
+    /* Recent Recipes */
+    /* <h3 className="text-lg font-bold mt-4">Recent Recipes</h3> */
+    /* {[1, 2, 3].map((_, i) => (
         <div
           key={i}
           className="bg-white shadow-md rounded-lg p-2 flex items-center mt-2"
@@ -101,8 +113,7 @@ const RecipePage = () => {
             </p>
           </div>
         </div>
-      ))} */}
-    </div>
+      ))} */
   );
 };
 
