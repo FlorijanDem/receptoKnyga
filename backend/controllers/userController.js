@@ -100,3 +100,17 @@ exports.protect = async (req, res, next) => {
     next(new AppError(err.message, 401));
   }
 };
+
+exports.allowAccessTo = (...roles) => {
+  return (req, res, next) => {
+    try{
+      if (!roles.includes(req.user.role)) 
+        throw new AppError(403, "You do not have permission to perform this action");
+      next();
+    }
+    catch (error) {
+      next(error);
+    }
+  }
+  
+}
