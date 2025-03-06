@@ -23,8 +23,10 @@ exports.getUserCharacteristicsMy = async (req, res, next) => {
 
 
 exports.updateCharacteristic = async (req, res, next) => {
+  const data = req.body;
+  const id = req.user?.id;
   try {
-    const characteristic = await updateCharacteristic(req.body, req.user?.id);
+    const characteristic = await updateCharacteristic(data, id);
 
     res.status(200).json({
       status: "success",
