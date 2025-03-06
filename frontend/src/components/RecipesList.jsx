@@ -13,9 +13,6 @@ const RecipesList = () => {
   const [error, setError] = useState(null);
   const { showBoundary } = useErrorBoundary();
 
-  console.log(recipes);
-  console.log(recipeCount);
-
   const prevPage = () => {
     if (filter.page > 1) {
       setFilter((prev) => ({ ...prev, page: prev.page - 1 }));
