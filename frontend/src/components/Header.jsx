@@ -1,4 +1,6 @@
-import Nav from "./Navigation"
+
+import Nav from "./Navigation";
+
 const Header = () => {
   return (
     <header>
