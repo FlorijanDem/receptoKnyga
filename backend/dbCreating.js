@@ -57,7 +57,7 @@ const createDBtables = async () => {
         CREATE TABLE IF NOT EXISTS products (
             id SERIAL PRIMARY KEY,
             title TEXT NOT NULL,
-            amount TEXT,
+            amount NUMERIC,
             units_of_meassurement VARCHAR
         )
     `;
