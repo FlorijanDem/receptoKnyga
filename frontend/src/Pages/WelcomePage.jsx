@@ -78,7 +78,7 @@ const WelcomePage = () => {
         <div className="md:hidden">{logintemp()}</div>
       </header>
       <main>
-        <div className="columns-2 md:columns-3 lg:columns-4 2xl:columns-5 gap-1.25">
+        <div className="columns-2 md:columns-3 lg:columns-4 2xl:columns-5 gap-1.25 bg-recipe-fifth">
           {imageArray.map((src, index) => (
             <Link to="/login" key={index}>
               <div className="break-inside-avoid mb-1.25 group relative overflow-hidden bg-recipe-third">

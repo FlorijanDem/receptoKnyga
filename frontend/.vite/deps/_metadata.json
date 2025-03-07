@@ -1,0 +1,61 @@
+{
+  "hash": "e1bd3ec7",
+  "configHash": "5369113f",
+  "lockfileHash": "ae1b17fd",
+  "browserHash": "8a63cec6",
+  "optimized": {
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "ef899033",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "1c035008",
+      "needsInterop": true
+    },
+    "react-router": {
+      "src": "../../node_modules/react-router/dist/development/index.mjs",
+      "file": "react-router.js",
+      "fileHash": "c71ac12c",
+      "needsInterop": false
+    },
+    "react-error-boundary": {
+      "src": "../../node_modules/react-error-boundary/dist/react-error-boundary.development.esm.js",
+      "file": "react-error-boundary.js",
+      "fileHash": "b2b33872",
+      "needsInterop": false
+    },
+    "axios": {
+      "src": "../../node_modules/axios/index.js",
+      "file": "axios.js",
+      "fileHash": "08eece30",
+      "needsInterop": false
+    },
+    "react-icons/lu": {
+      "src": "../../node_modules/react-icons/lu/index.mjs",
+      "file": "react-icons_lu.js",
+      "fileHash": "d1aa8ff8",
+      "needsInterop": false
+    },
+    "react-icons/io5": {
+      "src": "../../node_modules/react-icons/io5/index.mjs",
+      "file": "react-icons_io5.js",
+      "fileHash": "2d4fb135",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-IFXVA7FZ": {
+      "file": "chunk-IFXVA7FZ.js"
+    },
+    "chunk-YLDSBLSF": {
+      "file": "chunk-YLDSBLSF.js"
+    },
+    "chunk-DC5AMYBS": {
+      "file": "chunk-DC5AMYBS.js"
+    }
+  }
+}
