@@ -45,7 +45,7 @@ const Navigation = () => {
       <div className="flex flex-col md:flex-row items-center mx-[1.563rem] mt-[2rem] mb-[2rem]">
         <div className="flex justify-between items-center w-full md:w-auto">
           <Link to="/">
-            <h1 className="font-jakarta text-recipe-primary font-bold tracking-[-1px] text-[24px] md:text-[32px] xl:text-[60px] 2xl:text-[80px] 2xl:ml-[3.75rem]">
+            <h1 className="font-jakarta text-recipe-primary font-bold tracking-[-1px] text-[24px] md:text-[32px] xl:text-[32px]">
               Calibrium
             </h1>
           </Link>
@@ -61,7 +61,7 @@ const Navigation = () => {
               <img
                 src={NavFilterIcon}
                 alt="Filter icon"
-                className="w-[3rem] h-[3rem] 2xl:w-[6rem] 2xl:h-[6rem]"
+                className="w-[3rem] h-[3rem] "
               />
             </button>
           </div>
@@ -71,13 +71,7 @@ const Navigation = () => {
           {icons.map((icon, index) => (
             <Link to={icon.path} key={index}>
               <button className={iconStyle}>
-                <img
-                  src={icon.src}
-                  alt={icon.alt}
-                  width="44"
-                  height="44"
-                  className="2xl:w-[5rem] 2xl:h-[5rem]"
-                />
+                <img src={icon.src} alt={icon.alt} width="44" height="44" />
               </button>
             </Link>
           ))}
