@@ -7,7 +7,6 @@ import UserContext from "../contexts/UserContext";
 const Home = () => {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
-  console.log(user);
 
   useEffect(() => {
     if (!user) {
