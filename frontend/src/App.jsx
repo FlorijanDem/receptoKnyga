@@ -4,15 +4,18 @@ import ErrorFallback from "./components/ErrorFallback";
 import Header from "./components/Header";
 import Main from "./components/Main";
 import Footer from "./components/Footer";
+import UserContextProvider from "./contexts/UserContextProvider";
 
 function App() {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Header />
-        <Main />
-        <Footer />
-      </Suspense>
+      <UserContextProvider>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Header />
+          <Main />
+          <Footer />
+        </Suspense>
+      </UserContextProvider>
     </ErrorBoundary>
   );
 }
