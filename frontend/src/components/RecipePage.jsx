@@ -20,7 +20,7 @@ const RecipePage = () => {
         setRecipe(response.data);
         setError(null);
         setLoading(false);
-      } catch (err) {
+      } catch (error) {
         setLoading(false);
         if (axios.isAxiosError(error)) {
           if (error.response) {
