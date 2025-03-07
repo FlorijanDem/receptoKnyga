@@ -1,7 +1,8 @@
+import Nav from "./Navigation"
 const Header = () => {
   return (
     <header>
-      <nav></nav>
+      <Nav></Nav>
     </header>
   );
 };
