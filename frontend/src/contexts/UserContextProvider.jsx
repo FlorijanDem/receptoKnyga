@@ -20,9 +20,7 @@ const UserContextProvider = ({ children }) => {
 
         setUser(response.data);
         setError(null);
-        setLoading(false);
       } catch (error) {
-        setLoading(false);
         if (axios.isAxiosError(error)) {
           if (error.response) {
             setError(error.response.data.message);
@@ -34,13 +32,16 @@ const UserContextProvider = ({ children }) => {
         } else {
           showBoundary(error);
         }
+      } finally {
+        setLoading(false);
+        console.error(error);
       }
     };
     fetchUser();
   }, []);
   return (
     <>
-      {!loading && !error && (
+      {!loading && (
         <UserContext.Provider value={{ user, setUser }}>
           {children}
         </UserContext.Provider>

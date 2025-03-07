@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { useErrorBoundary } from "react-error-boundary";
 import UserContext from "../contexts/UserContext";
@@ -7,9 +8,10 @@ import UserContext from "../contexts/UserContext";
 const API_URL = import.meta.env.VITE_API_URL;
 
 const UserForm = ({ action }) => {
-  const { user, setUser } = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
   const [error, setError] = useState(null);
   const { showBoundary } = useErrorBoundary();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -29,10 +31,8 @@ const UserForm = ({ action }) => {
         }
       );
 
-      console.log(response);
-
       setUser(response.user);
-      console.log(user);
+      navigate("/");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
