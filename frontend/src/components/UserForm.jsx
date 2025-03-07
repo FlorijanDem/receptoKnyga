@@ -102,10 +102,10 @@ const UserForm = ({ action }) => {
 
         {action === "register" && (
           <div className="input-container">
-            <label htmlFor="confirmPassword">Confirm Password</label>
+            <label htmlFor="password-confirm">Confirm Password</label>
             <input
-              id="confirmPassword"
-              {...register("confirmPassword", {
+              id="password-confirm"
+              {...register("password-confirm", {
                 required: "Confirm Password is required",
                 validate: (value) =>
                   value === watch("password") || "Passwords do not match",
