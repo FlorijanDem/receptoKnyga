@@ -51,12 +51,7 @@ const RecipePage = () => {
       ) : (
         <div className="p-4 max-w-md mx-auto">
           {/* Recipe Card */}
-          <button
-            className="bg-blue-500 text-white px-4 py-1 rounded-lg my-2"
-            onClick={() => backToList()}
-          >
-            Back to recipe list
-          </button>
+          
           <div className="bg-white shadow-md rounded-lg p-4">
             <img
               src={recipe.data.photo}
@@ -92,6 +87,12 @@ const RecipePage = () => {
               </p>
             )}
           </div>
+          <button
+            className="bg-blue-500 text-white px-4 py-1 rounded-lg my-2"
+            onClick={() => backToList()}
+          >
+            Back to recipe list
+          </button>
         </div>
       )}
     </>
