@@ -10,6 +10,7 @@ const RecipePage = () => {
   const [error, setError] = useState(null);
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
+  const [showMethod, setShowMethod] = useState(false);
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
@@ -18,9 +19,9 @@ const RecipePage = () => {
         });
         setRecipe(response.data);
         setError(null);
-        setLoading(false)
+        setLoading(false);
       } catch (err) {
-        setLoading(false)
+        setLoading(false);
         if (axios.isAxiosError(error)) {
           if (error.response) {
             setError(error.response.data.message);
@@ -30,7 +31,7 @@ const RecipePage = () => {
             setError("Network error. Please check your internet connection.");
           }
         } else {
-          setError(error)
+          setError(error);
         }
       }
     };
@@ -53,12 +54,13 @@ const RecipePage = () => {
             />
             <div className="flex justify-between items-center">
               <h2 className="text-lg font-bold">{recipe.data.title}</h2>
-              <FaHeart className="text-red-500" />
+              {/* <FaHeart className="text-red-500" /> */}
             </div>
             <p className="text-sm text-gray-600">{recipe.data.description}</p>
-            <p className="text-sm text-gray-600">{recipe.data.method}</p>
             <p className="text-sm text-gray-600">Type: {recipe.data.type}</p>
-            <p className="text-sm text-gray-600">Preparation time: {recipe.data.preparation_time} m.</p>
+            <p className="text-sm text-gray-600">
+              Preparation time: {recipe.data.preparation_time} m.
+            </p>
             <div className="flex justify-between text-sm mt-2">
               <span>Protein: 34g</span>
               <span>Fat: 30g</span>
@@ -66,10 +68,18 @@ const RecipePage = () => {
             </div>
             <div className="mt-2 flex justify-between">
               <p className="text-xl font-bold">642 Cals</p>
-              <button className="bg-blue-500 text-white px-4 py-1 rounded-lg">
-                Instructions
+              <button
+                className="bg-blue-500 text-white px-4 py-1 rounded-lg"
+                onClick={() => setShowMethod(!showMethod)}
+              >
+                {showMethod ? "Hide Instructions" : "Instructions"}
               </button>
             </div>
+            {showMethod && (
+              <p className="mt-2 text-sm text-gray-800 bg-gray-100 p-2 rounded">
+                {recipe.data.method}
+              </p>
+            )}
           </div>
         </div>
       )}
