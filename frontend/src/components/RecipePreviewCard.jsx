@@ -1,10 +1,20 @@
 import { LuClock4 } from "react-icons/lu";
 import { IoPeople } from "react-icons/io5";
-
+import { useNavigate } from "react-router";
 const RecipePreviewCard = ({ recipe }) => {
+  const navigate = useNavigate();
+
+  const handleImageClick = () => {
+    navigate(`/recipes/${recipe.id}`);
+  };
+
+  console.log(recipe);
   return (
     <article className="recipe-preview-card">
-      <div className="recipe-preview-card__image-container">
+      <div
+        className="recipe-preview-card__image-container"
+        onClick={() => handleImageClick(recipe)}
+      >
         <img
           className="recipe-preview-card__image"
           src={recipe.photo}
