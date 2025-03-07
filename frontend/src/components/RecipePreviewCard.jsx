@@ -8,7 +8,6 @@ const RecipePreviewCard = ({ recipe }) => {
     navigate(`/recipe/${recipe.id}`);
   };
 
-  console.log(recipe);
   return (
     <article className="recipe-preview-card">
       <div
