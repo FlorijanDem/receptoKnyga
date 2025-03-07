@@ -95,8 +95,6 @@ exports.createRecipe = async (recipe) => {
 
     const productIDs = await Promise.all(
       recipe.products.map(async (product) => {
-        console.log(product);
-
         let [productID] = await sql`
         SELECT id
         FROM products
