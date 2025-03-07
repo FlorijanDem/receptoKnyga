@@ -1,5 +1,7 @@
 import { Route, Routes } from "react-router";
 import Home from "./Home";
+import Login from "./Login";
+import Register from "./Register";
 import RecipePage from "./RecipePage";
 import Favourite from "../navBarPages/Favourite";
 import Profile from "../navBarPages/Profile";
@@ -10,6 +12,8 @@ const Main = () => {
     <main>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/recipe/:id" element={<RecipePage/>}/>
         <Route path="/favourite" element={<Favourite />} />
         <Route path="/settings" element={<Settings />} />
