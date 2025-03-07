@@ -45,7 +45,7 @@ const createDBtables = async () => {
             type VARCHAR(255),
             photo VARCHAR,
             -- Preperation time in minutes
-            preperation_time INTEGER,
+            preparation_time INTEGER,
             servings INTEGER,
             user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
         )
@@ -57,6 +57,7 @@ const createDBtables = async () => {
         CREATE TABLE IF NOT EXISTS products (
             id SERIAL PRIMARY KEY,
             title TEXT NOT NULL,
+            amount NUMERIC,
             units_of_meassurement VARCHAR
         )
     `;
