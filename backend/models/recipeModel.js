@@ -192,6 +192,7 @@ exports.deleteRecipe = async (id) => {
 
   return deletedRecipe;
 };
+
 // Function to search recipes : title, description.
 exports.searchRecipes = async (searchQuery) => {
   const recipes = await sql`
@@ -204,15 +205,15 @@ exports.searchRecipes = async (searchQuery) => {
         ) as similarity_score
       FROM recipes
       WHERE 
-        similarity(title, ${searchQuery}) > 0.1 // paieskos fragmento panasumas > nei 10 proc, parinkti kai bus didesne DB
-        OR title ILIKE ${`%${searchQuery}%`} // tikslus atitikimas
-        OR similarity(description, ${searchQuery}) > 0.1 //paieskos fragmento panasumas > nei 10 proc, parinkti kai bus didesne DB
-        OR description ILIKE ${`%${searchQuery}%`} // tikslus atitikimas
+        similarity(title, ${searchQuery}) > 0.1
+        OR title ILIKE ${`%${searchQuery}%`}
+        OR similarity(description, ${searchQuery}) > 0.1
+        OR description ILIKE ${`%${searchQuery}%`}
     )
     SELECT *
     FROM similarity_scores
     ORDER BY similarity_score DESC
-    LIMIT 20 // parinkti kiek reiks paieskos rezultatu veliau
+    LIMIT 20
   `;
   return recipes;
 };

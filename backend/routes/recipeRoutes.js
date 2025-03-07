@@ -19,13 +19,12 @@ const {
 const { checkRecipeQuery } = require("../validators/checkRecipesQuery");
 const validate = require("../validators/validate");
 
-// Search endpoint should be above other routes to avoid authentication
-recipeRouter.get("/search", searchRecipesHandler);
-
 recipeRouter
   .route("/")
   .get(checkRecipeQuery, validate, getAllRecipesHandler)
   .post(protect, checkCreateRecipesBody, validate, createRecipeHandler);
+
+recipeRouter.get("/", searchRecipesHandler);
 
 recipeRouter
   .route("/:id")

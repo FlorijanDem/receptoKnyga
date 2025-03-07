@@ -94,7 +94,8 @@ exports.deleteRecipeHandler = async (req, res, next) => {
 exports.searchRecipesHandler = async (req, res, next) => {
   try {
     const { q } = req.query;
-    
+    console.log(q);
+
     if (!q || q.trim().length === 0) {
       return res.status(400).json({
         status: "error",
