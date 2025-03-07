@@ -1,7 +1,7 @@
 import React from "react";
 import { FaHeart, FaClock, FaUsers } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import axios from "axios";
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -37,6 +37,11 @@ const RecipePage = () => {
     };
     fetchRecipe();
   }, [id]);
+  const navigate = useNavigate();
+
+  const backToList = () => {
+    navigate(`/`);
+  };
   return (
     <>
       {loading ? (
@@ -46,6 +51,12 @@ const RecipePage = () => {
       ) : (
         <div className="p-4 max-w-md mx-auto">
           {/* Recipe Card */}
+          <button
+            className="bg-blue-500 text-white px-4 py-1 rounded-lg my-2"
+            onClick={() => backToList()}
+          >
+            Back to recipe list
+          </button>
           <div className="bg-white shadow-md rounded-lg p-4">
             <img
               src={recipe.data.photo}
