@@ -5,7 +5,7 @@ const RecipePreviewCard = ({ recipe }) => {
   const navigate = useNavigate();
 
   const handleImageClick = () => {
-    navigate(`/recipes/${recipe.id}`);
+    navigate(`/recipe/${recipe.id}`);
   };
 
   console.log(recipe);
