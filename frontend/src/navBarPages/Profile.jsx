@@ -7,17 +7,18 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 const Profile = () => {
   const navigate = useNavigate();
-  const [error, setError] = useState(null);
+  const [ setError] = useState(null);
   const { showBoundary } = useErrorBoundary();
   const handleLogoutClick = async () => {
     try {
-      const { data } = await axios.post(
+      const data  = await axios.post(
         `${API_URL}/auth/logout`,
         {},
         {
           withCredentials: true,
         }
       );
+      data()
       navigate("/");
     } catch (error) {
       if (axios.isAxiosError(error)) {
