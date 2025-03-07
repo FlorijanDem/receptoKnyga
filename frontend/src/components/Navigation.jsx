@@ -11,7 +11,7 @@ import SearchBar from "./SearchBar";
 import Sidebar from "./Sidebar";
 
 const icons = [
-  { src: NavLikeIcon, alt: "like Icon", pagename: "Like", path: "/Favourite" },
+  { src: NavLikeIcon, alt: "like Icon", pagename: "Like", path: "/favourite" },
   {
     src: NavSettingIcon,
     alt: "setting Icon",
@@ -22,7 +22,7 @@ const icons = [
     src: NavCartIcon,
     alt: "cart Icon",
     pagename: "Cart",
-    path: "/ShoppingList",
+    path: "/shoppingList",
   },
   {
     src: NavProfileIcon,
