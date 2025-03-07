@@ -3,6 +3,8 @@ const {
   registerUser,
   loginUser,
   logout,
+  getMe,
+  protect,
 } = require("../controllers/userController");
 const validate = require("../validators/validate");
 const { checkRegisterBody } = require("../validators/checkRegisterBody");
@@ -13,5 +15,6 @@ const authRouter = express.Router();
 authRouter.route("/register").post(checkRegisterBody, validate, registerUser);
 authRouter.route("/login").post(checkLoginBody, validate, loginUser);
 authRouter.route("/logout").post(logout);
+authRouter.route("/me").get(protect, getMe);
 
 module.exports = authRouter;

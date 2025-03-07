@@ -66,7 +66,7 @@ exports.loginUser = async (req, res, next) => {
 
     user.id = undefined;
     user.password = undefined;
-    
+
     res.status(200).json({
       message: "You are login",
       user,
@@ -103,5 +103,20 @@ exports.protect = async (req, res, next) => {
     next();
   } catch (err) {
     next(new AppError(err.message, 401));
+  }
+};
+
+exports.getMe = async (req, res, next) => {
+  try {
+    const user = await getUserByid(req.user?.id);
+    user.id = undefined;
+    user.password = undefined;
+
+    res.status(200).json({
+      status: "success",
+      data: user,
+    });
+  } catch (err) {
+    next(new AppError(err.message, 500));
   }
 };
