@@ -1,35 +1,29 @@
 const {
-  getAllRecipes,
   getRecipeById,
-  getRecipesCount,
   createRecipe,
   updateRecipe,
   deleteRecipe,
+  searchRecipes,
 } = require("../models/recipeModel");
 
 exports.getAllRecipesHandler = async (req, res, next) => {
   try {
-    const searchString = Object.entries(req.query)
-      .filter(([key]) => !["limit", "page", "sortBy", "order"].includes(key))
-      .map(([key, value]) => `${key} ILIKE '%${value}%'`)
-      .join(" AND ");
+    const { q, type, page = 1, limit = 12 } = req.query;
+    const offset = (parseInt(page) - 1) * parseInt(limit);
 
-    const filter = {
-      limit: +req.query.limit || 12,
-      offset: (+req.query.page - 1) * +req.query.limit || 0,
-      sortBy: req.query.sortBy || "title",
-      order: req.query.order || "asc",
-      searchString,
-    };
-
-    const recipes = await getAllRecipes(filter);
-
-    const recipesCount = await getRecipesCount(filter);
+    const { recipes, total } = await searchRecipes({
+      q: q?.trim(),
+      type: type?.toLowerCase(),
+      limit: parseInt(limit),
+      offset: offset,
+      sortBy: q ? 'similarity_score' : 'title',
+      order: q ? 'DESC' : 'ASC'
+    });
 
     res.status(200).json({
       status: "success",
-      results: recipesCount,
-      data: recipes,
+      results: total,
+      data: recipes
     });
   } catch (error) {
     next(error);

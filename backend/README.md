@@ -84,13 +84,15 @@ node server.js
 
 ### 🍽️ Recipes
 
-| Method | Endpoint              | Description           | Auth Required |
-| ------ | --------------------- | --------------------- | ------------- |
-| GET    | `/api/v1/recipes`     | Get all recipes       | ❌ No         |
-| GET    | `/api/v1/recipes/:id` | Get a specific recipe | ✅ Yes        |
-| POST   | `/api/v1/recipes`     | Create a new recipe   | ✅ Yes        |
-| PUT    | `/api/v1/recipes/:id` | Update a recipe       | ✅ Yes        |
-| DELETE | `/api/v1/recipes/:id` | Delete a recipe       | ✅ Yes        |
+| Method | Endpoint                 | Description           | Auth Required |
+| ------ | ------------------------ | --------------------- | ------------- |
+| GET    | `/api/v1/recipes`        | Get all recipes       | ❌ No         |
+| GET    | `/api/v1/recipes/?q=`    | Search recipes        | ❌ No         |
+| GET    | `/api/v1/recipes/?type=` | Filter recipes        | ❌ No         |
+| GET    | `/api/v1/recipes/:id`    | Get a specific recipe | ✅ Yes        |
+| POST   | `/api/v1/recipes`        | Create a new recipe   | ✅ Yes        |
+| PUT    | `/api/v1/recipes/:id`    | Update a recipe       | ✅ Yes        |
+| DELETE | `/api/v1/recipes/:id`    | Delete a recipe       | ✅ Yes        |
 
 ### ✏️ Characteristics
 
