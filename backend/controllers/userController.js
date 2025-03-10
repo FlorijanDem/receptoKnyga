@@ -139,6 +139,8 @@ exports.getMe = async (req, res, next) => {
 
 exports.updateUser = async (req, res, next) => {
   try {
+    console.log(req.body);
+
     const data = req.body;
     const id = req.params.id;
     const user = await updateUser(data, id);

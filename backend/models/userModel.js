@@ -36,6 +36,8 @@ exports.getUserByid = async (id) => {
 };
 
 exports.updateUser = async (data, id) => {
+  // console.log(data);
+
   const [user] = await sql`
         UPDATE users
         SET ${sql(data)}

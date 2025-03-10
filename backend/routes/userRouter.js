@@ -1,5 +1,5 @@
 const { protect } = require("../controllers/userController");
-const { updateUser } = require("../models/userModel");
+const { updateUser } = require("../controllers/userController");
 const { checkUpdateUserBody } = require("../validators/checkUsersBody");
 const { checkUserParams } = require("../validators/checkUsersParams");
 const validate = require("../validators/validate");
