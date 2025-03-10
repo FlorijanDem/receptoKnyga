@@ -34,3 +34,13 @@ exports.getUserByid = async (id) => {
     `;
   return user;
 };
+
+exports.updateUser = async (data, id) => {
+  const [user] = await sql`
+        UPDATE users
+        SET ${sql(data)}
+        WHERE id=${id}
+        RETURNING users.*
+    `;
+  return user;
+};
