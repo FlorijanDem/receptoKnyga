@@ -3,6 +3,7 @@ const {
   registerUser,
   getUserByEmail,
   getUserByid,
+  updateUser,
 } = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const argon2 = require("argon2");
@@ -131,6 +132,17 @@ exports.getMe = async (req, res, next) => {
     user.password = undefined;
 
     res.status(200).json({ user });
+  } catch (err) {
+    next(new AppError(err.message, 401));
+  }
+};
+
+exports.updateUser = async (req, res, next) => {
+  try {
+    const data = req.body;
+    const id = req.params.id;
+    const user = await updateUser(data, id);
+    res.status(200).json({ status: "success", data: user });
   } catch (err) {
     next(new AppError(err.message, 401));
   }
