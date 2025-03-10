@@ -11,14 +11,13 @@ const Profile = () => {
   const { showBoundary } = useErrorBoundary();
   const handleLogoutClick = async () => {
     try {
-      const data  = await axios.post(
+      await axios.post(
         `${API_URL}/auth/logout`,
         {},
         {
           withCredentials: true,
         }
       );
-      data()
       navigate("/");
     } catch (error) {
       if (axios.isAxiosError(error)) {
