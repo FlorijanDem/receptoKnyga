@@ -5,8 +5,8 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-const RecipePageControls = ({ recipe }) => {
-  const { user } = useContext(UserContext);
+const RecipePageControls = ({ recipe, setRecipe }) => {
+  const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
   const [openDelete, setOpenDelete] = useState(false);
   console.log(user.id);
@@ -31,19 +31,32 @@ const RecipePageControls = ({ recipe }) => {
 
   const approveRecipe = async () => {
     try {
-      const updatedRecipe = await axios.patch(
+      const { data: response } = await axios.patch(
         `${API_URL}/recipes/${recipe.id}`,
         { approved: !recipe.approved },
         {
           withCredentials: true,
         }
       );
-      console.log(updatedRecipe);
+      setRecipe(response);
     } catch (error) {
       console.log(error);
     }
   };
-  const banUser = async () => {};
+  const banUser = async () => {
+    try {
+      const { data: response } = await axios.patch(
+        `${API_URL}/users/${recipe.user_id}`,
+        { banned: !user.banned },
+        {
+          withCredentials: true,
+        }
+      );
+      setUser(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
