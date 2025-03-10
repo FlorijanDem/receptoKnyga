@@ -122,6 +122,8 @@ exports.getMe = async (req, res, next) => {
       res.status(200).json({ user: null });
     }
 
+    user.password = undefined;
+
     res.status(200).json({ user });
   } catch (err) {
     next(new AppError(err.message, 401));
