@@ -32,7 +32,7 @@ const Profile = () => {
         showBoundary(error);
       }
     }
-    navigate(`/login`);
+    navigate(0);
   };
   return (
     <>
