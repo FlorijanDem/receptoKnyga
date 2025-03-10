@@ -7,7 +7,6 @@ import UserContext from "./contexts/UserContext";
 import GuestLayout from "./components/layout/GuestLayout";
 function AppContent() {
   const { user } = useContext(UserContext);
-
   return (
     <Suspense fallback={<div>Loading...</div>}>
       {user ? <Layout /> : <GuestLayout />}

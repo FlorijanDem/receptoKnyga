@@ -76,7 +76,7 @@ const WelcomePage = () => {
           {loading && <p>Loading recipes...</p>}
           {error && <p className="text-red-500">{error}</p>}
           {recipes.map((recipe) => (
-            <Link to={`/login`}>
+            <Link to={`/login`} key={recipe.id}>
               <div className="break-inside-avoid mb-1.25 group relative overflow-hidden bg-recipe-third">
                 <img
                   src={recipe.photo}
