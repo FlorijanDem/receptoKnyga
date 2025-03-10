@@ -4,7 +4,6 @@ const {
   loginUser,
   logout,
   getMe,
-  protect,
 } = require("../controllers/userController");
 const validate = require("../validators/validate");
 const { checkRegisterBody } = require("../validators/checkRegisterBody");
