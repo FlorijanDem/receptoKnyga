@@ -15,7 +15,7 @@ const RecipePreviewCard = ({ recipe }) => {
         onClick={() => handleImageClick(recipe)}
       >
         <img
-          className="recipe-preview-card__image"
+          className="recipe-preview-card__image w-full h-48 object-cover"
           src={recipe.photo}
           alt={recipe.title}
         />

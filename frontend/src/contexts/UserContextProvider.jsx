@@ -18,7 +18,7 @@ const UserContextProvider = ({ children }) => {
           withCredentials: true,
         });
 
-        setUser(response.data);
+        setUser(response.user);
         setError(null);
       } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -34,13 +34,13 @@ const UserContextProvider = ({ children }) => {
         }
       } finally {
         setLoading(false);
-        console.error(error);
       }
     };
     fetchUser();
   }, []);
   return (
     <>
+      {error && <p>{error}</p>}
       {!loading && (
         <UserContext.Provider value={{ user, setUser }}>
           {children}
