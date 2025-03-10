@@ -1,42 +1,36 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
 import { Link } from "react-router";
-// import arrowIcon from "../assets/icons/arrow_forward_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg";
+
+const API_URL = import.meta.env.VITE_API_URL;
+
 const WelcomePage = () => {
-  const images = import.meta.glob("../assets/images/welcomepage/*.jpg", {
-    eager: true,
-  });
-  const imageArray = Object.values(images).map((module) => module.default);
+  const [recipes, setRecipes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const StyleText = "font-jakarta font-extrabold text-recipe-third";
 
-  function getRandomWord() {
-    const words = [
-      "Consume",
-      "Devour",
-      "Munch",
-      "Nibble",
-      "Chew",
-      "Ingest",
-      "Feast",
-      "Snack",
-      "Dine",
-      "Gobble",
-      "Swallow",
-      "Partake",
-      "Indulge",
-    ];
-    return words[Math.floor(Math.random() * words.length)];
-  }
-  const randomWords = imageArray.map(() => getRandomWord());
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/recipes`);
+        setRecipes(response.data.data); // Set the fetched recipes
+      } catch (err) {
+        setError(`Failed to load recipes. ${err}`);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRecipes();
+  }, []);
+
   const logintemp = () => {
     return (
       <Link to="/login">
         <button className={`${StyleText} md:mb-[10px]`}>
           <span className="flex border-b-3 border-recipe-third mb-[-1px]">
-            {/* <img
-              src={arrowIcon}
-              alt="Arrow Icon"
-              className="w-[20px] md:w-[15px] 2xl:w-[20px]"
-            /> */}
             <span className="text-[24px] md:text-[10px] 2xl:text-[20px]">
               LOGIN
             </span>
@@ -45,6 +39,7 @@ const WelcomePage = () => {
       </Link>
     );
   };
+
   return (
     <>
       <header className=" ml-[2.375rem] mt-[1rem] mb-[3.75rem]">
@@ -67,7 +62,7 @@ const WelcomePage = () => {
             <br className="hidden md:block" /> your health goals through
             personalized <br className="hidden md:block" /> calorie tracking and
             tailored recipe suggestions. <br className="hidden md:block" />
-            With our slogan 'For those who want to change,'
+            With our slogan 'For those who want to change,'{" "}
             <br className="hidden md:block" /> we make it easy to enjoy
             nutritious meals and stay <br className="hidden md:block" /> on
             track with your fitness journey.
@@ -78,16 +73,18 @@ const WelcomePage = () => {
       </header>
       <main>
         <div className="columns-2 md:columns-3 lg:columns-4 2xl:columns-5 gap-1.25 bg-recipe-fifth">
-          {imageArray.map((src, index) => (
-            <Link to="/login" key={index}>
+          {loading && <p>Loading recipes...</p>}
+          {error && <p className="text-red-500">{error}</p>}
+          {recipes.map((recipe) => (
+            <Link to={`/login`}>
               <div className="break-inside-avoid mb-1.25 group relative overflow-hidden bg-recipe-third">
                 <img
-                  src={src}
-                  alt={`Image ${index + 1}`}
+                  src={recipe.photo}
+                  alt={recipe.title}
                   className="w-full h-full object-cover transition duration-400 ease-in-out group-hover:scale-110 group-hover:opacity-50"
                 />
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-recipe-fifth text-[30px] font-jakarta font-extrabold opacity-0 group-hover:opacity-100">
-                  {randomWords[index]}
+                  {recipe.title}
                 </div>
               </div>
             </Link>
