@@ -108,15 +108,22 @@ exports.protect = async (req, res, next) => {
 
 exports.getMe = async (req, res, next) => {
   try {
-    const user = await getUserByid(req.user?.id);
-    user.id = undefined;
-    user.password = undefined;
+    const token = req.cookies?.jwt;
 
-    res.status(200).json({
-      status: "success",
-      data: user,
-    });
+    if (!token) {
+      res.status(200).json({ user: null });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await getUserByid(decoded?.id);
+
+    if (!user) {
+      res.status(200).json({ user: null });
+    }
+
+    res.status(200).json({ user });
   } catch (err) {
-    next(new AppError(err.message, 500));
+    next(new AppError(err.message, 401));
   }
 };
