@@ -4,12 +4,12 @@ const { sql } = require("../dbConnection");
 
 exports.searchRecipes = async (filters) => {
   const {
-    q,                    // bendras paieškos tekstas
-    type,                 // recepto tipas
-    preparation_time,     // paruošimo laikas
-    servings,            // porcijų skaičius
+    q, // bendras paieškos tekstas
+    type, // recepto tipas
+    preparation_time, // paruošimo laikas
+    servings, // porcijų skaičius
     limit = 12,
-    offset = 0
+    offset = 0,
   } = filters;
 
   const searchQuery = sql`
@@ -19,10 +19,10 @@ exports.searchRecipes = async (filters) => {
         CASE 
           WHEN ${!!q} THEN
             GREATEST(
-              similarity(r.title, ${q || ''}),
-              similarity(r.description, ${q || ''}),
+              similarity(r.title, ${q || ""}),
+              similarity(r.description, ${q || ""}),
               COALESCE((
-                SELECT MAX(similarity(p.title, ${q || ''}))
+                SELECT MAX(similarity(p.title, ${q || ""}))
                 FROM recipes_products rp
                 JOIN products p ON p.id = rp.product_id
                 WHERE rp.recipe_id = r.id
@@ -35,7 +35,9 @@ exports.searchRecipes = async (filters) => {
       ${type ? sql`AND r.type = ${type}` : sql``}
       ${preparation_time ? sql`AND r.preparation_time = ${preparation_time}` : sql``}
       ${servings ? sql`AND r.servings = ${servings}` : sql``}
-      ${q ? sql`
+      ${
+        q
+          ? sql`
         AND (
           similarity(r.title, ${q}) > 0.1
           OR r.title ILIKE ${`%${q}%`}
@@ -52,7 +54,9 @@ exports.searchRecipes = async (filters) => {
             )
           )
         )
-      ` : sql``}
+      `
+          : sql``
+      }
     )
     SELECT * FROM recipe_scores
     ORDER BY 
@@ -69,7 +73,9 @@ exports.searchRecipes = async (filters) => {
     ${type ? sql`AND r.type = ${type}` : sql``}
     ${preparation_time ? sql`AND r.preparation_time = ${preparation_time}` : sql``}
     ${servings ? sql`AND r.servings = ${servings}` : sql``}
-    ${q ? sql`
+    ${
+      q
+        ? sql`
       AND (
         similarity(r.title, ${q}) > 0.1
         OR r.title ILIKE ${`%${q}%`}
@@ -86,22 +92,18 @@ exports.searchRecipes = async (filters) => {
           )
         )
       )
-    ` : sql``}
+    `
+        : sql``
+    }
   `;
-
-  const [recipes, [{ total }]] = await Promise.all([
-    searchQuery,
-    countQuery
-  ]);
+  // patikrinti ar nesukeicia reiksmes vietomis
+  const [recipes, [{ total }]] = await Promise.all([searchQuery, countQuery]);
 
   return {
     recipes,
-    total: parseInt(total)
+    total: parseInt(total),
   };
 };
-
-
-
 
 exports.getRecipeById = async (id) => {
   // Needs refinment when DB is ready
@@ -259,4 +261,3 @@ exports.deleteRecipe = async (id) => {
 };
 
 // Function to search recipes : title, description.
-
