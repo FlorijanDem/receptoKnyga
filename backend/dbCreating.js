@@ -47,6 +47,7 @@ const createDBtables = async () => {
             -- Preperation time in minutes
             preparation_time INTEGER,
             servings INTEGER,
+            approved BOOLEAN DEFAULT FALSE,
             user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
         )
     `;
