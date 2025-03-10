@@ -96,7 +96,7 @@ exports.searchRecipes = async (filters) => {
         : sql``
     }
   `;
-
+  // patikrinti ar nesukeicia reiksmes vietomis
   const [recipes, [{ total }]] = await Promise.all([searchQuery, countQuery]);
 
   return {
