@@ -17,6 +17,14 @@ exports.checkRecipeQuery = [
     .isIn(["veg", "non-veg"])
     .withMessage('Recipe type must be either "veg" or "non-veg"'),
 
+  query("product")
+    .optional()
+    .trim()
+    .isString()
+    .withMessage("Product must be a string")
+    .isLength({ min: 2 })
+    .withMessage("Product name must be at least 2 characters long"),
+
   query("preparation_time")
     .optional()
     .trim()
