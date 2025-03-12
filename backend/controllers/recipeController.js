@@ -6,14 +6,7 @@ const {
   searchRecipes,
 } = require("../models/recipeModel");
 
-// validatorius iskelti ant routo
-const { checkRecipeQuery } = require("../validators/checkRecipesQuery");
-const validate = require("../validators/validate");
-
-exports.getAllRecipesHandler = [
-  checkRecipeQuery,
-  validate,
-  async (req, res, next) => {
+exports.getAllRecipesHandler = async (req, res, next) => {
     try {
       const { q, type, page = "1", limit = "12" } = req.query;
       // Užtikriname, kad offset bus 0 jei page/limit yra nevalidūs
@@ -47,8 +40,7 @@ exports.getAllRecipesHandler = [
     } catch (error) {
       next(error);
     }
-  },
-];
+};
 
 exports.getRecipeByIdHandler = async (req, res, next) => {
   try {
