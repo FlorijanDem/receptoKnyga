@@ -7,39 +7,40 @@ const {
 } = require("../models/recipeModel");
 
 exports.getAllRecipesHandler = async (req, res, next) => {
-    try {
-      const { q, type, page = "1", limit = "12" } = req.query;
-      // Užtikriname, kad offset bus 0 jei page/limit yra nevalidūs
-      const pageNum = Math.max(1, parseInt(page) || 1);
-      const limitNum = Math.min(50, Math.max(1, parseInt(limit) || 12));
-      const offset = (pageNum - 1) * limitNum;
+  try {
+    const { q, type, product, page = "1", limit = "12" } = req.query;
+    // Užtikriname, kad offset bus 0 jei page/limit yra nevalidūs
+    const pageNum = Math.max(1, parseInt(page) || 1);
+    const limitNum = Math.min(50, Math.max(1, parseInt(limit) || 12));
+    const offset = (pageNum - 1) * limitNum;
 
-      const { recipes, total } = await searchRecipes({
-        q: q?.trim(),
-        type: type?.toLowerCase(),
-        limit: limitNum,
-        offset: offset,
-        sortBy: q ? "similarity_score" : "title", // orderBy o ne sortBy
-        order: q ? "DESC" : "ASC", // nereikalinga logika rusiavimui mazejimo tvarka
-      });
+    const { recipes, total } = await searchRecipes({
+      q: q?.trim(),
+      type: type?.toLowerCase(),
+      product: product?.trim(),
+      limit: limitNum,
+      offset: offset,
+      sortBy: q ? "similarity_score" : "title",
+      order: q ? "DESC" : "ASC",
+    });
 
-      if (!recipes || recipes.length === 0) {
-        return res.status(200).json({
-          status: "success",
-          results: 0,
-          data: [],
-          message: "No recipes found matching your criteria",
-        });
-      }
-
-      res.status(200).json({
+    if (!recipes || recipes.length === 0) {
+      return res.status(200).json({
         status: "success",
-        results: total,
-        data: recipes,
+        results: 0,
+        data: [],
+        message: "No recipes found matching your criteria",
       });
-    } catch (error) {
-      next(error);
     }
+
+    res.status(200).json({
+      status: "success",
+      results: total,
+      data: recipes,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 exports.getRecipeByIdHandler = async (req, res, next) => {

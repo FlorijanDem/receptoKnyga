@@ -6,6 +6,7 @@ exports.searchRecipes = async (filters) => {
   const {
     q, // bendras paieškos tekstas
     type, // recepto tipas
+    product, // recepto produktas
     preparation_time, // paruošimo laikas
     servings, // porcijų skaičius
     limit = 12,
@@ -24,7 +25,7 @@ exports.searchRecipes = async (filters) => {
               COALESCE((
                 SELECT MAX(similarity(p.title, ${q || ""}))
                 FROM recipes_products rp
-                JOIN products p ON p.id = rp.product_id
+                INNER JOIN products p ON rp.product_id = p.id
                 WHERE rp.recipe_id = r.id
               ), 0)
             )
@@ -36,6 +37,22 @@ exports.searchRecipes = async (filters) => {
       ${preparation_time ? sql`AND r.preparation_time = ${preparation_time}` : sql``}
       ${servings ? sql`AND r.servings = ${servings}` : sql``}
       ${
+        product
+          ? sql`
+        AND EXISTS (
+          SELECT 1 
+          FROM recipes_products rp
+          INNER JOIN products p ON rp.product_id = p.id
+          WHERE rp.recipe_id = r.id
+          AND (
+            similarity(p.title, ${product}) > 0.1
+            OR p.title ILIKE ${`%${product}%`}
+          )
+        )
+      `
+          : sql``
+      }
+      ${
         q
           ? sql`
         AND (
@@ -46,7 +63,7 @@ exports.searchRecipes = async (filters) => {
           OR EXISTS (
             SELECT 1 
             FROM recipes_products rp
-            JOIN products p ON p.id = rp.product_id
+            INNER JOIN products p ON rp.product_id = p.id
             WHERE rp.recipe_id = r.id
             AND (
               similarity(p.title, ${q}) > 0.1
@@ -74,6 +91,22 @@ exports.searchRecipes = async (filters) => {
     ${preparation_time ? sql`AND r.preparation_time = ${preparation_time}` : sql``}
     ${servings ? sql`AND r.servings = ${servings}` : sql``}
     ${
+      product
+        ? sql`
+      AND EXISTS (
+        SELECT 1 
+        FROM recipes_products rp
+        INNER JOIN products p ON rp.product_id = p.id
+        WHERE rp.recipe_id = r.id
+        AND (
+          similarity(p.title, ${product}) > 0.1
+          OR p.title ILIKE ${`%${product}%`}
+        )
+      )
+    `
+        : sql``
+    }
+    ${
       q
         ? sql`
       AND (
@@ -84,7 +117,7 @@ exports.searchRecipes = async (filters) => {
         OR EXISTS (
           SELECT 1 
           FROM recipes_products rp
-          JOIN products p ON p.id = rp.product_id
+          INNER JOIN products p ON rp.product_id = p.id
           WHERE rp.recipe_id = r.id
           AND (
             similarity(p.title, ${q}) > 0.1
