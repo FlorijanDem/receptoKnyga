@@ -8,7 +8,9 @@ import Favourite from "../../navBarPages/Favourite";
 import Profile from "../../navBarPages/Profile";
 import Settings from "../../navBarPages/Settings";
 import ShoppingList from "../../navBarPages/ShoppingList";
+import AddRecipe from "../AddRecipe";
 import { Routes, Route, useLocation } from "react-router";
+
 function Layout() {
   const location = useLocation();
 
@@ -28,6 +30,7 @@ function Layout() {
         <Route path="/settings" element={<Settings />} />
         <Route path="/shoppingList" element={<ShoppingList />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/addRecipe" element={<AddRecipe />} />
       </Routes>
       <Footer />
     </>
