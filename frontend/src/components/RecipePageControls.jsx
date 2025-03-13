@@ -1,33 +1,37 @@
-import { useContext, useState } from "react";
-import { useNavigate } from "react-router";
+import {
+  useContext,
+  //  useState
+} from "react";
+// import { useNavigate } from "react-router";
 import UserContext from "../contexts/UserContext";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 const RecipePageControls = ({ recipe, setRecipe }) => {
-  const { user, setUser } = useContext(UserContext);
-  const navigate = useNavigate();
-  const [openDelete, setOpenDelete] = useState(false);
-  console.log(user.id);
-  console.log(recipe);
+  const { user } = useContext(UserContext);
+  // const navigate = useNavigate();
+  // const [openDelete, setOpenDelete] = useState(false);
+  // console.log(user.id);
+  // console.log(recipe);
 
-  const editRecipe = async () => {
-    // Need add recipe form
-    console.log("Edit recipe");
-  };
+  // const editRecipe = async () => {
+  //   // Need add recipe form
+  //   console.log("Edit recipe");
+  // };
 
-  const deleteRecipe = async () => {
-    try {
-      await axios.delete(`${API_URL}/recipes/${recipe.id}`, {
-        withCredentials: true,
-      });
+  // const deleteRecipe = async () => {
+  //   try {
+  //     await axios.delete(`${API_URL}/recipes/${recipe.id}`, {
+  //       withCredentials: true,
+  //     });
 
-      navigate("/");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     navigate("/");
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const approveRecipe = async () => {
     try {
@@ -39,20 +43,31 @@ const RecipePageControls = ({ recipe, setRecipe }) => {
         }
       );
       setRecipe(response);
+      toast.success(
+        `Recipe ${recipe.title} ${
+          response.data.approved ? "approved" : "unapproved"
+        } successfully!`,
+        {
+          duration: 3000,
+        }
+      );
     } catch (error) {
       console.log(error);
     }
   };
   const banUser = async () => {
+    if (recipe.user_id === user.id && user.role === "admin") {
+      return;
+    }
     try {
       const { data: response } = await axios.patch(
         `${API_URL}/users/${recipe.user_id}`,
-        { banned: !user.banned },
+        { banned: true },
         {
           withCredentials: true,
         }
       );
-      setUser(response.data);
+      toast.success(`User ${response.data.username} banned successfully!`);
     } catch (error) {
       console.log(error);
     }
@@ -61,7 +76,8 @@ const RecipePageControls = ({ recipe, setRecipe }) => {
   return (
     <>
       <div className="recipe-controls grid grid-cols-2 gap-2 mt-4">
-        {(user?.id === recipe?.user_id || user?.role === "admin") && (
+        {/* Edit / delete recipe control buttons */}
+        {/* {(user?.id === recipe?.user_id || user?.role === "admin") && (
           <>
             <button
               className="bg-blue-500 text-white px-4 py-1 rounded-lg"
@@ -76,14 +92,14 @@ const RecipePageControls = ({ recipe, setRecipe }) => {
               Delete
             </button>
           </>
-        )}
+        )} */}
         {user?.role === "admin" && (
           <>
             <button
               className="bg-blue-500 text-white px-4 py-1 rounded-lg"
               onClick={approveRecipe}
             >
-              Approve
+              {recipe.approved ? "Unapprove" : "Approve"}
             </button>
             <button
               className="bg-red-500 text-white px-4 py-1 rounded-lg"
@@ -94,7 +110,8 @@ const RecipePageControls = ({ recipe, setRecipe }) => {
           </>
         )}
       </div>
-      {openDelete && (
+      {/* Confirm delete recipe modal */}
+      {/* {openDelete && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-4 rounded-lg">
             <h2 className="text-lg font-bold mb-2">Are you sure?</h2>
@@ -117,7 +134,7 @@ const RecipePageControls = ({ recipe, setRecipe }) => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </>
   );
 };

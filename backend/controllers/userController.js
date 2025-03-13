@@ -118,7 +118,7 @@ exports.getMe = async (req, res, next) => {
     const token = req.cookies?.jwt;
 
     if (!token) {
-      res.status(200).json({ user: null });
+      return res.status(200).json({ user: null });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -126,7 +126,7 @@ exports.getMe = async (req, res, next) => {
     const user = await getUserByid(decoded?.id);
 
     if (!user) {
-      res.status(200).json({ user: null });
+      return res.status(200).json({ user: null });
     }
 
     user.password = undefined;
@@ -139,8 +139,6 @@ exports.getMe = async (req, res, next) => {
 
 exports.updateUser = async (req, res, next) => {
   try {
-    console.log(req.body);
-
     const data = req.body;
     const id = req.params.id;
     const user = await updateUser(data, id);
