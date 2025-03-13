@@ -33,3 +33,18 @@ exports.updateCharacteristic = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.createCharacteristic = async (req, res, next) => {
+  const data = req.body;
+  const id = req.user?.id;
+  try {
+    const characteristic = await createCharacteristic(data, id);
+    res.status(201).json({
+      status: "success",
+      data: characteristic,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+

@@ -42,3 +42,12 @@ exports.updateCharacteristic = async (data, id) => {
     return characteristic;
   }
 };
+
+exports.createCharacteristic = async (data, id) => {
+  const [characteristics] = await sql`
+      INSERT INTO characteristics (user_id, height, weight, age, gender)
+      VALUES (${id}, ${data.height ?? null}, ${data.weight ?? null}, ${data.age ?? null}, ${data.gender ?? null})
+      RETURNING characteristics.*
+  `;
+  return characteristics;
+};
