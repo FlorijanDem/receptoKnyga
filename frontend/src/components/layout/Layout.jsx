@@ -1,34 +1,28 @@
 import Footer from "../Footer";
 import Nav from "../Navigation";
 import Home from "../Home";
-import Login from "../Login";
-import Register from "../Register";
 import RecipePage from "../RecipePage";
 import Favourite from "../../navBarPages/Favourite";
 import Profile from "../../navBarPages/Profile";
 import Settings from "../../navBarPages/Settings";
 import ShoppingList from "../../navBarPages/ShoppingList";
-import { Routes, Route, useLocation } from "react-router";
+import { Routes, Route } from "react-router";
+import { SearchProvider } from "../../contexts/SearchContext";
+
 function Layout() {
-  const location = useLocation();
-
-  // Hide Nav on Login & Register pages
-  const hideNav =
-    location.pathname === "/login" || location.pathname === "/register";
-
   return (
     <>
-      {!hideNav && <Nav />} {/* Conditionally render Nav */}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/recipe/:id" element={<RecipePage/>}/>
-        <Route path="/favourite" element={<Favourite />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/shoppingList" element={<ShoppingList />} />
-        <Route path="/profile" element={<Profile />} />
-      </Routes>
+      <SearchProvider>
+        <Nav />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/recipe/:id" element={<RecipePage />} />
+          <Route path="/favourite" element={<Favourite />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/shoppingList" element={<ShoppingList />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+      </SearchProvider>
       <Footer />
     </>
   );
