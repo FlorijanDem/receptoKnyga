@@ -245,7 +245,7 @@ const CharesteristicForm = () => {
       </div>
     </div>
 
-        <button type="submit" disabled={loading}>
+        <button type="submit" className="char-button" disabled={loading}>
           {loading ? 'Submitting...' : hasExistingData ? 'Update' : 'Add'}
         </button>
       </form>
@@ -253,6 +253,7 @@ const CharesteristicForm = () => {
       <div>
         <button 
           type="button" 
+          className="char-button"
           onClick={() => setShowPasswordReset(!showPasswordReset)}
         >
           {showPasswordReset ? 'Hide Password Reset' : 'Reset Password'}
@@ -298,7 +299,7 @@ const CharesteristicForm = () => {
                 />
               </label>
             </div>
-            <button type="submit" disabled={loading}>
+            <button className="char-button" type="submit" disabled={loading}>
               {loading ? 'Updating...' : 'Update Password'}
             </button>
           </form>
