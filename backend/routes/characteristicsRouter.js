@@ -4,6 +4,7 @@ const characteristicsRouter = express.Router();
 const {
   updateCharacteristic,
   getUserCharacteristicsMy,
+  createCharacteristic,
 } = require("../controllers/characteristicsController");
 //import body validator
 const {
@@ -19,6 +20,7 @@ const validate = require("../validators/validate");
 characteristicsRouter
   .route("/")
   .get(protect, getUserCharacteristicsMy)
+  .post(protect, createCharacteristic)
   .patch(
     protect,
     checkUpdateCharacteristicsBody,
