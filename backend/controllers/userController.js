@@ -53,10 +53,16 @@ exports.loginUser = async (req, res, next) => {
 
   try {
     const user = await getUserByEmail(email);
+    
+    if (!user) {
+      return res.status(401).json({
+        message: "Invalid email or password",
+      });
+    }
 
     const isPasswordCorrect = await argon2.verify(user.password, password);
     if (!isPasswordCorrect) {
-      res.status(401).json({
+      return res.status(401).json({
         message: "Invalid email or password",
       });
     }
@@ -111,7 +117,7 @@ exports.getMe = async (req, res, next) => {
     const token = req.cookies?.jwt;
 
     if (!token) {
-      res.status(200).json({ user: null });
+      return res.status(200).json({ user: null });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -119,7 +125,7 @@ exports.getMe = async (req, res, next) => {
     const user = await getUserByid(decoded?.id);
 
     if (!user) {
-      res.status(200).json({ user: null });
+      return res.status(200).json({ user: null });
     }
 
     res.status(200).json({ user });
