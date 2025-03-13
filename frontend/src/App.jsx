@@ -18,7 +18,7 @@ function App() {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <UserContextProvider>
-        <AppContent />
+          <AppContent />
       </UserContextProvider>
     </ErrorBoundary>
   );

@@ -7,19 +7,22 @@ import Profile from "../../navBarPages/Profile";
 import Settings from "../../navBarPages/Settings";
 import ShoppingList from "../../navBarPages/ShoppingList";
 import { Routes, Route } from "react-router";
-function Layout() {
+import { SearchProvider } from "../../contexts/SearchContext";
 
+function Layout() {
   return (
     <>
-      <Nav/>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/recipe/:id" element={<RecipePage/>}/>
-        <Route path="/favourite" element={<Favourite />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/shoppingList" element={<ShoppingList />} />
-        <Route path="/profile" element={<Profile />} />
-      </Routes>
+      <SearchProvider>
+        <Nav />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/recipe/:id" element={<RecipePage />} />
+          <Route path="/favourite" element={<Favourite />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/shoppingList" element={<ShoppingList />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+      </SearchProvider>
       <Footer />
     </>
   );

@@ -2,46 +2,140 @@ const { sql } = require("../dbConnection");
 
 // Does not work without DB
 
-exports.getAllRecipes = async (filter) => {
-  const { limit, offset, sortBy, order, searchString } = filter;
+exports.searchRecipes = async (filters) => {
+  const {
+    q, // bendras paieškos tekstas
+    type, // recepto tipas
+    product, // recepto produktas
+    preparation_time, // paruošimo laikas
+    servings, // porcijų skaičius
+    limit = 12,
+    offset = 0,
+  } = filters;
 
-  // Needs more work on filtering
-  const recipes = await sql`
-    SELECT recipes.*
-    FROM recipes
-    LEFT JOIN recipes_products
-    ON recipes.id = recipes_products.recipe_id
-    LEFT JOIN products
-    ON recipes_products.product_id = products.id
-    ${searchString ? sql`WHERE ${searchString}` : sql``}
-    GROUP BY recipes.id
-    ORDER BY ${sortBy} ${sql.unsafe(order)}
+  const searchQuery = sql`
+    WITH recipe_scores AS (
+      SELECT 
+        r.*,
+        CASE 
+          WHEN ${!!q} THEN
+            GREATEST(
+              similarity(r.title, ${q || ""}),
+              similarity(r.description, ${q || ""}),
+              COALESCE((
+                SELECT MAX(similarity(p.title, ${q || ""}))
+                FROM recipes_products rp
+                INNER JOIN products p ON rp.product_id = p.id
+                WHERE rp.recipe_id = r.id
+              ), 0)
+            )
+          ELSE 1.0
+        END as similarity_score
+      FROM recipes r
+      WHERE 1=1
+      ${type ? sql`AND r.type = ${type}` : sql``}
+      ${preparation_time ? sql`AND r.preparation_time = ${preparation_time}` : sql``}
+      ${servings ? sql`AND r.servings = ${servings}` : sql``}
+      ${
+        product
+          ? sql`
+        AND EXISTS (
+          SELECT 1 
+          FROM recipes_products rp
+          INNER JOIN products p ON rp.product_id = p.id
+          WHERE rp.recipe_id = r.id
+          AND (
+            similarity(p.title, ${product}) > 0.1
+            OR p.title ILIKE ${`%${product}%`}
+          )
+        )
+      `
+          : sql``
+      }
+      ${
+        q
+          ? sql`
+        AND (
+          similarity(r.title, ${q}) > 0.1
+          OR r.title ILIKE ${`%${q}%`}
+          OR similarity(r.description, ${q}) > 0.1
+          OR r.description ILIKE ${`%${q}%`}
+          OR EXISTS (
+            SELECT 1 
+            FROM recipes_products rp
+            INNER JOIN products p ON rp.product_id = p.id
+            WHERE rp.recipe_id = r.id
+            AND (
+              similarity(p.title, ${q}) > 0.1
+              OR p.title ILIKE ${`%${q}%`}
+            )
+          )
+        )
+      `
+          : sql``
+      }
+    )
+    SELECT * FROM recipe_scores
+    ORDER BY 
+      CASE WHEN ${!!q} THEN similarity_score ELSE 0 END DESC,
+      title ASC
     LIMIT ${limit}
     OFFSET ${offset}
-    `;
+  `;
 
-  return recipes;
-};
+  const countQuery = sql`
+    SELECT COUNT(*) as total 
+    FROM recipes r
+    WHERE 1=1
+    ${type ? sql`AND r.type = ${type}` : sql``}
+    ${preparation_time ? sql`AND r.preparation_time = ${preparation_time}` : sql``}
+    ${servings ? sql`AND r.servings = ${servings}` : sql``}
+    ${
+      product
+        ? sql`
+      AND EXISTS (
+        SELECT 1 
+        FROM recipes_products rp
+        INNER JOIN products p ON rp.product_id = p.id
+        WHERE rp.recipe_id = r.id
+        AND (
+          similarity(p.title, ${product}) > 0.1
+          OR p.title ILIKE ${`%${product}%`}
+        )
+      )
+    `
+        : sql``
+    }
+    ${
+      q
+        ? sql`
+      AND (
+        similarity(r.title, ${q}) > 0.1
+        OR r.title ILIKE ${`%${q}%`}
+        OR similarity(r.description, ${q}) > 0.1
+        OR r.description ILIKE ${`%${q}%`}
+        OR EXISTS (
+          SELECT 1 
+          FROM recipes_products rp
+          INNER JOIN products p ON rp.product_id = p.id
+          WHERE rp.recipe_id = r.id
+          AND (
+            similarity(p.title, ${q}) > 0.1
+            OR p.title ILIKE ${`%${q}%`}
+          )
+        )
+      )
+    `
+        : sql``
+    }
+  `;
+  // patikrinti ar nesukeicia reiksmes vietomis
+  const [recipes, [{ total }]] = await Promise.all([searchQuery, countQuery]);
 
-exports.getRecipesCount = async (filter) => {
-  const { searchString } = filter;
-
-  // Needs more work on filtering
-  const [recipesCount] = await sql`
-    SELECT COUNT(recipes.id)
-    FROM (
-      SELECT recipes.id
-      FROM recipes
-      LEFT JOIN recipes_products
-      ON recipes.id = recipes_products.recipe_id
-      LEFT JOIN products
-      ON recipes_products.product_id = products.id
-      ${searchString ? sql`WHERE ${searchString}` : sql``}
-      GROUP BY recipes.id
-    ) AS recipes
-    `;
-
-  return recipesCount?.count;
+  return {
+    recipes,
+    total: parseInt(total),
+  };
 };
 
 exports.getRecipeById = async (id) => {
@@ -198,3 +292,5 @@ exports.deleteRecipe = async (id) => {
 
   return deletedRecipe;
 };
+
+// Function to search recipes : title, description.

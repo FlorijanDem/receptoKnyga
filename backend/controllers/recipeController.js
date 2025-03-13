@@ -1,34 +1,41 @@
 const {
-  getAllRecipes,
   getRecipeById,
-  getRecipesCount,
   createRecipe,
   updateRecipe,
   deleteRecipe,
+  searchRecipes,
 } = require("../models/recipeModel");
 
 exports.getAllRecipesHandler = async (req, res, next) => {
   try {
-    const searchString = Object.entries(req.query)
-      .filter(([key]) => !["limit", "page", "sortBy", "order"].includes(key))
-      .map(([key, value]) => `${key} ILIKE '%${value}%'`)
-      .join(" AND ");
+    const { q, type, product, page = "1", limit = "12" } = req.query;
+    // Užtikriname, kad offset bus 0 jei page/limit yra nevalidūs
+    const pageNum = Math.max(1, parseInt(page) || 1);
+    const limitNum = Math.min(50, Math.max(1, parseInt(limit) || 12));
+    const offset = (pageNum - 1) * limitNum;
 
-    const filter = {
-      limit: +req.query.limit || 12,
-      offset: (+req.query.page - 1) * +req.query.limit || 0,
-      sortBy: req.query.sortBy || "title",
-      order: req.query.order || "asc",
-      searchString,
-    };
+    const { recipes, total } = await searchRecipes({
+      q: q?.trim(),
+      type: type?.toLowerCase(),
+      product: product?.trim(),
+      limit: limitNum,
+      offset: offset,
+      sortBy: q ? "similarity_score" : "title",
+      order: q ? "DESC" : "ASC",
+    });
 
-    const recipes = await getAllRecipes(filter);
-
-    const recipesCount = await getRecipesCount(filter);
+    if (!recipes || recipes.length === 0) {
+      return res.status(200).json({
+        status: "success",
+        results: 0,
+        data: [],
+        message: "No recipes found matching your criteria",
+      });
+    }
 
     res.status(200).json({
       status: "success",
-      results: recipesCount,
+      results: total,
       data: recipes,
     });
   } catch (error) {
