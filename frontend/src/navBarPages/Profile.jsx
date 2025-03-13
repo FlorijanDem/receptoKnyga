@@ -2,6 +2,7 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 import { useState } from "react";
 import { useErrorBoundary } from "react-error-boundary";
+import CharesteristicForm from "../components/CharesteristicForm";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -36,6 +37,7 @@ const Profile = () => {
   };
   return (
     <>
+      <CharesteristicForm />
       <button onClick={() => handleLogoutClick()}>Logout</button>
     </>
   );
