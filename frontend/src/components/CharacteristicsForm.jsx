@@ -25,7 +25,8 @@ const CharacteristicsForm = () => {
         const response = await axios.get(`${API_URL}/characteristics`, {
           withCredentials: true,
         });
-        setData(response.data.data);
+        const { user_id: _, ...filteredData } = response.data.data;
+        setData(filteredData);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           if (error.response) {
@@ -42,7 +43,7 @@ const CharacteristicsForm = () => {
     };
     fetchCharacteristics();
   }, []);
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
