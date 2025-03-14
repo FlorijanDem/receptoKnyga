@@ -1,43 +1,12 @@
-import { useNavigate } from "react-router";
-import axios from "axios";
 import { useState } from "react";
-import { useErrorBoundary } from "react-error-boundary";
 import CharacteristicsForm from "../components/CharacteristicsForm";
-const API_URL = import.meta.env.VITE_API_URL;
-
+import LogoutButton from "./LogoutButton";
 const Profile = () => {
-  const navigate = useNavigate();
-  const [ setError] = useState(null);
-  const { showBoundary } = useErrorBoundary();
-  const handleLogoutClick = async () => {
-    try {
-      await axios.post(
-        `${API_URL}/auth/logout`,
-        {},
-        {
-          withCredentials: true,
-        }
-      );
-      navigate("/");
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.response) {
-          setError(error.response.data.message);
-        } else if (error.request) {
-          setError("Something went wrong. Please try again later.");
-        } else {
-          setError("Network error. Please check your internet connection.");
-        }
-      } else {
-        showBoundary(error);
-      }
-    }
-    navigate(0);
-  };
+  const [setError] = useState(null);
   return (
     <>
-      <CharacteristicsForm/>
-      <button onClick={() => handleLogoutClick()}>Logout</button>
+      <CharacteristicsForm />
+      <LogoutButton setError={setError} />
     </>
   );
 };
