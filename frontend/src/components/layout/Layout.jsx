@@ -8,6 +8,7 @@ import Settings from "../../navBarPages/Settings";
 import ShoppingList from "../../navBarPages/ShoppingList";
 import { Routes, Route } from "react-router";
 import { SearchProvider } from "../../contexts/SearchContext";
+import AddRecipe from "../AddRecipe";
 
 function Layout() {
   return (
@@ -21,6 +22,7 @@ function Layout() {
           <Route path="/settings" element={<Settings />} />
           <Route path="/shoppingList" element={<ShoppingList />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/addRecipe" element={<AddRecipe />} />
         </Routes>
       </SearchProvider>
       <Footer />
