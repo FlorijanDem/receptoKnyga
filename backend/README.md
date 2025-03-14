@@ -100,5 +100,4 @@ node server.js
 | Method | Endpoint                  | Description               | Auth Required |
 | ------ | ------------------------- | ------------------------- | ------------- |
 | GET    | `/api/v1/characteristics` | Get user characteristics  | ✅ Yes        |
-| POST   | `/api/v1/characteristics` | Add user characteristics  | ✅ Yes        |
-| PUT    | `/api/v1/characteristics` | Edit user characteristics | ✅ Yes        |
+| PATCH  | `/api/v1/characteristics` | Edit user characteristics | ✅ Yes        |
