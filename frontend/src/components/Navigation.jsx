@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router";
 import NavLikeIcon from "../assets/icons/Like.svg";
 import NavSettingIcon from "../assets/icons/Settings.svg";
@@ -9,6 +9,7 @@ import NavFilterIcon from "../assets/icons/Filter.svg";
 
 import SearchBar from "./SearchBar";
 import Sidebar from "./Sidebar";
+import SearchContext from "../contexts/SearchContext";
 
 const icons = [
   { src: NavLikeIcon, alt: "like Icon", pagename: "Like", path: "/favourite" },
@@ -34,8 +35,15 @@ const icons = [
 
 const Navigation = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const { setDraftQuery, setCurrentQuery } = useContext(SearchContext);
 
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
+
+  // Funkcija, kuri išvalo paieškos lauką ir rezultatus
+  const handleLogoClick = () => {
+    setDraftQuery("");
+    setCurrentQuery("");
+  };
 
   const iconStyle =
     "mx-[0.625rem] transition-transform duration-300 hover:scale-110 active:scale-90";
@@ -44,7 +52,7 @@ const Navigation = () => {
     <nav>
       <div className="flex flex-col md:flex-row items-center mx-[1.563rem] mt-[2rem] mb-[2rem]">
         <div className="flex justify-between items-center w-full md:w-auto">
-          <Link to="/">
+          <Link to="/" onClick={handleLogoClick}>
             <h1 className="font-jakarta text-recipe-primary font-bold tracking-[-1px] text-[24px] md:text-[32px] xl:text-[32px]">
               Calibrium
             </h1>
