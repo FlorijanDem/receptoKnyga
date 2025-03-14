@@ -45,7 +45,7 @@ exports.searchRecipes = async (filters) => {
           INNER JOIN products p ON rp.product_id = p.id
           WHERE rp.recipe_id = r.id
           AND (
-            similarity(p.title, ${product}) > 0.1
+            similarity(p.title, ${product}) > 0.2
             OR p.title ILIKE ${`%${product}%`}
           )
         )
@@ -56,9 +56,9 @@ exports.searchRecipes = async (filters) => {
         q
           ? sql`
         AND (
-          similarity(r.title, ${q}) > 0.1
+          similarity(r.title, ${q}) > 0.2
           OR r.title ILIKE ${`%${q}%`}
-          OR similarity(r.description, ${q}) > 0.1
+          OR similarity(r.description, ${q}) > 0.2
           OR r.description ILIKE ${`%${q}%`}
           OR EXISTS (
             SELECT 1 
@@ -66,7 +66,7 @@ exports.searchRecipes = async (filters) => {
             INNER JOIN products p ON rp.product_id = p.id
             WHERE rp.recipe_id = r.id
             AND (
-              similarity(p.title, ${q}) > 0.1
+              similarity(p.title, ${q}) > 0.2
               OR p.title ILIKE ${`%${q}%`}
             )
           )
@@ -99,7 +99,7 @@ exports.searchRecipes = async (filters) => {
         INNER JOIN products p ON rp.product_id = p.id
         WHERE rp.recipe_id = r.id
         AND (
-          similarity(p.title, ${product}) > 0.1
+          similarity(p.title, ${product}) > 0.2
           OR p.title ILIKE ${`%${product}%`}
         )
       )
@@ -110,9 +110,9 @@ exports.searchRecipes = async (filters) => {
       q
         ? sql`
       AND (
-        similarity(r.title, ${q}) > 0.1
+        similarity(r.title, ${q}) > 0.2
         OR r.title ILIKE ${`%${q}%`}
-        OR similarity(r.description, ${q}) > 0.1
+        OR similarity(r.description, ${q}) > 0.2
         OR r.description ILIKE ${`%${q}%`}
         OR EXISTS (
           SELECT 1 
@@ -120,7 +120,7 @@ exports.searchRecipes = async (filters) => {
           INNER JOIN products p ON rp.product_id = p.id
           WHERE rp.recipe_id = r.id
           AND (
-            similarity(p.title, ${q}) > 0.1
+            similarity(p.title, ${q}) > 0.2
             OR p.title ILIKE ${`%${q}%`}
           )
         )
