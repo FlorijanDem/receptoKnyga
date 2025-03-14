@@ -17,7 +17,8 @@ const createDBtables = async () => {
             username VARCHAR(255) UNIQUE NOT NULL,
             role VARCHAR(10) NOT NULL DEFAULT 'user',
             password VARCHAR(255) NOT NULL,
-            email VARCHAR(255) UNIQUE NOT NULL
+            email VARCHAR(255) UNIQUE NOT NULL,
+            banned BOOLEAN DEFAULT FALSE
     );`;
 
     // Create characteristics table who refences to user id
@@ -47,6 +48,7 @@ const createDBtables = async () => {
             -- Preperation time in minutes
             preparation_time INTEGER,
             servings INTEGER,
+            approved BOOLEAN DEFAULT FALSE,
             user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
         )
     `;
