@@ -54,6 +54,12 @@ exports.loginUser = async (req, res, next) => {
 
   try {
     const user = await getUserByEmail(email);
+    
+    if (!user) {
+      return res.status(401).json({
+        message: "Invalid email or password",
+      });
+    }
 
     if (!user) {
       return res.status(401).json({
