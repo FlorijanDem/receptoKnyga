@@ -47,7 +47,7 @@ const CharacteristicsForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.patch(`${API_URL}/characteristics`, data, {
+      await axios.patch(`${API_URL}/characteristics`, data, {
         withCredentials: true,
       });
       setError(null);
