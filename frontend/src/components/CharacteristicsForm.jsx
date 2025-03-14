@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -19,10 +19,35 @@ const CharacteristicsForm = () => {
     }));
   };
 
+  useEffect(() => {
+    const fetchCharacteristics = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/characteristics`, {
+          withCredentials: true,
+        });
+        const { user_id: _, ...filteredData } = response.data.data;
+        setData(filteredData);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          if (error.response) {
+            setError(error.response.data.message);
+          } else if (error.request) {
+            setError("Something went wrong. Please try again later.");
+          } else {
+            setError("Network error. Please check your internet connection.");
+          }
+        } else {
+          setError(error);
+        }
+      }
+    };
+    fetchCharacteristics();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.patch(`${API_URL}/characteristics`, data, {
+      await axios.patch(`${API_URL}/characteristics`, data, {
         withCredentials: true,
       });
       setError(null);
