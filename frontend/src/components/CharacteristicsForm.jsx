@@ -26,7 +26,6 @@ const CharacteristicsForm = () => {
         withCredentials: true,
       });
       setError(null);
-      console.log("Success:", response.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
