@@ -5,6 +5,10 @@ const SearchContext = createContext();
 export const SearchProvider = ({ children }) => {
   const [currentQuery, setCurrentQuery] = useState("");
   const [draftQuery, setDraftQuery] = useState("");
+  const [filters, setFilters] = useState({
+    type: "",
+    product: ""
+  });
 
   return (
     <SearchContext.Provider 
@@ -12,7 +16,9 @@ export const SearchProvider = ({ children }) => {
         currentQuery, 
         setCurrentQuery,
         draftQuery,
-        setDraftQuery
+        setDraftQuery,
+        filters,
+        setFilters
       }}
     >
       {children}

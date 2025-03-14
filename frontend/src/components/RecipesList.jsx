@@ -8,7 +8,7 @@ import SearchContext from "../contexts/SearchContext";
 const API_URL = import.meta.env.VITE_API_URL;
 
 const RecipesList = ({ filter, setFilter }) => {
-  const { currentQuery } = useContext(SearchContext);
+  const { currentQuery, filters } = useContext(SearchContext);
   const [recipes, setRecipes] = useState([]);
   const [recipeCount, setRecipeCount] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -18,8 +18,18 @@ const RecipesList = ({ filter, setFilter }) => {
   const fetchRecipes = async (query = "") => {
     try {
       setLoading(true);
+      
+      // Sukuriame URL parametrus iš filtro objekto ir konteksto filtrų
+      const params = new URLSearchParams();
+      params.append('page', filter.page);
+      params.append('limit', filter.limit);
+      
+      if (query) params.append('q', query);
+      if (filters.type) params.append('type', filters.type);
+      if (filters.product) params.append('product', filters.product);
+      
       const { data: response } = await axios.get(
-        `${API_URL}/recipes?page=${filter.page}&limit=${filter.limit}${query ? `&q=${query}` : ''}`,
+        `${API_URL}/recipes?${params.toString()}`,
         {
           withCredentials: true,
         }
@@ -46,9 +56,18 @@ const RecipesList = ({ filter, setFilter }) => {
     }
   };
 
+  // Reaguojame į filtrų pasikeitimus
+  useEffect(() => {
+    // Kai pasikeičia filtrai, grįžtame į pirmą puslapį
+    setFilter(prev => ({
+      ...prev,
+      page: 1
+    }));
+  }, [filters, setFilter]);
+
   useEffect(() => {
     fetchRecipes(currentQuery);
-  }, [filter, currentQuery]);
+  }, [filter, currentQuery, filters]);
 
   return (
     <>
