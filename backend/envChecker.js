@@ -1,10 +1,13 @@
 const isNaString = (value) => typeof value !== "string";
 const validateEnv = () => {
+  if (process.env.DISABLE_CHECKING == "true") {
+    return 0;
+  }
   console.log("Enviroment messages:");
 
   let warnings = 0;
   let errors = 0;
-  
+
   if (!process.env.PORT) {
     console.log("\x1b[33m", "PORT not found, using default port 3001");
     process.env.PORT = 3001;
