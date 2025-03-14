@@ -5,6 +5,8 @@ import Layout from "./components/layout/Layout";
 import UserContextProvider from "./contexts/UserContextProvider";
 import UserContext from "./contexts/UserContext";
 import GuestLayout from "./components/layout/GuestLayout";
+import { SearchProvider } from "./contexts/SearchContext";
+
 function AppContent() {
   const { user } = useContext(UserContext);
   return (
@@ -18,7 +20,9 @@ function App() {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <UserContextProvider>
+        <SearchProvider>
           <AppContent />
+        </SearchProvider>
       </UserContextProvider>
     </ErrorBoundary>
   );
