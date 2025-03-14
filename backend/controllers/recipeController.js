@@ -57,6 +57,10 @@ exports.getRecipeByIdHandler = async (req, res, next) => {
 };
 
 exports.createRecipeHandler = async (req, res, next) => {
+  // Add default image (in the future can be change)
+  if (req.body.photo === "") {
+    req.body.photo = "https://en.wikipedia.org/wiki/Meal#/media/File:Floris_Claesz._van_Dyck_001.jpg"
+  }
   try {
     const newRecipe = await createRecipe({
       ...req.body,
