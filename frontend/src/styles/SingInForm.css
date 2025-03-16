@@ -1,0 +1,129 @@
+body {
+  
+  min-height: 100vh;
+
+  font-family: "Plus Jakarta Sans";
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.Box {
+  background-color: #ffff;
+  width: 625px;
+  height: 788px;
+
+  border-radius: 10px;
+}
+
+.heading {
+  font-size: 40px;
+  font-family: "Plus Jakarta Sans";
+  font-weight: 700;
+  padding-left: 25px;
+  padding-top: 47px;
+}
+
+.Email {
+  margin-top: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  padding-left: 5px;
+  padding-bottom: 10px;
+}
+.re-password {
+  margin-top: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  padding-left: 5px;
+  padding-bottom: 10px;
+}
+
+.input-container {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 3px;
+}
+
+.input-container input {
+  background-color: #f6f7f9;
+  border: none;
+  outline: none;
+
+  height: 66px;
+  width: 560px;
+  border-radius: 10px;
+  padding-left: 25px;
+
+  caret-color: #000000;
+
+  cursor: pointer;
+
+  font-weight: 100;
+  font-size: 0.938rem;
+}
+
+.input-container-email {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 3px;
+}
+
+.input-container-email input {
+  background-color: #f6f7f9;
+  border: none;
+  outline: none;
+  color: #000000;
+
+  height: 66px;
+  width: 560px;
+  border-radius: 10px;
+  padding-left: 25px;
+
+  caret-color: #000000;
+
+  font-weight: 100;
+}
+.input-container-email input::placeholder {
+  font-size: 14px;
+  font-weight: 500;
+  color: #90a3bf;
+  padding-right: 50px;
+  font-weight: 300;
+}
+.input-container input::placeholder {
+  font-size: 14px;
+  font-weight: 500;
+  color: #90a3bf;
+  padding-right: 50px;
+}
+.login {
+  font-size: 16px;
+  font-weight: 600;
+  padding-left: 20px;
+  padding-top: 20px;
+
+  cursor: pointer;
+}
+
+.already {
+  font-size: 14px;
+  font-weight: 500;
+  padding-left: 0px;
+  color: #90a3bf;
+  padding-top: 10px;
+}
+
+.button {
+  margin-top: 50px;
+}
+
+.error-message {
+  color: #fc4747;
+
+  position: absolute;
+
+  transform: translateY(-50%);
+  margin-top: 21px;
+}
