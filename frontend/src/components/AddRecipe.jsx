@@ -82,7 +82,10 @@ function AddRecipe() {
       });
       navigate(`/recipe/${response.data.data.id}`);
     } catch (error) {
-      setError(error.response?.data?.message && "Failed to add recipe.");
+      setError(
+        error.response?.data?.message &&
+          `Failed to add recipe.; ${error.response.data.message}`
+      );
     }
   };
 
@@ -91,7 +94,12 @@ function AddRecipe() {
       <h2 className="text-xl font-semibold text-center text-gray-700 mb-4">
         Add Recipe
       </h2>
-      {error && <p className="text-red-500 text-center">{error}</p>}
+      {error &&
+        error.split("; ").map((errStr, i) => (
+          <p key={i} className="text-red-500 text-center">
+            {errStr}
+          </p>
+        ))}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <p className="text-gray-600">Recipe Title</p>
