@@ -49,7 +49,10 @@ function AddRecipe() {
   const addProductField = () => {
     setFormData((prev) => ({
       ...prev,
-      products: [...prev.products, { title: "", amount: "", units_of_meassurement: "" }],
+      products: [
+        ...prev.products,
+        { title: "", amount: "", units_of_meassurement: "" },
+      ],
     }));
   };
 
@@ -179,7 +182,9 @@ function AddRecipe() {
                 className="w-1/3 p-2 border rounded"
                 required
                 value={product.title}
-                onChange={(e) => handleProductChange(index, "title", e.target.value)}
+                onChange={(e) =>
+                  handleProductChange(index, "title", e.target.value)
+                }
               />
               <input
                 type="text"
@@ -187,7 +192,9 @@ function AddRecipe() {
                 className="w-1/3 p-2 border rounded"
                 required
                 value={product.amount}
-                onChange={(e) => handleProductChange(index, "amount", e.target.value)}
+                onChange={(e) =>
+                  handleProductChange(index, "amount", e.target.value)
+                }
               />
               <input
                 type="text"
@@ -196,7 +203,11 @@ function AddRecipe() {
                 required
                 value={product.units_of_meassurement}
                 onChange={(e) =>
-                  handleProductChange(index, "units_of_meassurement", e.target.value)
+                  handleProductChange(
+                    index,
+                    "units_of_meassurement",
+                    e.target.value
+                  )
                 }
               />
               <button
