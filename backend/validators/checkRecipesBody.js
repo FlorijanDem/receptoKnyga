@@ -57,6 +57,8 @@ exports.checkUpdateRecipesBody = [
 
   body("servings").optional().trim().isNumeric({ min: 1 }),
 
+  body("approved").optional().isBoolean(),
+
   checkExact([], {
     message: (fields) =>
       fields.map((field) => `Invalid field: ${field.path}`).join("; "),

@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+@theme {
+  --font-jakarta: "Plus Jakarta Sans", sans-serif;
+  --color-recipe-primary: #3563e9;
+  --color-recipe-secondary: #90a3bf;
+  --color-recipe-third: #1a202c;
+  --color-recipe-fourth: #ed3f3f;
+  --color-recipe-fifth: #ffffff;
+}
+
 main {
   @apply bg-gray-200;
 }
@@ -69,5 +78,28 @@ main {
 
   button {
     @apply cursor-pointer border px-2 rounded;
+  }
+}
+
+.login-page,
+.register-page {
+  @apply w-max mx-auto py-10 text-gray-800;
+}
+
+.user-form {
+  @apply flex flex-col gap-2;
+
+  .input-container {
+    * {
+      @apply block;
+    }
+
+    label {
+      @apply relative translate-x-2 translate-y-3 bg-gray-200 w-max px-1;
+    }
+
+    input {
+      @apply border rounded py-1 px-2;
+    }
   }
 }

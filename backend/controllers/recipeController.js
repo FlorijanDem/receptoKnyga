@@ -1,34 +1,41 @@
 const {
-  getAllRecipes,
   getRecipeById,
-  getRecipesCount,
   createRecipe,
   updateRecipe,
   deleteRecipe,
+  searchRecipes,
 } = require("../models/recipeModel");
 
 exports.getAllRecipesHandler = async (req, res, next) => {
   try {
-    const searchString = Object.entries(req.query)
-      .filter(([key]) => !["limit", "page", "sortBy", "order"].includes(key))
-      .map(([key, value]) => `${key} ILIKE '%${value}%'`)
-      .join(" AND ");
+    const { q, type, product, page = "1", limit = "12" } = req.query;
+    // Užtikriname, kad offset bus 0 jei page/limit yra nevalidūs
+    const pageNum = Math.max(1, parseInt(page) || 1);
+    const limitNum = Math.min(50, Math.max(1, parseInt(limit) || 12));
+    const offset = (pageNum - 1) * limitNum;
 
-    const filter = {
-      limit: +req.query.limit || 12,
-      offset: (+req.query.page - 1) * +req.query.limit || 0,
-      sortBy: req.query.sortBy || "title",
-      order: req.query.order || "asc",
-      searchString,
-    };
+    const { recipes, total } = await searchRecipes({
+      q: q?.trim(),
+      type: type?.toLowerCase(),
+      product: product?.trim(),
+      limit: limitNum,
+      offset: offset,
+      sortBy: q ? "similarity_score" : "title",
+      order: q ? "DESC" : "ASC",
+    });
 
-    const recipes = await getAllRecipes(filter);
-
-    const recipesCount = await getRecipesCount(filter);
+    if (!recipes || recipes.length === 0) {
+      return res.status(200).json({
+        status: "success",
+        results: 0,
+        data: [],
+        message: "No recipes found matching your criteria",
+      });
+    }
 
     res.status(200).json({
       status: "success",
-      results: recipesCount,
+      results: total,
       data: recipes,
     });
   } catch (error) {
@@ -50,6 +57,10 @@ exports.getRecipeByIdHandler = async (req, res, next) => {
 };
 
 exports.createRecipeHandler = async (req, res, next) => {
+  // Add default image (in the future can be change)
+  if (req.body.photo === "") {
+    req.body.photo = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Floris_Claesz._van_Dyck_001.jpg/960px-Floris_Claesz._van_Dyck_001.jpg"
+  }
   try {
     const newRecipe = await createRecipe({
       ...req.body,

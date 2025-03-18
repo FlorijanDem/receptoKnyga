@@ -1,52 +1,73 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useErrorBoundary } from "react-error-boundary";
 import RecipePreviewCard from "./RecipePreviewCard";
 import RecipesListPagination from "./RecipesListPagination";
+import SearchContext from "../contexts/SearchContext";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-const RecipesList = () => {
-  const [filter, setFilter] = useState({ page: 1, limit: 12 });
+const RecipesList = ({ filter, setFilter }) => {
+  const { currentQuery, filters } = useContext(SearchContext);
   const [recipes, setRecipes] = useState([]);
   const [recipeCount, setRecipeCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { showBoundary } = useErrorBoundary();
 
-  useEffect(() => {
-    const fetchRecipes = async () => {
-      try {
-        const { data: response } = await axios.get(
-          `${API_URL}/recipes?page=${filter.page}&limit=${filter.limit}`,
-          {
-            withCredentials: true,
-          }
-        );
-
-        setRecipes(response.data);
-        setRecipeCount(response.results);
-        setError(null);
-        setLoading(false);
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      } catch (error) {
-        setLoading(false);
-        if (axios.isAxiosError(error)) {
-          if (error.response) {
-            setError(error.response.data.message);
-          } else if (error.request) {
-            setError("Something went wrong. Please try again later.");
-          } else {
-            setError("Network error. Please check your internet connection.");
-          }
-        } else {
-          showBoundary(error);
+  const fetchRecipes = async (query = "") => {
+    try {
+      setLoading(true);
+      
+      // Sukuriame URL parametrus iš filtro objekto ir konteksto filtrų
+      const params = new URLSearchParams();
+      params.append('page', filter.page);
+      params.append('limit', filter.limit);
+      
+      if (query) params.append('q', query);
+      if (filters.type) params.append('type', filters.type);
+      if (filters.product) params.append('product', filters.product);
+      
+      const { data: response } = await axios.get(
+        `${API_URL}/recipes?${params.toString()}`,
+        {
+          withCredentials: true,
         }
-      }
-    };
+      );
 
-    fetchRecipes();
-  }, [filter]);
+      setRecipes(response.data);
+      setRecipeCount(response.results);
+      setError(null);
+      setLoading(false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (error) {
+      setLoading(false);
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          setError(error.response.data.message);
+        } else if (error.request) {
+          setError("Something went wrong. Please try again later.");
+        } else {
+          setError("Network error. Please check your internet connection.");
+        }
+      } else {
+        showBoundary(error);
+      }
+    }
+  };
+
+  // Reaguojame į filtrų pasikeitimus
+  useEffect(() => {
+    // Kai pasikeičia filtrai, grįžtame į pirmą puslapį
+    setFilter(prev => ({
+      ...prev,
+      page: 1
+    }));
+  }, [filters, setFilter]);
+
+  useEffect(() => {
+    fetchRecipes(currentQuery);
+  }, [filter, currentQuery, filters]);
 
   return (
     <>

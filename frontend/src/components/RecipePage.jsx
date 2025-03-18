@@ -3,6 +3,7 @@ import { FaHeart, FaClock, FaUsers } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import axios from "axios";
+import RecipePageControls from "./RecipePageControls";
 const API_URL = import.meta.env.VITE_API_URL;
 
 const RecipePage = () => {
@@ -51,7 +52,7 @@ const RecipePage = () => {
       ) : (
         <div className="p-4 max-w-md mx-auto">
           {/* Recipe Card */}
-          
+
           <div className="bg-white shadow-md rounded-lg p-4">
             <img
               src={recipe.data.photo}
@@ -86,6 +87,7 @@ const RecipePage = () => {
                 {recipe.data.method}
               </p>
             )}
+            <RecipePageControls recipe={recipe.data} setRecipe={setRecipe} />
           </div>
           <button
             className="bg-blue-500 text-white px-4 py-1 rounded-lg my-2"

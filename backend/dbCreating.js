@@ -17,7 +17,8 @@ const createDBtables = async () => {
             username VARCHAR(255) UNIQUE NOT NULL,
             role VARCHAR(10) NOT NULL DEFAULT 'user',
             password VARCHAR(255) NOT NULL,
-            email VARCHAR(255) UNIQUE NOT NULL
+            email VARCHAR(255) UNIQUE NOT NULL,
+            banned BOOLEAN DEFAULT FALSE
     );`;
 
     // Create characteristics table who refences to user id
@@ -47,6 +48,7 @@ const createDBtables = async () => {
             -- Preperation time in minutes
             preparation_time INTEGER,
             servings INTEGER,
+            approved BOOLEAN DEFAULT FALSE,
             user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
         )
     `;
@@ -76,4 +78,38 @@ const createDBtables = async () => {
   }
 };
 
-module.exports = { createDBtables };
+const dbSettings = async () => {
+    // Aktyvuoja pg_trgm plėtinį postgreSQL duomenų bazėje, kurio pagrindu realizuota netiksli paieska pagal fragmentą
+  try {
+    const trgmCheck = await sql`
+        SELECT EXISTS (
+          SELECT 1 FROM pg_extension WHERE extname = 'pg_trgm'
+        );
+      `;
+
+    if (!trgmCheck[0].exists) {
+      await sql`CREATE EXTENSION IF NOT EXISTS pg_trgm`;
+      console.log("pg_trgm plėtinys sėkmingai įdiegtas");
+    }
+
+    console.log("pg_trgm plėtinys sėkmingai įdiegtas ir aktyvuotas.");
+
+    //  indeksai recipes products lentelei
+    await sql`CREATE INDEX IF NOT EXISTS recipes_title_trgm_idx ON recipes USING gin (title gin_trgm_ops)`;
+    await sql`CREATE INDEX IF NOT EXISTS recipes_description_trgm_idx ON recipes USING gin (description gin_trgm_ops)`;
+    await sql`CREATE INDEX IF NOT EXISTS products_title_trgm_idx ON products USING gin (title gin_trgm_ops)`;
+
+    // await sql`ALTER TABLE recipes SET (autovacuum_enabled = true)`;
+    // await sql`ALTER TABLE recipes SET (autovacuum_analyze_scale_factor = 0.1)`;
+    // await sql`ALTER TABLE products SET (autovacuum_enabled = true)`;
+    // await sql`ALTER TABLE products SET (autovacuum_analyze_scale_factor = 0.1)`;
+
+    console.log(
+      "Indeksai sukurti ir optimizacijos nustatymai pritaikyti sėkmingai."
+    );
+  } catch (err) {
+    console.error("Klaida nustatant duomenų bazės parametrus:", err);
+  }
+};
+
+module.exports = { createDBtables, dbSettings };

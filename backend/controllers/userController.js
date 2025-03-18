@@ -3,6 +3,7 @@ const {
   registerUser,
   getUserByEmail,
   getUserByid,
+  updateUser,
 } = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const argon2 = require("argon2");
@@ -53,10 +54,22 @@ exports.loginUser = async (req, res, next) => {
 
   try {
     const user = await getUserByEmail(email);
+    
+    if (!user) {
+      return res.status(401).json({
+        message: "Invalid email or password",
+      });
+    }
+
+    if (!user) {
+      return res.status(401).json({
+        message: "Invalid email or password",
+      });
+    }
 
     const isPasswordCorrect = await argon2.verify(user.password, password);
     if (!isPasswordCorrect) {
-      res.status(401).json({
+      return res.status(401).json({
         message: "Invalid email or password",
       });
     }
@@ -66,7 +79,7 @@ exports.loginUser = async (req, res, next) => {
 
     user.id = undefined;
     user.password = undefined;
-    
+
     res.status(200).json({
       message: "You are login",
       user,
@@ -101,6 +114,41 @@ exports.protect = async (req, res, next) => {
 
     req.user = user;
     next();
+  } catch (err) {
+    next(new AppError(err.message, 401));
+  }
+};
+
+exports.getMe = async (req, res, next) => {
+  try {
+    const token = req.cookies?.jwt;
+
+    if (!token) {
+      return res.status(200).json({ user: null });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await getUserByid(decoded?.id);
+
+    if (!user) {
+      return res.status(200).json({ user: null });
+    }
+
+    user.password = undefined;
+
+    res.status(200).json({ user });
+  } catch (err) {
+    next(new AppError(err.message, 401));
+  }
+};
+
+exports.updateUser = async (req, res, next) => {
+  try {
+    const data = req.body;
+    const id = req.params.id;
+    const user = await updateUser(data, id);
+    res.status(200).json({ status: "success", data: user });
   } catch (err) {
     next(new AppError(err.message, 401));
   }
