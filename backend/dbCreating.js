@@ -34,6 +34,14 @@ const createDBtables = async () => {
         )
     `;
 
+    await sql`
+        CREATE TABLE IF NOT EXISTS characteristics_history (
+            user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+            weight FLOAT[],
+            date TIMESTAMP[]
+        )
+    `;
+
     // Create recipes table
     // The "type" field represents the recipe category, such as "Vegetarian" or "Vegan".
     // If no category it remains NULL.
