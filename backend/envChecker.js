@@ -13,6 +13,12 @@ const validateEnv = () => {
     warnings++;
   }
 
+  if (!process.env.DB_HOST) {
+    // If nothing exist will be localhost without addictionall set up
+    console.log("\x1b[33m", "DB_HOST not found, using default host localhost");
+    warnings++;
+  }
+
   if (!process.env.PORT) {
     console.log("\x1b[33m", "PORT not found, using default port 3001");
     process.env.PORT = 3001;
@@ -38,6 +44,16 @@ const validateEnv = () => {
   } else if (isNaString(process.env.DB_NAME)) {
     console.log("\x1b[31m", "DB_NAME must be string");
     errors++;
+  }
+
+  if (!process.env.DB_USER) {
+    console.log("\x1b[33m", "DB_USER not found, using username");
+    warnings++;
+  }
+
+  if (!process.env.DB_PASS) {
+    console.log("\x1b[33m", "DB_PASS not found, using default password postgres");
+    warnings++;
   }
 
   if (warnings == 0 && errors == 0) {
