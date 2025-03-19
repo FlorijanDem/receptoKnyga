@@ -8,7 +8,7 @@ const validateEnv = () => {
   let warnings = 0;
   let errors = 0;
 
-  //  client url 
+  //  client url
   if (!process.env.FRONTEND_URL) {
     console.log("\x1b[33m", "CORS response to all sources");
     warnings++;
@@ -55,7 +55,36 @@ const validateEnv = () => {
   }
 
   if (!process.env.DB_PASS) {
-    console.log("\x1b[33m", "DB_PASS not found, using default password postgres");
+    console.log(
+      "\x1b[33m",
+      "DB_PASS not found, using default password postgres"
+    );
+    process.env.DB_PASS = "postgres";
+    warnings++;
+  }
+
+  // jwt config
+  if (!process.env.JWT_SECRET) {
+    console.log(
+      "\x1b[33m",
+      "JWT_SECRET not found, using default password password"
+    );
+    process.env.JWT_SECRET = "password";
+    warnings++;
+  }
+
+  if (!process.env.JWT_EXPIRES_IN) {
+    console.log("\x1b[33m", "JWT_EXPIRES_IN not found, using default time 90d");
+    process.env.JWT_EXPIRES_IN = "90d";
+    warnings++;
+  }
+
+  if (!process.env.JWT_COOKIE_EXPIRES_IN) {
+    console.log(
+      "\x1b[33m",
+      "JWT_COOKIE_EXPIRES_IN not found, using default time 90"
+    );
+    process.env.JWT_COOKIE_EXPIRES_IN = 90;
     warnings++;
   }
 
