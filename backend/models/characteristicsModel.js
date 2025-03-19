@@ -25,6 +25,12 @@ exports.updateCharacteristic = async (data, id) => {
         VALUES (${id}, ${data.height ?? null}, ${data.weight ?? null}, ${data.age ?? null}, ${data.gender ?? null})
         RETURNING characteristics.*
     `;
+
+    // Add entry point in history
+    await sql`
+        INSERT INTO characteristics_history (user_id, weight)
+        VALUES (${id}, ARRAY[${data.weight ?? null}])
+    `;
     return characteristics;
   } else {
     const user = existingUser[0];
@@ -41,4 +47,13 @@ exports.updateCharacteristic = async (data, id) => {
     `;
     return characteristic;
   }
+};
+
+exports.addToCharacteristicsHistory = async (data, id) => {
+  const [addToHistory] = await sql`
+      UPDATE characteristics_history
+      SET weight = ARRAY_APPEND(COALESCE(weight, '{}'), ${data.weight})
+      WHERE user_id=${id}
+  `;
+  return addToHistory;
 };
