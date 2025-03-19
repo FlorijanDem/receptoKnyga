@@ -49,7 +49,10 @@ function AddRecipe() {
   const addProductField = () => {
     setFormData((prev) => ({
       ...prev,
-      products: [...prev.products, { title: "", amount: "", units_of_meassurement: "" }],
+      products: [
+        ...prev.products,
+        { title: "", amount: "", units_of_meassurement: "" },
+      ],
     }));
   };
 
@@ -79,7 +82,10 @@ function AddRecipe() {
       });
       navigate(`/recipe/${response.data.data.id}`);
     } catch (error) {
-      setError(error.response?.data?.message && "Failed to add recipe.");
+      setError(
+        error.response?.data?.message &&
+          `Failed to add recipe.; ${error.response.data.message}`
+      );
     }
   };
 
@@ -88,7 +94,12 @@ function AddRecipe() {
       <h2 className="text-xl font-semibold text-center text-gray-700 mb-4">
         Add Recipe
       </h2>
-      {error && <p className="text-red-500 text-center">{error}</p>}
+      {error &&
+        error.split("; ").map((errStr, i) => (
+          <p key={i} className="text-red-500 text-center">
+            {errStr}
+          </p>
+        ))}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <p className="text-gray-600">Recipe Title</p>
@@ -179,7 +190,9 @@ function AddRecipe() {
                 className="w-1/3 p-2 border rounded"
                 required
                 value={product.title}
-                onChange={(e) => handleProductChange(index, "title", e.target.value)}
+                onChange={(e) =>
+                  handleProductChange(index, "title", e.target.value)
+                }
               />
               <input
                 type="text"
@@ -187,7 +200,9 @@ function AddRecipe() {
                 className="w-1/3 p-2 border rounded"
                 required
                 value={product.amount}
-                onChange={(e) => handleProductChange(index, "amount", e.target.value)}
+                onChange={(e) =>
+                  handleProductChange(index, "amount", e.target.value)
+                }
               />
               <input
                 type="text"
@@ -196,7 +211,11 @@ function AddRecipe() {
                 required
                 value={product.units_of_meassurement}
                 onChange={(e) =>
-                  handleProductChange(index, "units_of_meassurement", e.target.value)
+                  handleProductChange(
+                    index,
+                    "units_of_meassurement",
+                    e.target.value
+                  )
                 }
               />
               <button

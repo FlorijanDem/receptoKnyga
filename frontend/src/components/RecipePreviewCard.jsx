@@ -16,7 +16,7 @@ const RecipePreviewCard = ({ recipe }) => {
       >
         <img
           className="recipe-preview-card__image w-full h-48 object-cover"
-          src={recipe.photo}
+          src={recipe.photo || null}
           alt={recipe.title}
         />
       </div>

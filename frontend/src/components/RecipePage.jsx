@@ -55,7 +55,7 @@ const RecipePage = () => {
 
           <div className="bg-white shadow-md rounded-lg p-4">
             <img
-              src={recipe.data.photo}
+              src={recipe.data.photo || null}
               alt={recipe.data.title}
               className="w-full rounded-lg mb-2"
             />

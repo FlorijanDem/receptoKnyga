@@ -26,13 +26,15 @@ exports.checkCreateRecipesBody = [
 
   body("preparation_time")
     .trim()
-    .isNumeric({ min: 1 })
-    .withMessage("Preparation time is required"),
+    .isInt({ min: 1, max: 60 * 24 })
+    .withMessage(
+      "Preparation time is required and must be at least 1 minute and at most 24 hours"
+    ),
 
   body("servings")
     .trim()
-    .isNumeric({ min: 1 })
-    .withMessage("Servings is required"),
+    .isInt({ min: 1, max: 20 })
+    .withMessage("Servings is required and must be at least 1 and at most 20"),
 
   checkExact([], {
     message: (fields) =>
@@ -53,9 +55,20 @@ exports.checkUpdateRecipesBody = [
 
   body("products").optional().isArray({ min: 1 }),
 
-  body("preparation_time").optional().trim().isNumeric({ min: 1 }),
+  body("preparation_time")
+    .optional()
+    .trim()
+    .isInt({ min: 1, max: 60 * 24 })
+    .withMessage(
+      "Preparation time is required and must be at least 1 minute and at most 24 hours"
+    ),
 
-  body("servings").optional().trim().isNumeric({ min: 1 }),
+  body("servings")
+    .optional()
+    .trim()
+    .isInt({ min: 1 })
+    .isInt({ min: 1, max: 20 })
+    .withMessage("Servings is required and must be at least 1 and at most 20"),
 
   body("approved").optional().isBoolean(),
 
