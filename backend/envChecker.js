@@ -8,17 +8,13 @@ const validateEnv = () => {
   let warnings = 0;
   let errors = 0;
 
+  //  client url 
   if (!process.env.FRONTEND_URL) {
     console.log("\x1b[33m", "CORS response to all sources");
     warnings++;
   }
 
-  if (!process.env.DB_HOST) {
-    // If nothing exist will be localhost without addictionall set up
-    console.log("\x1b[33m", "DB_HOST not found, using default host localhost");
-    warnings++;
-  }
-
+  // app port
   if (!process.env.PORT) {
     console.log("\x1b[33m", "PORT not found, using default port 3001");
     process.env.PORT = 3001;
@@ -26,6 +22,13 @@ const validateEnv = () => {
   } else if (isNaN(process.env.PORT)) {
     console.log("\x1b[31m", "PORT must be number");
     errors++;
+  }
+
+  // database config
+  if (!process.env.DB_HOST) {
+    // If nothing exist will be localhost without addictionall set up
+    console.log("\x1b[33m", "DB_HOST not found, using default host localhost");
+    warnings++;
   }
 
   if (!process.env.DB_PORT) {
