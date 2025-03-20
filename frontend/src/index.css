@@ -92,7 +92,7 @@ main {
 }
 
 .user-form {
-  @apply flex flex-col gap-10 bg-[var(--color-recipe-fifth)] rounded-[10px] px-6 py-12;
+  @apply flex flex-col gap-10 rounded-[10px] px-6 py-12 bg-[var(--color-recipe-fifth)];
 
   h1 {
     @apply text-4xl font-bold;

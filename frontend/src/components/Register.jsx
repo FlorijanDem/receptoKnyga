@@ -4,7 +4,7 @@ import UserForm from "./UserForm";
 const Register = () => {
   return (
     <div className="register-page">
-      <UserForm action="register" />{" "}
+      <UserForm action="register" />
     </div>
   );
 };
