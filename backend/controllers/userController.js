@@ -7,6 +7,7 @@ const {
 } = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const argon2 = require("argon2");
+const { sql } = require("../dbConnection");
 
 const signToken = (id) => {
   const token = jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -54,7 +55,7 @@ exports.loginUser = async (req, res, next) => {
 
   try {
     const user = await getUserByEmail(email);
-    
+
     if (!user) {
       return res.status(401).json({
         message: "Invalid email or password",
@@ -169,7 +170,7 @@ exports.updatePassword = async (req, res, next) => {
     }
 
     const hashedPassword = await argon2.hash(newPassword);
-    
+
     await sql`
       UPDATE users
       SET password = ${hashedPassword}
