@@ -38,7 +38,7 @@ const ResetPassword = () => {
             return;
         }
 
-        // Check if the new password is the same as the current password
+        
         if (passwordData.newPassword === passwordData.currentPassword) {
             setError("New password cannot be the same as the current password");
             return;
