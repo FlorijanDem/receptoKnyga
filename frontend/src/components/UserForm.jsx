@@ -140,7 +140,6 @@ const UserForm = ({ action }) => {
             <Link to="/login" className="text-blue-600">
               Login
             </Link>
-            <br />
             Already have an account?
           </p>
         ) : (
