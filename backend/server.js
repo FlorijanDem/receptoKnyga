@@ -3,11 +3,9 @@ const server = require("./app");
 const { sql, testDBConnection } = require("./dbConnection");
 const { createDBtables, dbSettings } = require("./dbCreating");
 const { validateEnv } = require("./envChecker");
-try {
-  validateEnv();
-} catch (error) {
-  console.error("Fail to validate env:", error);
-}
+
+validateEnv();
+
 (async () => {
   try {
     await testDBConnection();

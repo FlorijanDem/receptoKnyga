@@ -41,7 +41,7 @@ const validateEnv = () => {
   }
 
   if (!process.env.DB_NAME) {
-    console.log("\x1b[33m", "DB_PORT not found, using default name postgres");
+    console.log("\x1b[33m", "DB_NAME not found, using default name postgres");
     process.env.DB_NAME = "postgres";
     warnings++;
   } else if (isNaString(process.env.DB_NAME)) {
