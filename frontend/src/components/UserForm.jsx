@@ -50,6 +50,8 @@ const UserForm = ({ action }) => {
 
   useEffect(() => {
     reset();
+    setError(null);
+    scrollTo({ top: 0, behavior: "smooth" });
   }, [action]);
 
   return (
