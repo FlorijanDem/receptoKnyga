@@ -50,7 +50,7 @@ const ResetPassword = () => {
             const response = await axios.patch(
                 `${API_URL}/auth/update-password`,
                 {
-                    currentPassword: passwordData.currentPassword,
+
                     newPassword: passwordData.newPassword
                 },
                 {
@@ -61,7 +61,6 @@ const ResetPassword = () => {
             if (response.data.status === "success") {
                 setSuccess("Password updated successfully");
                 setPasswordData({
-                    currentPassword: '',
                     newPassword: '',
                     confirmPassword: ''
                 });
@@ -80,19 +79,7 @@ const ResetPassword = () => {
             <form onSubmit={handlePasswordReset}>
                 <div>
                     <label>
-                        Current Password:
-                        <input
-                            type="password"
-                            name="currentPassword"
-                            value={passwordData.currentPassword}
-                            onChange={handlePasswordChange}
-                            required
-                        />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        New Password:
+                        New password*
                         <input
                             type="password"
                             name="newPassword"
@@ -105,7 +92,7 @@ const ResetPassword = () => {
                 </div>
                 <div>
                     <label>
-                        Confirm New Password:
+                        Re-enter new Password*
                         <input
                             type="password"
                             name="confirmPassword"
