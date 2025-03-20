@@ -17,6 +17,6 @@ authRouter.route("/register").post(checkRegisterBody, validate, registerUser);
 authRouter.route("/login").post(checkLoginBody, validate, loginUser);
 authRouter.route("/logout").post(logout);
 authRouter.route("/me").get(getMe);
-authRouter.route("/updatePassword").patch(protect, updatePassword);
+authRouter.route("/update-password").patch(protect, updatePassword);
 
 module.exports = authRouter;
