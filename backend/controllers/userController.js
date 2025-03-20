@@ -153,3 +153,35 @@ exports.updateUser = async (req, res, next) => {
     next(new AppError(err.message, 401));
   }
 };
+
+exports.updatePassword = async (req, res, next) => {
+  const { currentPassword, newPassword } = req.body;
+
+  try {
+    const user = await getUserByid(req.user.id);
+
+    const isPasswordCorrect = await argon2.verify(user.password, currentPassword);
+    if (!isPasswordCorrect) {
+      return res.status(401).json({
+        status: 'fail',
+        message: 'Current password is incorrect'
+      });
+    }
+
+    const hashedPassword = await argon2.hash(newPassword);
+    
+    await sql`
+      UPDATE users
+      SET password = ${hashedPassword}
+      WHERE id = ${req.user.id}
+    `;
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Password updated successfully'
+    });
+  } catch (err) {
+    next(new AppError(err.message, 500));
+  }
+};
+
