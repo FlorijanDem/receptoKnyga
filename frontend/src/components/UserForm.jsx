@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router";
 import { useForm } from "react-hook-form";
 import { useErrorBoundary } from "react-error-boundary";
 import UserContext from "../contexts/UserContext";
@@ -54,33 +54,40 @@ const UserForm = ({ action }) => {
 
   return (
     <>
-      {error && <p>{error}</p>}
       <form onSubmit={handleSubmit(onSubmit)} className="user-form">
+        {error && <p className="error">{error}</p>}
+        {action === "register" ? <h1>Register</h1> : <h1>Login</h1>}
         <div className="input-container">
           <label htmlFor="email">Email</label>
           <input
+            id="email"
             {...register("email", {
-              id: "email",
               required: "Email is required",
               pattern: {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                 message: "Invalid email address",
               },
             })}
+            placeholder="Insert your email"
           />
-          {errors.email && <p>{errors.email.message}</p>}
+          {errors.email && (
+            <p className="form-input-error">{errors.email.message}</p>
+          )}
         </div>
 
         {action === "register" && (
           <div className="input-container">
             <label htmlFor="username">Username</label>
             <input
+              id="username"
               {...register("username", {
-                id: "username",
                 required: "Username is required",
               })}
+              placeholder="Insert your username"
             />
-            {errors.username && <p>{errors.username.message}</p>}
+            {errors.username && (
+              <p className="form-input-error">{errors.username.message}</p>
+            )}
           </div>
         )}
 
@@ -96,8 +103,11 @@ const UserForm = ({ action }) => {
               },
             })}
             type="password"
+            placeholder="Insert your password"
           />
-          {errors.password && <p>{errors.password.message}</p>}
+          {errors.password && (
+            <p className="form-input-error">{errors.password.message}</p>
+          )}
         </div>
 
         {action === "register" && (
@@ -111,12 +121,36 @@ const UserForm = ({ action }) => {
                   value === watch("password") || "Passwords do not match",
               })}
               type="password"
+              placeholder="Insert your password again"
             />
-            {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
+            {errors["password-confirm"] && (
+              <p className="form-input-error">
+                {errors["password-confirm"].message}
+              </p>
+            )}
           </div>
         )}
 
-        <button type="submit">Submit</button>
+        <button type="submit">
+          {action === "register" ? "Register" : "Log in"}
+        </button>
+
+        {action === "register" ? (
+          <p className="form-link">
+            <Link to="/login" className="text-blue-600">
+              Login
+            </Link>
+            <br />
+            Already have an account?
+          </p>
+        ) : (
+          <p className="form-link">
+            <Link to="/register" className="text-blue-600">
+              Register
+            </Link>
+            Don't have an account?
+          </p>
+        )}
       </form>
     </>
   );
