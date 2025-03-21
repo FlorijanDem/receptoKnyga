@@ -7,6 +7,7 @@ const authRouter = require("./routes/authRouter");
 const recipeRouter = require("./routes/recipeRoutes");
 const characteristicsRouter = require("./routes/characteristicsRouter");
 const userRouter = require("./routes/userRouter");
+const productRouter = require("./routes/productRoutes");
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/recipes", recipeRouter);
 app.use("/api/v1/characteristics", characteristicsRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/products", productRouter);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
