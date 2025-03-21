@@ -55,15 +55,94 @@ const createDBtables = async () => {
 
     // Create products table,
     // every product have own id who putted into "recipes.products" array
-    await sql`
-        CREATE TABLE IF NOT EXISTS products (
-            id SERIAL PRIMARY KEY,
-            title TEXT NOT NULL,
-            amount NUMERIC,
-            units_of_meassurement VARCHAR
-        )
-    `;
+    // await sql`
+    // CREATE TABLE products (
+    // id SERIAL PRIMARY KEY,
+    // title TEXT NOT NULL,
+    // calories INT NOT NULL,
+    // carbohydrates FLOAT NOT NULL,
+    // fiber FLOAT NOT NULL,
+    // netcarbs FLOAT NOT NULL,
+    // fats FLOAT NOT NULL,
+    // saturated FLOAT NOT NULL,
+    // mufa FLOAT NOT NULL,
+    // pufa FLOAT NOT NULL,
+    // pufa_w6 FLOAT NOT NULL,
+    // pufa_w3 FLOAT NOT NULL,
+    // protein FLOAT NOT NULL,
+    // vit_a_rae INT NOT NULL,
+    // vit_b1 FLOAT NOT NULL,
+    // vit_b2 FLOAT NOT NULL,
+    // vit_b3 FLOAT NOT NULL,
+    // vit_b5 FLOAT NOT NULL,
+    // vit_b6 FLOAT NOT NULL,
+    // vit_b9 INT NOT NULL,
+    // vit_b12 FLOAT NOT NULL,
+    // vit_c FLOAT NOT NULL,
+    // vit_d FLOAT NOT NULL,
+    // vit_e FLOAT NOT NULL,
+    // vit_k FLOAT NOT NULL,
+    // choline FLOAT NOT NULL,
+    // betaine FLOAT NOT NULL,
+    // calcium INT NOT NULL,
+    // copper TEXT NOT NULL,
+    // fluoride FLOAT NOT NULL,
+    // iron FLOAT NOT NULL,
+    // magnesium INT NOT NULL,
+    // manganese FLOAT NOT NULL,
+    // phoshorus INT NOT NULL,
+    // potassium INT NOT NULL,
+    // selenium FLOAT NOT NULL,
+    // sodium INT NOT NULL,
+    // zinc FLOAT NOT NULL,
+    // othername TEXT,
+    // category TEXT NOT NULL
+    // );
+    // `;
 
+    await sql`
+    CREATE TABLE IF NOT EXISTS products(
+    id INTEGER PRIMARY KEY,
+    potassium INTEGER,
+    selenium DOUBLE PRECISION,
+    sodium INTEGER,
+    zinc DOUBLE PRECISION,
+    calories INTEGER,
+    carbohydrates DOUBLE PRECISION,
+    fiber DOUBLE PRECISION,
+    netcarbs DOUBLE PRECISION,
+    fats DOUBLE PRECISION,
+    saturated DOUBLE PRECISION,
+    mufa DOUBLE PRECISION,
+    pufa DOUBLE PRECISION,
+    pufa_w6 DOUBLE PRECISION,
+    pufa_w3 DOUBLE PRECISION,
+    protein DOUBLE PRECISION,
+    vit_a_rae INTEGER,
+    vit_b1 DOUBLE PRECISION,
+    vit_b2 DOUBLE PRECISION,
+    vit_b3 DOUBLE PRECISION,
+    vit_b5 DOUBLE PRECISION,
+    vit_b6 DOUBLE PRECISION,
+    vit_b9 INTEGER,
+    vit_b12 DOUBLE PRECISION,
+    vit_c DOUBLE PRECISION,
+    vit_d DOUBLE PRECISION,
+    vit_e DOUBLE PRECISION,
+    vit_k DOUBLE PRECISION,
+    choline DOUBLE PRECISION,
+    betaine DOUBLE PRECISION,
+    calcium INTEGER,
+    fluoride DOUBLE PRECISION,
+    iron DOUBLE PRECISION,
+    magnesium INTEGER,
+    manganese DOUBLE PRECISION,
+    phoshorus INTEGER,
+    title TEXT,
+    category TEXT,
+    othername TEXT,
+    copper TEXT
+);`;
     // If I understand correctly, the amount inside can be anything
     await sql`
         CREATE TABLE IF NOT EXISTS recipes_products (
@@ -79,7 +158,7 @@ const createDBtables = async () => {
 };
 
 const dbSettings = async () => {
-    // Aktyvuoja pg_trgm plėtinį postgreSQL duomenų bazėje, kurio pagrindu realizuota netiksli paieska pagal fragmentą
+  // Aktyvuoja pg_trgm plėtinį postgreSQL duomenų bazėje, kurio pagrindu realizuota netiksli paieska pagal fragmentą
   try {
     const trgmCheck = await sql`
         SELECT EXISTS (
