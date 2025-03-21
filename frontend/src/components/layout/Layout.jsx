@@ -15,15 +15,17 @@ function Layout() {
     <>
       <SearchProvider>
         <Nav />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/recipe/:id" element={<RecipePage />} />
-          <Route path="/favourite" element={<Favourite />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/shoppingList" element={<ShoppingList />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/addRecipe" element={<AddRecipe />} />
-        </Routes>
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/recipe/:id" element={<RecipePage />} />
+            <Route path="/favourite" element={<Favourite />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/shoppingList" element={<ShoppingList />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/addRecipe" element={<AddRecipe />} />
+          </Routes>
+        </main>
       </SearchProvider>
       <Footer />
     </>
