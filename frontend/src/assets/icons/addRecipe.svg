@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<svg width="256" height="256" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+ <g class="layer" display="inline">
+  <title>Layer 1</title>
+  <ellipse cx="129" cy="129" fill="#ffffff" id="svg_8" rx="124" ry="124" stroke="#c3d4e9" stroke-width="6" opacity="0.8" stroke-opacity="0.4"/>
+  <g id="svg_2" transform="translate(0 1) translate(0 1) translate(0 -1) translate(0 -1) translate(0 -1) translate(0 -1) translate(0 -1) translate(0 -1) translate(0 -1) translate(0 -1) translate(0 -1.94) translate(-1 0) translate(-1 0) translate(-1 0) translate(-1 0) translate(-1 0) translate(-1 0) translate(-1 0) translate(-1 0) translate(-1.92 0) translate(245.183 25.9351) scale(0.91852 1) translate(-245.183 -25.9351) translate(11.9966 245.999) matrix(0.906615 0 0 0.855418 0.546692 -219.491)">
+ 
+   <path d="m166.3,118.1l2.7,64c0,4.5 -1.8,8.2 -6.3,8.2s-7.3,-3.7 -7.3,-8.2l1.9,-64c-9.4,-3.4 -19.5,-17.6 -19.5,-32.1c0,-13.6 9.9,-28.5 23.3,-28.5c13.5,0 24,15.3 24,28.9c0,14.8 -9.4,28.3 -18.8,31.7l0,0zm-48.7,-0.3l-14.3,0l0,66c0,4.5 -0.8,7.4 -5.3,7.4c-4.5,0 -5.7,-2.8 -5.7,-7.4l0,-66l-14,0c-4.5,0 -7.4,-3.7 -7.4,-8.2l0,-44.3c0,-4.5 2.2,-8.2 8.1,-8.2c2.7,0 2,9 2,9l0,40.9l11.2,0l0,-41.7c0,-4.5 1.2,-8.2 5.7,-8.2s5.3,3.7 5.3,8.2l0,41.7l12.3,0l0,-41.7c0,-4.5 -0.6,-8.2 2,-8.2c6,0 8.1,3.7 8.1,8.2l0,44.2c0.1,4.6 -3.5,8.3 -8,8.3l0,0z" fill="#596780" id="svg_4"/>
+  </g>
+ </g>
+</svg>
