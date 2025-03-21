@@ -45,7 +45,7 @@ main {
   }
 
   .recipe-preview-card__title {
-    @apply text-2xl text-gray-800 font-bold mb-2 px-4;
+    @apply text-2xl text-gray-800 font-bold mb-2 px-4 break-words;
   }
 
   .recipe-preview-card__line {
