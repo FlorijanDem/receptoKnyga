@@ -29,10 +29,7 @@ const RecipePreviewCard = ({ recipe }) => {
           <IoPeople /> {recipe?.servings} People
         </span>
       </div>
-      <h2 className="recipe-preview-card__title">
-        {recipe?.title}k;ajbnajoisrvnadorjrbnarebnaoirnboqanhgoierbndf
-        nioueruihgioorvekearvnoirqehgkkvniivbsdk;jvnfafbgvoqarbv.kjabviue
-      </h2>
+      <h2 className="recipe-preview-card__title">{recipe?.title}</h2>
       <hr className="recipe-preview-card__line" />
       <p className="recipe-preview-card__type">{recipe?.type}</p>
     </article>
