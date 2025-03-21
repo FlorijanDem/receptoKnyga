@@ -57,7 +57,7 @@ const createDBtables = async () => {
     // every product have own id who putted into "recipes.products" array
     await sql`
     CREATE TABLE IF NOT EXISTS products(
-    id INTEGER PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     potassium INTEGER,
     selenium DOUBLE PRECISION,
     sodium INTEGER,
