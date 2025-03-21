@@ -58,6 +58,9 @@ const createDBtables = async () => {
     await sql`
     CREATE TABLE IF NOT EXISTS products(
     id SERIAL PRIMARY KEY,
+    title TEXT,
+    othername TEXT,
+    category TEXT,
     potassium INTEGER,
     selenium DOUBLE PRECISION,
     sodium INTEGER,
@@ -88,15 +91,12 @@ const createDBtables = async () => {
     choline DOUBLE PRECISION,
     betaine DOUBLE PRECISION,
     calcium INTEGER,
+    copper DOUBLE PRECISION,
     fluoride DOUBLE PRECISION,
     iron DOUBLE PRECISION,
     magnesium INTEGER,
     manganese DOUBLE PRECISION,
-    phoshorus INTEGER,
-    title TEXT,
-    category TEXT,
-    othername TEXT,
-    copper TEXT
+    phoshorus INTEGER
 );`;
     // If I understand correctly, the amount inside can be anything
     await sql`
