@@ -105,8 +105,12 @@ const RecipePage = () => {
           >
             Back to recipe list
           </button>
-          <RecipeReviews refresh={refresh}/>
-          <WriteReview recipe_id={id} setRefresh={setRefresh} isLoggedIn={true} />
+          <RecipeReviews refresh={refresh} />
+          <WriteReview
+            recipe_id={id}
+            setRefresh={setRefresh}
+            isLoggedIn={true}
+          />
         </div>
       )}
     </>
