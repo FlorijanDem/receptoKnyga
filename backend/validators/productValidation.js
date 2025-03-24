@@ -5,9 +5,9 @@ exports.checkProductSearchQuery = [
   query("query")
     .isString()
     .withMessage("Query must be a string")
+    .trim()
     .isLength({ min: 2 })
-    .withMessage("Query must be at least 2 characters long")
-    .trim(),
+    .withMessage("Query must be at least 2 characters long"),
 ];
 
 // Validation rules for amount input
