@@ -1,12 +1,20 @@
 import { useContext, useState } from "react";
 import UserContext from "../contexts/UserContext";
+<<<<<<< HEAD
 import { useNavigate } from "react-router";
+=======
+// import { useNavigate } from "react-router";
+>>>>>>> bb379c1 (Add unban user functionality)
 import axios from "axios";
 import toast from "react-hot-toast";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 const RecipePageControls = ({ recipe, setRecipe, setRefresh }) => {
+<<<<<<< HEAD
+=======
+  // const navigate = useNavigate();
+>>>>>>> bb379c1 (Add unban user functionality)
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
   const [openDelete, setOpenDelete] = useState(false);
@@ -104,13 +112,21 @@ const RecipePageControls = ({ recipe, setRecipe, setRefresh }) => {
         {user?.role === "admin" && (
           <>
             <button
+<<<<<<< HEAD
               className="bg-[var(--color-recipe-primary)] text-[var(--color-recipe-fifth)] px-4 py-1 rounded-lg"
+=======
+              className="bg-[var(--color-recipe-primary)] text-white px-4 py-1 rounded-lg"
+>>>>>>> bb379c1 (Add unban user functionality)
               onClick={approveRecipe}
             >
               {recipe.approved ? "Unapprove" : "Approve"}
             </button>
             <button
+<<<<<<< HEAD
               className="bg-[var(--color-recipe-fourth)] text-[var(--color-recipe-fifth)] px-4 py-1 rounded-lg"
+=======
+              className="bg-[var(--color-recipe-fourth)] text-white px-4 py-1 rounded-lg"
+>>>>>>> bb379c1 (Add unban user functionality)
               onClick={banUser}
             >
               {recipe.user_banned ? "Unban user" : "Ban user"}
