@@ -138,9 +138,11 @@ exports.searchRecipes = async (filters) => {
 exports.getRecipeById = async (id) => {
   const recipe = await sql.begin(async () => {
     const [recipe] = await sql`
-    SELECT *
+    SELECT recipes.*, users.banned AS user_banned
     FROM recipes
-    WHERE id = ${id}
+    JOIN users
+    ON recipes.user_id = users.id
+    WHERE recipes.id = ${id}
     `;
 
     if (!recipe) {
