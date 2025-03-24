@@ -20,14 +20,14 @@ function AppContent() {
 function App() {
   return (
     <>
-    <Toaster />
-    <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <UserContextProvider>
-        <SearchProvider>
-          <AppContent />
-        </SearchProvider>
-      </UserContextProvider>
-    </ErrorBoundary>
+      <Toaster />
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <UserContextProvider>
+          <SearchProvider>
+            <AppContent />
+          </SearchProvider>
+        </UserContextProvider>
+      </ErrorBoundary>
     </>
   );
 }
