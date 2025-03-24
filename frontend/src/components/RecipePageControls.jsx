@@ -121,12 +121,15 @@ const RecipePageControls = ({ recipe, setRecipe, setRefresh }) => {
       {/* Confirm delete recipe modal */}
       {openDelete && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-[var(--color-recipe-fifth)] p-4 rounded-lg">
+          <div className="bg-[var(--color-recipe-fifth)] p-4 rounded-lg w-9/12 max-w-[600px]">
             <h2 className="text-lg text-[var(--color-recipe-third)] font-bold mb-2">
               Are you sure?
             </h2>
             <p className="text-sm text-[var(--color-recipe-third)] mb-4">
-              Are you sure you want to delete recipe for {recipe?.title}?
+              Are you sure you want to delete recipe for:{" "}
+              <span className="font-bold block break-words">
+                {recipe?.title}?
+              </span>
             </p>
             <div className="flex justify-end">
               <button
