@@ -31,7 +31,7 @@ const WelcomePage = () => {
       <Link to="/login">
         <button className={`${StyleText} md:mb-[10px]`}>
           <span className="flex border-b-3 border-recipe-third mb-[-1px]">
-            <span className="text-[24px] md:text-[10px] 2xl:text-[20px]">
+            <span className="text-[24px] md:text-[15px] 2xl:text-[20px]">
               LOGIN
             </span>
           </span>
@@ -79,8 +79,8 @@ const WelcomePage = () => {
             <Link to={`/login`} key={recipe.id}>
               <div className="break-inside-avoid mb-1.25 group relative overflow-hidden bg-recipe-third">
                 <img
-                  src={recipe.photo}
-                  alt={recipe.title}
+                  src={recipe.photo || null}
+                  alt={recipe.title || null}
                   className="w-full h-full object-cover transition duration-400 ease-in-out group-hover:scale-110 group-hover:opacity-50"
                 />
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-recipe-fifth text-[30px] font-jakarta font-extrabold opacity-0 group-hover:opacity-100">
