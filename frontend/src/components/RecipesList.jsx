@@ -18,32 +18,53 @@ const RecipesList = ({ filter, setFilter }) => {
   const fetchRecipes = async (query = "") => {
     try {
       setLoading(true);
-      
-      // Sukuriame URL parametrus iš filtro objekto ir konteksto filtrų
+
+      // Fetch current user's ID
+      const userResponse = await axios.get(`${API_URL}/auth/me`, {
+        withCredentials: true,
+      });
+      const userId = userResponse.data.user.id;
+
+      // Fetch user's favorites
+      const favoritesResponse = await axios.get(
+        `${API_URL}/favorites/${userId}`,
+        {
+          withCredentials: true,
+        }
+      );
+      const favoriteIds = new Set(favoritesResponse.data.data);
+
+      // Fetch recipes with pagination
       const params = new URLSearchParams();
-      params.append('page', filter.page);
-      params.append('limit', filter.limit);
-      
-      if (query) params.append('q', query);
-      if (filters.type) params.append('type', filters.type);
-      if (filters.product) params.append('product', filters.product);
-      
-      const { data: response } = await axios.get(
+      params.append("page", filter.page);
+      params.append("limit", filter.limit);
+      if (query) params.append("q", query);
+      if (filters.type) params.append("type", filters.type);
+      if (filters.product) params.append("product", filters.product);
+
+      const recipesResponse = await axios.get(
         `${API_URL}/recipes?${params.toString()}`,
         {
           withCredentials: true,
         }
       );
 
-      setRecipes(response.data);
-      setRecipeCount(response.results);
+      const recipesWithFavorites = recipesResponse.data.data.map((recipe) => ({
+        ...recipe,
+        isFavorite: favoriteIds.has(recipe.id),
+      }));
+
+      setRecipes(recipesWithFavorites);
+      setRecipeCount(recipesResponse.data.results);
       setError(null);
       setLoading(false);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
       setLoading(false);
       if (axios.isAxiosError(error)) {
-        if (error.response) {
+        if (error.response?.status === 401) {
+          setError("Please log in to view recipes.");
+        } else if (error.response) {
           setError(error.response.data.message);
         } else if (error.request) {
           setError("Something went wrong. Please try again later.");
@@ -56,12 +77,10 @@ const RecipesList = ({ filter, setFilter }) => {
     }
   };
 
-  // Reaguojame į filtrų pasikeitimus
   useEffect(() => {
-    // Kai pasikeičia filtrai, grįžtame į pirmą puslapį
-    setFilter(prev => ({
+    setFilter((prev) => ({
       ...prev,
-      page: 1
+      page: 1,
     }));
   }, [filters, setFilter]);
 

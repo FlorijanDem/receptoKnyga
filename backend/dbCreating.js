@@ -73,13 +73,23 @@ const createDBtables = async () => {
             product_id INTEGER REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE
         )
     `;
+
+    // Create favorite_recipes table to store user favorite recipes
+    await sql`
+        CREATE TABLE IF NOT EXISTS favorite_recipes (
+            id SERIAL PRIMARY KEY,
+            user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+            recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE ON UPDATE CASCADE,
+            UNIQUE (user_id, recipe_id)
+        );
+    `;
   } catch (err) {
     console.error("Failed to create tables:", err);
   }
 };
 
 const dbSettings = async () => {
-    // Aktyvuoja pg_trgm plėtinį postgreSQL duomenų bazėje, kurio pagrindu realizuota netiksli paieska pagal fragmentą
+  // Aktyvuoja pg_trgm plėtinį postgreSQL duomenų bazėje, kurio pagrindu realizuota netiksli paieska pagal fragmentą
   try {
     const trgmCheck = await sql`
         SELECT EXISTS (
@@ -98,6 +108,9 @@ const dbSettings = async () => {
     await sql`CREATE INDEX IF NOT EXISTS recipes_title_trgm_idx ON recipes USING gin (title gin_trgm_ops)`;
     await sql`CREATE INDEX IF NOT EXISTS recipes_description_trgm_idx ON recipes USING gin (description gin_trgm_ops)`;
     await sql`CREATE INDEX IF NOT EXISTS products_title_trgm_idx ON products USING gin (title gin_trgm_ops)`;
+
+    // Index for favorite_recipes table to optimize user-based queries
+    await sql`CREATE INDEX IF NOT EXISTS favorite_recipes_user_id_idx ON favorite_recipes (user_id)`;
 
     // await sql`ALTER TABLE recipes SET (autovacuum_enabled = true)`;
     // await sql`ALTER TABLE recipes SET (autovacuum_analyze_scale_factor = 0.1)`;
