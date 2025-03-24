@@ -4,12 +4,14 @@ import {
 } from "react";
 // import { useNavigate } from "react-router";
 import UserContext from "../contexts/UserContext";
+// import { useNavigate } from "react-router";
 import axios from "axios";
 import toast from "react-hot-toast";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-const RecipePageControls = ({ recipe, setRecipe }) => {
+const RecipePageControls = ({ recipe, setRecipe, setRefresh }) => {
+  // const navigate = useNavigate();
   const { user } = useContext(UserContext);
   // const navigate = useNavigate();
   // const [openDelete, setOpenDelete] = useState(false);
@@ -49,6 +51,7 @@ const RecipePageControls = ({ recipe, setRecipe }) => {
         } successfully!`,
         {
           duration: 3000,
+          id: "approve-recipe",
         }
       );
     } catch (error) {
@@ -62,12 +65,22 @@ const RecipePageControls = ({ recipe, setRecipe }) => {
     try {
       const { data: response } = await axios.patch(
         `${API_URL}/users/${recipe.user_id}`,
-        { banned: true },
+        { banned: !recipe.user_banned },
         {
           withCredentials: true,
         }
       );
-      toast.success(`User ${response.data.username} banned successfully!`);
+
+      toast.success(
+        `User ${response.data.username} ${
+          response.data.banned ? "banned" : "unbanned"
+        } successfully!`,
+        {
+          id: "ban-user",
+        }
+      );
+      // console.log(recipe);
+      setRefresh((prev) => !prev);
     } catch (error) {
       console.log(error);
     }
@@ -96,16 +109,16 @@ const RecipePageControls = ({ recipe, setRecipe }) => {
         {user?.role === "admin" && (
           <>
             <button
-              className="bg-blue-500 text-white px-4 py-1 rounded-lg"
+              className="bg-[var(--color-recipe-primary)] text-white px-4 py-1 rounded-lg"
               onClick={approveRecipe}
             >
               {recipe.approved ? "Unapprove" : "Approve"}
             </button>
             <button
-              className="bg-red-500 text-white px-4 py-1 rounded-lg"
+              className="bg-[var(--color-recipe-fourth)] text-white px-4 py-1 rounded-lg"
               onClick={banUser}
             >
-              Ban User
+              {recipe.user_banned ? "Unban user" : "Ban user"}
             </button>
           </>
         )}

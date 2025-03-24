@@ -11,11 +11,11 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 const RecipePage = () => {
   const [recipe, setRecipe] = useState(null);
+  const [refresh, setRefresh] = useState(false);
   const [error, setError] = useState(null);
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [showMethod, setShowMethod] = useState(false);
-  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -93,6 +93,11 @@ const RecipePage = () => {
                 {recipe.data.method}
               </p>
             )}
+            <RecipePageControls
+              recipe={recipe.data}
+              setRecipe={setRecipe}
+              setRefresh={setRefresh}
+            />
           </div>
           <button
             className="bg-blue-500 text-white px-4 py-1 rounded-lg my-2"
