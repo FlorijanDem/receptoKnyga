@@ -8,7 +8,10 @@ import ResetPassword from "./components/ResetPassword";
 import { Toaster } from "react-hot-toast";
 import { ErrorBoundary } from "react-error-boundary";
 import { SearchProvider } from "./contexts/SearchContext";
+<<<<<<< HEAD
 import { Routes, Route } from "react-router";
+=======
+>>>>>>> 05b6ea2 (Add admin navigation)
 import { AdminFilterContextProvider } from "./contexts/AdminFilterContext";
 
 function AppContent() {
