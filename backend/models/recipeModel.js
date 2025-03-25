@@ -11,7 +11,15 @@ exports.searchRecipes = async (filters) => {
     servings, // porcijų skaičius
     limit = 12,
     offset = 0,
+    approved,
   } = filters;
+
+  const apprStr =
+    approved === "true"
+      ? sql`AND r.approved`
+      : approved === "false"
+        ? sql`AND NOT r.approved`
+        : sql``;
 
   const searchQuery = sql`
     WITH recipe_scores AS (
@@ -33,6 +41,7 @@ exports.searchRecipes = async (filters) => {
         END as similarity_score
       FROM recipes r
       WHERE 1=1
+      ${apprStr}
       ${type ? sql`AND r.type = ${type}` : sql``}
       ${preparation_time ? sql`AND r.preparation_time = ${preparation_time}` : sql``}
       ${servings ? sql`AND r.servings = ${servings}` : sql``}
@@ -87,6 +96,7 @@ exports.searchRecipes = async (filters) => {
     SELECT COUNT(*) as total 
     FROM recipes r
     WHERE 1=1
+    ${apprStr}
     ${type ? sql`AND r.type = ${type}` : sql``}
     ${preparation_time ? sql`AND r.preparation_time = ${preparation_time}` : sql``}
     ${servings ? sql`AND r.servings = ${servings}` : sql``}

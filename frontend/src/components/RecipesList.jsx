@@ -4,11 +4,15 @@ import { useErrorBoundary } from "react-error-boundary";
 import RecipePreviewCard from "./RecipePreviewCard";
 import RecipesListPagination from "./RecipesListPagination";
 import SearchContext from "../contexts/SearchContext";
+import { AdminFilterContext } from "../contexts/AdminFilterContext";
+import UserContext from "../contexts/UserContext";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 const RecipesList = ({ filter, setFilter }) => {
   const { currentQuery, filters } = useContext(SearchContext);
+  const { adminFilters } = useContext(AdminFilterContext);
+  const { user } = useContext(UserContext);
   const [recipes, setRecipes] = useState([]);
   const [recipeCount, setRecipeCount] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -18,16 +22,21 @@ const RecipesList = ({ filter, setFilter }) => {
   const fetchRecipes = async (query = "") => {
     try {
       setLoading(true);
-      
+
       // Sukuriame URL parametrus iš filtro objekto ir konteksto filtrų
       const params = new URLSearchParams();
-      params.append('page', filter.page);
-      params.append('limit', filter.limit);
-      
-      if (query) params.append('q', query);
-      if (filters.type) params.append('type', filters.type);
-      if (filters.product) params.append('product', filters.product);
-      
+      params.append("page", filter.page);
+      params.append("limit", filter.limit);
+
+      if (query) params.append("q", query);
+      if (filters.type) params.append("type", filters.type);
+      if (filters.product) params.append("product", filters.product);
+      if (adminFilters?.value !== "all" && user?.role === "admin") {
+        params.append(adminFilters.name, adminFilters.value);
+      } else if (user?.role !== "admin") {
+        params.append("approved", "true");
+      }
+
       const { data: response } = await axios.get(
         `${API_URL}/recipes?${params.toString()}`,
         {
@@ -53,21 +62,22 @@ const RecipesList = ({ filter, setFilter }) => {
       } else {
         showBoundary(error);
       }
+      console.log(error);
     }
   };
 
   // Reaguojame į filtrų pasikeitimus
   useEffect(() => {
     // Kai pasikeičia filtrai, grįžtame į pirmą puslapį
-    setFilter(prev => ({
+    setFilter((prev) => ({
       ...prev,
-      page: 1
+      page: 1,
     }));
   }, [filters, setFilter]);
 
   useEffect(() => {
     fetchRecipes(currentQuery);
-  }, [filter, currentQuery, filters]);
+  }, [filter, currentQuery, filters, adminFilters]);
 
   return (
     <>

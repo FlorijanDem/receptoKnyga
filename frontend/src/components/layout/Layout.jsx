@@ -9,6 +9,8 @@ import ShoppingList from "../../navBarPages/ShoppingList";
 import { Routes, Route } from "react-router";
 import { SearchProvider } from "../../contexts/SearchContext";
 import AddRecipe from "../AddRecipe";
+import UsersList from "../UsersList";
+import ReviewsList from "../ReviewsList";
 
 function Layout() {
   return (
@@ -18,6 +20,9 @@ function Layout() {
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/users" element={<UsersList />} />
+            <Route path="/reviews" element={<ReviewsList />} />
+
             <Route path="/recipe/:id" element={<RecipePage />} />
             <Route path="/favourite" element={<Favourite />} />
             <Route path="/settings" element={<Settings />} />
