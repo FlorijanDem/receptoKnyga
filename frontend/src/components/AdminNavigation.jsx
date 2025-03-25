@@ -48,7 +48,6 @@ const AdminNavigation = () => {
               onClick={() => setAdminPage("recipes")}
               className={({ isActive }) => (isActive ? "underline" : "")}
               to="/"
-
               //   state={adminFilter}
             >
               Recipes
