@@ -18,6 +18,7 @@ const WelcomePage = () => {
         setRecipes(response.data.data); // Set the fetched recipes
       } catch (err) {
         setError(`Failed to load recipes. ${err}`);
+        console.log(err.response.data);
       } finally {
         setLoading(false);
       }

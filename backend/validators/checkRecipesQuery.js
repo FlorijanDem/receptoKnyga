@@ -1,4 +1,6 @@
 const { query, checkExact } = require("express-validator");
+const { getUserByid } = require("../models/userModel");
+const jwt = require("jsonwebtoken");
 
 exports.checkRecipeQuery = [
   // Paieškos ir filtravimo parametrai
@@ -63,6 +65,32 @@ exports.checkRecipeQuery = [
     .toUpperCase()
     .isIn(["ASC", "DESC"])
     .withMessage("Order must be either ASC or DESC"),
+
+  query("approved")
+    .optional()
+    .trim()
+    .isBoolean()
+    .withMessage("Approved must be a boolean")
+    .custom(async (value, { req }) => {
+      if (value !== "true") {
+        const { id: userId } = jwt.verify(
+          req.cookies?.jwt,
+          process.env.JWT_SECRET
+        );
+
+        if (!userId) {
+          throw new Error("User not found");
+        }
+
+        const user = await getUserByid(userId);
+
+        if (user?.role !== "admin") {
+          throw new Error("User is not an admin");
+        }
+      }
+
+      return true;
+    }),
 
   // Užtikriname, kad nėra papildomų nenumatytų parametrų
   checkExact([], {

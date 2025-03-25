@@ -7,6 +7,7 @@ import GuestLayout from "./components/layout/GuestLayout";
 import { Toaster } from "react-hot-toast";
 import { ErrorBoundary } from "react-error-boundary";
 import { SearchProvider } from "./contexts/SearchContext";
+import { AdminFilterContextProvider } from "./contexts/AdminFilterContext";
 
 function AppContent() {
   const { user } = useContext(UserContext);
@@ -20,14 +21,16 @@ function AppContent() {
 function App() {
   return (
     <>
-    <Toaster />
-    <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <UserContextProvider>
-        <SearchProvider>
-          <AppContent />
-        </SearchProvider>
-      </UserContextProvider>
-    </ErrorBoundary>
+      <Toaster />
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <UserContextProvider>
+          <AdminFilterContextProvider>
+            <SearchProvider>
+              <AppContent />
+            </SearchProvider>
+          </AdminFilterContextProvider>
+        </UserContextProvider>
+      </ErrorBoundary>
     </>
   );
 }
