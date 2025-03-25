@@ -39,7 +39,7 @@ exports.registerUser = async (req, res, next) => {
     const token = signToken(user.id);
     sendCookie(token, res);
 
-  //  user.id = undefined;
+    // user.id = undefined;
     user.password = undefined;
 
     res.status(201).json({
@@ -79,7 +79,7 @@ exports.loginUser = async (req, res, next) => {
     const token = signToken(user.id);
     sendCookie(token, res);
 
-  //  user.id = undefined;
+    // user.id = undefined;
     user.password = undefined;
 
     res.status(200).json({
@@ -149,6 +149,9 @@ exports.updateUser = async (req, res, next) => {
     const data = req.body;
     const id = req.params.id;
     const user = await updateUser(data, id);
+
+    user.password = undefined;
+
     res.status(200).json({ status: "success", data: user });
   } catch (err) {
     next(new AppError(err.message, 401));
