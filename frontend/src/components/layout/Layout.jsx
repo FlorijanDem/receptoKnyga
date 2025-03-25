@@ -9,7 +9,10 @@ import ShoppingList from "../../navBarPages/ShoppingList";
 import { Routes, Route } from "react-router";
 import { SearchProvider } from "../../contexts/SearchContext";
 import AddRecipe from "../AddRecipe";
+<<<<<<< HEAD
 import Dashboard from "../../navBarPages/Dashboard";
+=======
+>>>>>>> 68610e4 (Add admin navigation)
 import UsersList from "../UsersList";
 import ReviewsList from "../ReviewsList";
 
