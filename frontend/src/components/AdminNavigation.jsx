@@ -48,7 +48,6 @@ const AdminNavigation = () => {
               onClick={() => setAdminPage("recipes")}
               className={({ isActive }) => (isActive ? "underline" : "")}
               to="/"
-
               //   state={adminFilter}
             >
               Recipes
@@ -74,7 +73,10 @@ const AdminNavigation = () => {
             window.location.pathname === "/users" ||
             window.location.pathname === "/reviews") && (
             <form className="flex justify-around mt-[2rem]">
-              <label htmlFor="all" className="cursor-pointer">
+              <label
+                htmlFor="all"
+                className="cursor-pointer"
+              >
                 <input
                   className="cursor-pointer"
                   // onChange={handleRadioChange}
