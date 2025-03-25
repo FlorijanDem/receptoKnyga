@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
-import { Link } from "react-router";
+import { NavLink, Link } from "react-router";
 import NavLikeIcon from "../assets/icons/Like.svg";
 import NavSettingIcon from "../assets/icons/Settings.svg";
 import NavCartIcon from "../assets/icons/Cart.svg";
@@ -12,6 +12,7 @@ import SearchBar from "./SearchBar";
 import Sidebar from "./Sidebar";
 import SearchContext from "../contexts/SearchContext";
 import FilterForm from "./FilterForm";
+import AdminNavigation from "./AdminNavigation";
 
 const icons = [
   {
@@ -44,6 +45,7 @@ const icons = [
 const Navigation = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isFilterFormOpen, setIsFilterFormOpen] = useState(false);
+
   const { setDraftQuery, setCurrentQuery, setFilters } =
     useContext(SearchContext);
 
@@ -150,6 +152,7 @@ const Navigation = () => {
 
       {/* Add extra margin when the filter form is open */}
       {isFilterFormOpen && <div className="h-[350px] md:h-[200px]"></div>}
+      <AdminNavigation />
     </nav>
   );
 };
