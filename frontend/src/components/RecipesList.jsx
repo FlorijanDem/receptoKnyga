@@ -77,7 +77,7 @@ const RecipesList = ({ filter, setFilter }) => {
 
   useEffect(() => {
     fetchRecipes(currentQuery);
-  }, [filter, currentQuery, filters]);
+  }, [filter, currentQuery, filters, adminFilters]);
 
   return (
     <>
