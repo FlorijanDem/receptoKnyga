@@ -1,5 +1,5 @@
 import { useEffect, useContext } from "react";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import { AdminFilterContext } from "../contexts/AdminFilterContext";
 import UserContext from "../contexts/UserContext";
 import { useForm } from "react-hook-form";
@@ -9,12 +9,14 @@ const AdminNavigation = () => {
   const { user } = useContext(UserContext);
   const { adminPage, setAdminPage } = useContext(AdminFilterContext);
   const { register, reset } = useForm();
+  const navigate = useNavigate();
 
   const handleRadioChange = (e) => {
     setAdminFilters({
       name: e.target.name,
       value: e.target.value,
     });
+    navigate(`${adminPage === "recipes" ? "/" : `/${adminPage}`}`);
   };
 
   useEffect(() => {
