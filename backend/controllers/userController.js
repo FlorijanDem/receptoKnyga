@@ -170,7 +170,7 @@ exports.updateUser = async (req, res, next) => {
 
 exports.getAllUsers = async (req, res, next) => {
   try {
-    const users = await getAllUsers();
+    const users = await getAllUsers(req.query);
 
     users.forEach((user) => {
       user.password = undefined;
