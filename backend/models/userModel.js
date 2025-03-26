@@ -47,10 +47,14 @@ exports.updateUser = async (data, id) => {
   return user;
 };
 
-exports.getAllUsers = async () => {
+exports.getAllUsers = async (query) => {
+  console.log(query);
+
   const users = await sql`
         SELECT *
         FROM users
+        WHERE 1=1
+        ${query.banned === "true" ? sql`AND banned` : query.banned === "false" ? sql`AND NOT banned` : sql``}
     `;
   return users;
 };
