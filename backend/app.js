@@ -7,6 +7,7 @@ const authRouter = require("./routes/authRouter");
 const recipeRouter = require("./routes/recipeRoutes");
 const characteristicsRouter = require("./routes/characteristicsRouter");
 const userRouter = require("./routes/userRouter");
+require('dotenv').config();
 
 const app = express();
 
