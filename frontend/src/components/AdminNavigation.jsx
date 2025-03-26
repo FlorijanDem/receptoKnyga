@@ -8,17 +8,25 @@ import { useForm } from "react-hook-form";
 import { NavLink } from "react-router";
 import { AdminFilterContext } from "../contexts/AdminFilterContext";
 import UserContext from "../contexts/UserContext";
+<<<<<<< HEAD
 >>>>>>> 68610e4 (Add admin navigation)
+=======
+import { useForm } from "react-hook-form";
+>>>>>>> 90cefaa (Fix pagination bug)
 
 const AdminNavigation = () => {
   const { setAdminFilters } = useContext(AdminFilterContext);
   const { user } = useContext(UserContext);
   const { adminPage, setAdminPage } = useContext(AdminFilterContext);
 <<<<<<< HEAD
+<<<<<<< HEAD
   const { register, reset } = useForm();
   const navigate = useNavigate();
 =======
 >>>>>>> 68610e4 (Add admin navigation)
+=======
+  const { register, reset } = useForm();
+>>>>>>> 90cefaa (Fix pagination bug)
 
   const handleRadioChange = (e) => {
     setAdminFilters({
@@ -31,6 +39,7 @@ const AdminNavigation = () => {
 
   useEffect(() => {
     reset();
+<<<<<<< HEAD
     if (user?.role !== "admin") {
       navigate("/");
       return;
@@ -40,6 +49,8 @@ const AdminNavigation = () => {
 
   useEffect(() => {
 >>>>>>> 68610e4 (Add admin navigation)
+=======
+>>>>>>> 90cefaa (Fix pagination bug)
     if (user?.role === "admin") {
       setAdminFilters((prev) => {
         return {
@@ -54,8 +65,13 @@ const AdminNavigation = () => {
   }, [adminPage]);
 =======
     }
+<<<<<<< HEAD
   }, []);
 >>>>>>> 68610e4 (Add admin navigation)
+=======
+    console.log(adminPage);
+  }, [adminPage]);
+>>>>>>> 90cefaa (Fix pagination bug)
 
   //   console.log("adminFilter", adminFilters);
 
@@ -157,33 +173,54 @@ const AdminNavigation = () => {
           )}
 =======
           <form className="flex justify-around mt-[2rem]">
-            <label htmlFor="all">
+            <label htmlFor="all" className="cursor-pointer">
               <input
-                onChange={handleRadioChange}
+                className="cursor-pointer"
+                // onChange={handleRadioChange}
                 type="radio"
                 id="all"
-                name={adminPage === "users" ? "banned" : "approved"}
+                {...register(
+                  `${adminPage === "users" ? "banned" : "approved"}`,
+                  { onChange: (e) => handleRadioChange(e) }
+                )}
+                // name={adminPage === "users" ? "banned" : "approved"}
                 value="all"
                 defaultChecked
               />{" "}
               All {adminPage}
             </label>
-            <label htmlFor={adminPage === "users" ? "banned" : "approved"}>
+            <label
+              htmlFor={adminPage === "users" ? "banned" : "approved"}
+              className="cursor-pointer"
+            >
               <input
-                onChange={handleRadioChange}
+                className="cursor-pointer"
+                // onChange={handleRadioChange}
                 type="radio"
                 id={adminPage === "users" ? "banned" : "approved"}
-                name={adminPage === "users" ? "banned" : "approved"}
+                {...register(
+                  `${adminPage === "users" ? "banned" : "approved"}`,
+                  { onChange: (e) => handleRadioChange(e) }
+                )}
+                // name={adminPage === "users" ? "banned" : "approved"}
                 value="true"
               />{" "}
               {adminPage === "users" ? "Banned" : "Approved"} {adminPage}
             </label>
-            <label htmlFor={adminPage === "users" ? "unbanned" : "unapproved"}>
+            <label
+              htmlFor={adminPage === "users" ? "unbanned" : "unapproved"}
+              className="cursor-pointer"
+            >
               <input
-                onChange={handleRadioChange}
+                className="cursor-pointer"
+                // onChange={handleRadioChange}
                 type="radio"
                 id={adminPage === "users" ? "unbanned" : "unapproved"}
-                name={adminPage === "users" ? "banned" : "approved"}
+                {...register(
+                  `${adminPage === "users" ? "banned" : "approved"}`,
+                  { onChange: (e) => handleRadioChange(e) }
+                )}
+                // name={adminPage === "users" ? "banned" : "approved"}
                 value="false"
               />{" "}
               {adminPage === "users" ? "Unbanned" : "Unapproved"} {adminPage}
