@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -48,6 +49,14 @@ const UserCard = ({ user }) => {
           {currentUser.banned ? "Unban" : "Ban"}
         </button>
       )}
+=======
+const UserCard = ({ user }) => {
+  return (
+    <div className="user-card my-2 mx-auto w-full bg-[var(--color-recipe-fifth)] py-2 px-4 rounded-xl">
+      <p>{user.username}</p>
+      <p>{user.email}</p>
+      <p>{user.role}</p>
+>>>>>>> 8f21a2f (Add basic user card)
     </div>
   );
 };
