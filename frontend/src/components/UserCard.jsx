@@ -37,6 +37,7 @@ const UserCard = ({ user }) => {
       <p className="text-[var(--color-recipe-secondary)]">
         {currentUser.email}
       </p>
+      {/* <<<<<<< HEAD */}
       <p>Role: {user.role}</p>
       {currentUser.banned && (
         <p className="text-[var(--color-recipe-fourth)]">Banned</p>
@@ -61,11 +62,22 @@ const UserCard = ({ user }) => {
 =======
       <p>Username: {user.username}</p>
       <p className="text-[var(--color-recipe-secondary)]">{user.email}</p>
+=======
+>>>>>>> 56a21ce (Add ban/unban user functionality to userCard)
       <p>Role: {user.role}</p>
-      {user.banned && (
+      {currentUser.banned && (
         <p className="text-[var(--color-recipe-fourth)]">Banned</p>
       )}
+<<<<<<< HEAD
 >>>>>>> 094a1d4 (Change UsersList style) */}
+      {/* ======= */}
+      {/* <button
+        onClick={banUser}
+        className="cursor-pointer bg-[var(--color-recipe-fourth)] p-2 rounded-md text-[var(--color-recipe-fifth)]"
+      >
+        {currentUser.banned ? "Unban" : "Ban"}
+      </button> */}
+      {/* >>>>>>> 56a21ce (Add ban/unban user functionality to userCard) */}
     </div>
   );
 };
