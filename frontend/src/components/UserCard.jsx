@@ -36,7 +36,6 @@ const UserCard = ({ user }) => {
       <p className="text-[var(--color-recipe-secondary)]">
         {currentUser.email}
       </p>
-
       <p>Role: {user.role}</p>
       {currentUser.banned && (
         <p className="text-[var(--color-recipe-fourth)]">Banned</p>
