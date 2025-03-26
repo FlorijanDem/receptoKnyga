@@ -73,11 +73,11 @@ const RecipesList = ({ filter, setFilter }) => {
       ...prev,
       page: 1,
     }));
-  }, [filters, setFilter]);
+  }, [filters, setFilter, adminFilters]);
 
   useEffect(() => {
     fetchRecipes(currentQuery);
-  }, [filter, currentQuery, filters, adminFilters]);
+  }, [filter, currentQuery, filters]);
 
   return (
     <>
