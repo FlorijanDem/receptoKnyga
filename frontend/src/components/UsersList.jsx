@@ -41,8 +41,8 @@ const UsersList = () => {
   }, [adminFilters]);
 
   return (
-    <section className="w-max mx-auto">
-      <h1>UsersList</h1>
+    <section className="w-9/12 max-w-[600px] mx-auto py-4">
+      <h1 className="text-center text-3xl">Users List</h1>
       {users.map((user) => (
         <UserCard key={user.id} user={user} />
       ))}
