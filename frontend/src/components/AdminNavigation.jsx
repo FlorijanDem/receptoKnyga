@@ -1,5 +1,4 @@
 import { useEffect, useContext } from "react";
-
 import { NavLink, useNavigate } from "react-router";
 import { AdminFilterContext } from "../contexts/AdminFilterContext";
 import UserContext from "../contexts/UserContext";
@@ -18,7 +17,6 @@ const AdminNavigation = () => {
       name: e.target.name,
       value: e.target.value,
     });
-
     navigate(`${adminPage === "recipes" ? "/" : `/${adminPage}`}`);
   };
 
