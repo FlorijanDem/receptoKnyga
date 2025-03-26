@@ -46,3 +46,11 @@ exports.updateUser = async (data, id) => {
     `;
   return user;
 };
+
+exports.getAllUsers = async () => {
+  const users = await sql`
+        SELECT *
+        FROM users
+    `;
+  return users;
+};

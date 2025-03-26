@@ -4,6 +4,7 @@ const {
   getUserByEmail,
   getUserByid,
   updateUser,
+  getAllUsers,
 } = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const argon2 = require("argon2");
@@ -114,8 +115,19 @@ exports.protect = async (req, res, next) => {
     req.user = user;
     next();
   } catch (err) {
-    next(new AppError(err.message, 401));
+    next(new AppError(err.message, 500));
   }
+};
+
+exports.allowAccessTo = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new AppError("You are not allowed to access this route", 403)
+      );
+    }
+    next();
+  };
 };
 
 exports.getMe = async (req, res, next) => {
@@ -152,6 +164,20 @@ exports.updateUser = async (req, res, next) => {
 
     res.status(200).json({ status: "success", data: user });
   } catch (err) {
-    next(new AppError(err.message, 401));
+    next(new AppError(err.message, 500));
+  }
+};
+
+exports.getAllUsers = async (req, res, next) => {
+  try {
+    const users = await getAllUsers();
+
+    users.forEach((user) => {
+      user.password = undefined;
+    });
+
+    res.status(200).json({ status: "success", data: users });
+  } catch (err) {
+    next(new AppError(err.message, 500));
   }
 };
