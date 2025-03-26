@@ -1,11 +1,16 @@
 import axios from "axios";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 const UserCard = ({ user }) => {
   const [currentUser, setCurrentUser] = useState(user);
   const banUser = async () => {
+    if (currentUser.role === "admin") {
+      toast.error("You can't ban an admin", { id: "ban-admin" });
+      return;
+    }
     try {
       const { data: response } = await axios.patch(
         `${API_URL}/users/${currentUser.id}`,
@@ -13,9 +18,14 @@ const UserCard = ({ user }) => {
         { withCredentials: true }
       );
 
-      console.log(response);
-
+      //   console.log(response);
       setCurrentUser(response.data);
+      toast.success(
+        `User ${response.data.username} ${
+          response.data.banned ? "banned" : "unbanned"
+        } successfully!`,
+        { id: "ban-user" }
+      );
     } catch (err) {
       console.log(err);
     }
@@ -30,12 +40,14 @@ const UserCard = ({ user }) => {
       {currentUser.banned && (
         <p className="text-[var(--color-recipe-fourth)]">Banned</p>
       )}
-      <button
-        onClick={banUser}
-        className="cursor-pointer bg-[var(--color-recipe-fourth)] p-2 rounded-md text-[var(--color-recipe-fifth)]"
-      >
-        {currentUser.banned ? "Unban" : "Ban"}
-      </button>
+      {currentUser.role !== "admin" && (
+        <button
+          onClick={banUser}
+          className="cursor-pointer bg-[var(--color-recipe-fourth)] p-2 rounded-md text-[var(--color-recipe-fifth)]"
+        >
+          {currentUser.banned ? "Unban" : "Ban"}
+        </button>
+      )}
     </div>
   );
 };
