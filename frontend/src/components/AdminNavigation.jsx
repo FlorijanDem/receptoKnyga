@@ -19,6 +19,8 @@ const AdminNavigation = () => {
     navigate(`${adminPage === "recipes" ? "/" : `/${adminPage}`}`);
   };
 
+  console.log(window.location.pathname);
+
   useEffect(() => {
     reset();
     if (user?.role !== "admin") {
@@ -111,6 +113,7 @@ const AdminNavigation = () => {
                 />{" "}
                 {adminPage === "users" ? "Banned" : "Approved"} {adminPage}
               </label>
+
               <label
                 htmlFor={adminPage === "users" ? "unbanned" : "unapproved"}
                 className="cursor-pointer"
