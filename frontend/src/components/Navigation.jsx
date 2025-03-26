@@ -11,6 +11,8 @@ import NavAddRecipeIcon from "../assets/icons/AddRecipe.svg";
 import SearchBar from "./SearchBar";
 import Sidebar from "./Sidebar";
 import SearchContext from "../contexts/SearchContext";
+import { AdminFilterContext } from "../contexts/AdminFilterContext";
+import UserContext from "../contexts/UserContext";
 import FilterForm from "./FilterForm";
 import AdminNavigation from "./AdminNavigation";
 
@@ -48,6 +50,8 @@ const Navigation = () => {
 
   const { setDraftQuery, setCurrentQuery, setFilters } =
     useContext(SearchContext);
+  const { setAdminFilters, setAdminPage } = useContext(AdminFilterContext);
+  const { user } = useContext(UserContext);
 
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
@@ -71,6 +75,13 @@ const Navigation = () => {
       type: "",
       product: "",
     });
+    if (user?.role === "admin") {
+      setAdminPage("recipes");
+      setAdminFilters({
+        name: "approved",
+        value: "all",
+      });
+    }
   };
 
   const iconStyle =
