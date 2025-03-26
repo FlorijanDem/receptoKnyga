@@ -1,4 +1,3 @@
-// <<<<<<< HEAD
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -37,7 +36,7 @@ const UserCard = ({ user }) => {
       <p className="text-[var(--color-recipe-secondary)]">
         {currentUser.email}
       </p>
-      {/* <<<<<<< HEAD */}
+
       <p>Role: {user.role}</p>
       {currentUser.banned && (
         <p className="text-[var(--color-recipe-fourth)]">Banned</p>
@@ -50,37 +49,6 @@ const UserCard = ({ user }) => {
           {currentUser.banned ? "Unban" : "Ban"}
         </button>
       )}
-      {/* <<<<<<< HEAD */}
-      {/* ======= */}
-      {/* const UserCard = ({ user }) => {
-  return (
-    <div className="user-card my-2 mx-auto w-full bg-[var(--color-recipe-fifth)] py-2 px-4 rounded-xl">
-<<<<<<< HEAD
-      <p>{user.username}</p>
-      <p>{user.email}</p>
-      <p>{user.role}</p>
->>>>>>> 8f21a2f (Add basic user card)
-=======
-      <p>Username: {user.username}</p>
-      <p className="text-[var(--color-recipe-secondary)]">{user.email}</p>
-=======
->>>>>>> 56a21ce (Add ban/unban user functionality to userCard)
-      <p>Role: {user.role}</p>
-      {currentUser.banned && (
-        <p className="text-[var(--color-recipe-fourth)]">Banned</p>
-      )}
-<<<<<<< HEAD
->>>>>>> 094a1d4 (Change UsersList style) */}
-      {/* ======= */}
-      {/* <button
-        onClick={banUser}
-        className="cursor-pointer bg-[var(--color-recipe-fourth)] p-2 rounded-md text-[var(--color-recipe-fifth)]"
-      >
-        {currentUser.banned ? "Unban" : "Ban"}
-      </button> */}
-      {/* >>>>>>> 56a21ce (Add ban/unban user functionality to userCard) */}
-      {/* =======
->>>>>>> c78a36a (Add better ban user fubctionality) */}
     </div>
   );
 };
