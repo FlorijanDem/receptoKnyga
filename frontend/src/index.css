@@ -7,10 +7,15 @@
   --color-recipe-third: #1a202c;
   --color-recipe-fourth: #ed3f3f;
   --color-recipe-fifth: #ffffff;
+  --color-recipe-sixth: #f6f7f9;
+}
+
+body {
+  @apply font-jakarta text-[var(--color-recipe-third)];
 }
 
 main {
-  @apply bg-gray-200;
+  @apply bg-[var(--color-recipe-sixth)];
 }
 
 .recipes-list-container {
@@ -21,12 +26,12 @@ main {
   }
 
   .recipes-list {
-    @apply flex flex-col gap-5 items-center md:grid md:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4;
+    @apply flex flex-col gap-5 items-center md:grid md:grid-cols-2 md:items-start lg:grid-cols-3 xl:grid-cols-4;
   }
 }
 
 .recipe-preview-card {
-  @apply w-[300px] text-gray-600 rounded-lg bg-white overflow-hidden;
+  @apply w-[300px] text-[var(--color-recipe-secondary)] rounded-lg bg-[var(--color-recipe-fifth)] overflow-hidden;
 
   .recipe-preview-card__image-container {
     @apply w-full h-[200px];
@@ -45,7 +50,7 @@ main {
   }
 
   .recipe-preview-card__title {
-    @apply text-2xl text-gray-800 font-bold mb-2 px-4;
+    @apply text-2xl text-gray-800 font-bold mb-2 px-4 break-words;
   }
 
   .recipe-preview-card__line {
@@ -66,14 +71,14 @@ main {
 }
 
 .error {
-  @apply text-red-500 w-max max-w-1/2 mx-auto pt-20;
+  @apply text-[var(--color-recipe-fourth)] w-max max-w-3/4 mx-auto pt-20;
 }
 
 .error-fallback {
   @apply w-max mx-auto mt-20;
 
   pre {
-    @apply text-red-500;
+    @apply text-[var(--color-recipe-fourth)];
   }
 
   button {
@@ -83,11 +88,15 @@ main {
 
 .login-page,
 .register-page {
-  @apply w-max mx-auto py-10 text-gray-800;
+  @apply w-[300px] sm:w-[625px] mx-auto py-20;
 }
 
 .user-form {
-  @apply flex flex-col gap-2;
+  @apply flex flex-col gap-10 rounded-[10px] px-6 py-12 bg-[var(--color-recipe-fifth)];
+
+  h1 {
+    @apply text-4xl font-bold;
+  }
 
   .input-container {
     * {
@@ -95,11 +104,26 @@ main {
     }
 
     label {
-      @apply relative translate-x-2 translate-y-3 bg-gray-200 w-max px-1;
+      @apply w-full mb-4 font-semibold;
     }
 
     input {
-      @apply border rounded py-1 px-2;
+      @apply rounded-lg bg-[var(--color-recipe-sixth)] w-full p-4 autofill:bg-[var(--colorrecipe-sixth)] autofill:duration-[5000s];
+    }
+
+    .form-input-error {
+      @apply text-[var(--color-recipe-fourth)] text-sm mt-1.5 text-right pr-2;
+    }
+  }
+
+  button {
+    @apply bg-[var(--color-recipe-primary)] w-max mx-auto px-10 py-4 text-[var(--color-recipe-fifth)] rounded-[10px] text-xl cursor-pointer;
+  }
+
+  .form-link {
+    @apply text-[var(--color-recipe-secondary)] flex flex-col gap-3;
+    a {
+      @apply text-[var(--color-recipe-third)] font-semibold;
     }
   }
 }

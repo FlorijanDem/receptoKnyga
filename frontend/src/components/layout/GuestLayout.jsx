@@ -6,12 +6,14 @@ import { Routes, Route } from "react-router";
 function GuestLayout() {
   return (
     <>
-      <Routes>
-        <Route path="/" element={<WelcomePage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
-      <Footer/>
+      <main>
+        <Routes>
+          <Route path="/" element={<WelcomePage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </main>
+      <Footer />
     </>
   );
 }
