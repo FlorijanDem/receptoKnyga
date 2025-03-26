@@ -3,6 +3,7 @@ import NavLikeIcon from "../assets/icons/Like.svg";
 import NavSettingIcon from "../assets/icons/Settings.svg";
 import NavCartIcon from "../assets/icons/Cart.svg";
 import NavProfileIcon from "../assets/icons/Profil.svg";
+import NavAddRecipeIcon from "../assets/icons/AddRecipe.svg";
 import { IoClose } from "react-icons/io5";
 import { Link } from "react-router";
 
@@ -49,6 +50,12 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         <button onClick={toggleSidebar} className="p-[0.85rem]">
           <IoClose className={`h-[25px] w-[25px]`} />
         </button>
+
+        <IconButton
+          icon={NavAddRecipeIcon}
+          to="/addRecipe"
+          onClick={toggleSidebar}
+        />
 
         <IconButton
           icon={NavLikeIcon}
