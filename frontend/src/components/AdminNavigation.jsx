@@ -20,6 +20,8 @@ const AdminNavigation = () => {
     navigate(`${adminPage === "recipes" ? "/" : `/${adminPage}`}`);
   };
 
+  console.log(window.location.pathname);
+
   useEffect(() => {
     reset();
     if (user?.role !== "admin") {
