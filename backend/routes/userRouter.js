@@ -1,10 +1,14 @@
-const { protect } = require("../controllers/userController");
-const { updateUser } = require("../controllers/userController");
+const { protect, allowAccessTo } = require("../controllers/userController");
+const { updateUser, getAllUsers } = require("../controllers/userController");
 const { checkUpdateUserBody } = require("../validators/checkUsersBody");
 const { checkUserParams } = require("../validators/checkUsersParams");
 const validate = require("../validators/validate");
 
 const userRouter = require("express").Router();
+
+userRouter
+  .route("/")
+  .get(protect, allowAccessTo("admin"), validate, getAllUsers);
 
 userRouter
   .route("/:id")
