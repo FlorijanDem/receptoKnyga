@@ -1,56 +1,34 @@
 import { useEffect, useContext } from "react";
-<<<<<<< HEAD
+
 import { NavLink, useNavigate } from "react-router";
 import { AdminFilterContext } from "../contexts/AdminFilterContext";
 import UserContext from "../contexts/UserContext";
 import { useForm } from "react-hook-form";
-=======
-import { NavLink } from "react-router";
-import { AdminFilterContext } from "../contexts/AdminFilterContext";
-import UserContext from "../contexts/UserContext";
-<<<<<<< HEAD
->>>>>>> 68610e4 (Add admin navigation)
-=======
-import { useForm } from "react-hook-form";
->>>>>>> 90cefaa (Fix pagination bug)
 
 const AdminNavigation = () => {
   const { setAdminFilters } = useContext(AdminFilterContext);
   const { user } = useContext(UserContext);
   const { adminPage, setAdminPage } = useContext(AdminFilterContext);
-<<<<<<< HEAD
-<<<<<<< HEAD
+
   const { register, reset } = useForm();
   const navigate = useNavigate();
-=======
->>>>>>> 68610e4 (Add admin navigation)
-=======
-  const { register, reset } = useForm();
->>>>>>> 90cefaa (Fix pagination bug)
 
   const handleRadioChange = (e) => {
     setAdminFilters({
       name: e.target.name,
       value: e.target.value,
     });
-<<<<<<< HEAD
+
     navigate(`${adminPage === "recipes" ? "/" : `/${adminPage}`}`);
   };
 
   useEffect(() => {
     reset();
-<<<<<<< HEAD
     if (user?.role !== "admin") {
       navigate("/");
       return;
     }
-=======
-  };
 
-  useEffect(() => {
->>>>>>> 68610e4 (Add admin navigation)
-=======
->>>>>>> 90cefaa (Fix pagination bug)
     if (user?.role === "admin") {
       setAdminFilters((prev) => {
         return {
@@ -58,20 +36,11 @@ const AdminNavigation = () => {
           value: "all",
         };
       });
-<<<<<<< HEAD
+
       navigate(`${adminPage === "recipes" ? "/" : `/${adminPage}`}`);
     }
     console.log(adminPage);
   }, [adminPage]);
-=======
-    }
-<<<<<<< HEAD
-  }, []);
->>>>>>> 68610e4 (Add admin navigation)
-=======
-    console.log(adminPage);
-  }, [adminPage]);
->>>>>>> 90cefaa (Fix pagination bug)
 
   //   console.log("adminFilter", adminFilters);
 
@@ -84,11 +53,6 @@ const AdminNavigation = () => {
               onClick={() => setAdminPage("recipes")}
               className={({ isActive }) => (isActive ? "underline" : "")}
               to="/"
-<<<<<<< HEAD
-
-=======
->>>>>>> 68610e4 (Add admin navigation)
-              //   state={adminFilter}
             >
               Recipes
             </NavLink>
@@ -109,15 +73,11 @@ const AdminNavigation = () => {
               Reviews
             </NavLink>
           </div>
-<<<<<<< HEAD
           {(window.location.pathname === "/" ||
             window.location.pathname === "/users" ||
             window.location.pathname === "/reviews") && (
             <form className="flex justify-around mt-[2rem]">
-              <label
-                htmlFor="all"
-                className="cursor-pointer"
-              >
+              <label htmlFor="all" className="cursor-pointer">
                 <input
                   className="cursor-pointer"
                   // onChange={handleRadioChange}
@@ -171,62 +131,6 @@ const AdminNavigation = () => {
               </label>
             </form>
           )}
-=======
-          <form className="flex justify-around mt-[2rem]">
-            <label htmlFor="all" className="cursor-pointer">
-              <input
-                className="cursor-pointer"
-                // onChange={handleRadioChange}
-                type="radio"
-                id="all"
-                {...register(
-                  `${adminPage === "users" ? "banned" : "approved"}`,
-                  { onChange: (e) => handleRadioChange(e) }
-                )}
-                // name={adminPage === "users" ? "banned" : "approved"}
-                value="all"
-                defaultChecked
-              />{" "}
-              All {adminPage}
-            </label>
-            <label
-              htmlFor={adminPage === "users" ? "banned" : "approved"}
-              className="cursor-pointer"
-            >
-              <input
-                className="cursor-pointer"
-                // onChange={handleRadioChange}
-                type="radio"
-                id={adminPage === "users" ? "banned" : "approved"}
-                {...register(
-                  `${adminPage === "users" ? "banned" : "approved"}`,
-                  { onChange: (e) => handleRadioChange(e) }
-                )}
-                // name={adminPage === "users" ? "banned" : "approved"}
-                value="true"
-              />{" "}
-              {adminPage === "users" ? "Banned" : "Approved"} {adminPage}
-            </label>
-            <label
-              htmlFor={adminPage === "users" ? "unbanned" : "unapproved"}
-              className="cursor-pointer"
-            >
-              <input
-                className="cursor-pointer"
-                // onChange={handleRadioChange}
-                type="radio"
-                id={adminPage === "users" ? "unbanned" : "unapproved"}
-                {...register(
-                  `${adminPage === "users" ? "banned" : "approved"}`,
-                  { onChange: (e) => handleRadioChange(e) }
-                )}
-                // name={adminPage === "users" ? "banned" : "approved"}
-                value="false"
-              />{" "}
-              {adminPage === "users" ? "Unbanned" : "Unapproved"} {adminPage}
-            </label>
-          </form>
->>>>>>> 68610e4 (Add admin navigation)
         </div>
       )}
     </>
