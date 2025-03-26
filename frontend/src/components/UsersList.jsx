@@ -1,9 +1,7 @@
-<<<<<<< HEAD
 import { useEffect, useContext, useState } from "react";
 import UserContext from "../contexts/UserContext";
 import { useNavigate } from "react-router";
 import axios from "axios";
-// <<<<<<< HEAD
 import { AdminFilterContext } from "../contexts/AdminFilterContext";
 import UserCard from "./UserCard";
 
@@ -53,20 +51,6 @@ const UsersList = () => {
       ))}
     </section>
   );
-=======
-import { useEffect } from "react";
-import { useLocation } from "react-router";
-
-const UsersList = () => {
-  const location = useLocation();
-  console.log("location.state", location.state);
-
-  useEffect(() => {
-    console.log(location.state);
-  }, [location.state]);
-
-  return <h1>UsersList</h1>;
->>>>>>> 05b6ea2 (Add admin navigation)
 };
 
 export default UsersList;

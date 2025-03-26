@@ -184,20 +184,6 @@ exports.getAllUsers = async (req, res, next) => {
   }
 };
 
-exports.getAllUsers = async (req, res, next) => {
-  try {
-    const users = await getAllUsers(req.query);
-
-    users.forEach((user) => {
-      user.password = undefined;
-    });
-
-    res.status(200).json({ status: "success", data: users });
-  } catch (err) {
-    next(new AppError(err.message, 500));
-  }
-};
-
 exports.updatePassword = async (req, res, next) => {
   const { currentPassword, newPassword } = req.body;
 
