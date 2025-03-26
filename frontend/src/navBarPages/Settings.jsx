@@ -1,10 +1,11 @@
-import ResetPassword from "../components/ResetPassword";
+import React from 'react';
+import ForgotPassword from "../components/ForgotPassword";
 
 const Settings = () => {
   return (
     <>
-      <h1>SettingPage</h1>
-      <ResetPassword />
+      <h1>Settings Page</h1>
+      <ForgotPassword />
     </>
   );
 };
