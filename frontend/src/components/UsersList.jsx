@@ -3,6 +3,7 @@ import UserContext from "../contexts/UserContext";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import { AdminFilterContext } from "../contexts/AdminFilterContext";
+import UserCard from "./UserCard";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -40,12 +41,12 @@ const UsersList = () => {
   }, [adminFilters]);
 
   return (
-    <>
+    <section className="w-max mx-auto">
       <h1>UsersList</h1>
       {users.map((user) => (
-        <div key={user.id}>{user.username}</div>
+        <UserCard key={user.id} user={user} />
       ))}
-    </>
+    </section>
   );
 };
 
