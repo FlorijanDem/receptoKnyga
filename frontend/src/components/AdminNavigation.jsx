@@ -28,7 +28,6 @@ const AdminNavigation = () => {
       navigate("/");
       return;
     }
-
     if (user?.role === "admin") {
       setAdminFilters((prev) => {
         return {
@@ -36,7 +35,6 @@ const AdminNavigation = () => {
           value: "all",
         };
       });
-
       navigate(`${adminPage === "recipes" ? "/" : `/${adminPage}`}`);
     }
     console.log(adminPage);
