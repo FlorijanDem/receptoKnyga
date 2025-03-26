@@ -50,6 +50,7 @@ const UserCard = ({ user }) => {
           {currentUser.banned ? "Unban" : "Ban"}
         </button>
       )}
+      {/* <<<<<<< HEAD */}
       {/* ======= */}
       {/* const UserCard = ({ user }) => {
   return (
@@ -78,6 +79,8 @@ const UserCard = ({ user }) => {
         {currentUser.banned ? "Unban" : "Ban"}
       </button> */}
       {/* >>>>>>> 56a21ce (Add ban/unban user functionality to userCard) */}
+      {/* =======
+>>>>>>> c78a36a (Add better ban user fubctionality) */}
     </div>
   );
 };
