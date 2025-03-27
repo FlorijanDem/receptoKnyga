@@ -32,7 +32,7 @@ const UserForm = ({ action, recipeId }) => {
       );
 
       setUser(response.user);
-      navigate(`/recipe/${recipeId}`);
+      navigate(`${recipeId ? `/recipe/${recipeId}` : "/"}`);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
