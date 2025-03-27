@@ -4,11 +4,13 @@ import { useErrorBoundary } from "react-error-boundary";
 import RecipePreviewCard from "./RecipePreviewCard";
 import RecipesListPagination from "./RecipesListPagination";
 import SearchContext from "../contexts/SearchContext";
+import UserContext from "../contexts/UserContext";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 const RecipesList = ({ filter, setFilter }) => {
   const { currentQuery, filters } = useContext(SearchContext);
+  const { user } = useContext(UserContext);
   const [recipes, setRecipes] = useState([]);
   const [recipeCount, setRecipeCount] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -17,17 +19,15 @@ const RecipesList = ({ filter, setFilter }) => {
 
   const fetchRecipes = async (query = "") => {
     try {
+      if (!user) {
+        throw new Error("Please log in to view recipes.");
+      }
+
       setLoading(true);
 
-      // Fetch current user's ID
-      const userResponse = await axios.get(`${API_URL}/auth/me`, {
-        withCredentials: true,
-      });
-      const userId = userResponse.data.user.id;
-
-      // Fetch user's favorites
+      console.log(user.id);
       const favoritesResponse = await axios.get(
-        `${API_URL}/favorites/${userId}`,
+        `${API_URL}/favorites/${user.id}`,
         {
           withCredentials: true,
         }
@@ -72,6 +72,7 @@ const RecipesList = ({ filter, setFilter }) => {
           setError("Network error. Please check your internet connection.");
         }
       } else {
+        setError(error.message);
         showBoundary(error);
       }
     }

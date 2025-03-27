@@ -1,34 +1,21 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import FavList from "../components/FavList";
-
-const API_URL = import.meta.env.VITE_API_URL;
+import UserContext from "../contexts/UserContext"; // Import UserContext
 
 const Favourite = () => {
-  const [userId, setUserId] = useState(null);
+  const { user } = useContext(UserContext); // Get user from context
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchCurrentUser = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(`${API_URL}/auth/me`, {
-        withCredentials: true, // Ensures cookies/session data is sent
-      });
-      const { id } = response.data.user;
-      setUserId(id);
-      setError(null);
-    } catch (err) {
-      setError("Failed to fetch user data. Please ensure you are logged in.");
-      console.error(err);
-    } finally {
+  useEffect(() => {
+    // Check if user is available from context
+    if (user) {
+      setLoading(false);
+    } else {
+      setError("User data not found. Please ensure you are logged in.");
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    fetchCurrentUser();
-  }, []);
+  }, [user]);
 
   if (loading) {
     return <p>Loading user data...</p>;
@@ -40,7 +27,7 @@ const Favourite = () => {
 
   return (
     <>
-      <FavList userId={userId} />
+      <FavList userId={user.id} /> {/* Use user.id from context */}
     </>
   );
 };
