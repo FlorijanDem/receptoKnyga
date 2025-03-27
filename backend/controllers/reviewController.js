@@ -5,7 +5,6 @@ const {
   updateReview,
 } = require("../models/reviewModel");
 
-
 exports.getReviewsByRecipe = async (req, res, next) => {
   try {
     const { page, limit, sortBy, order } = req.query;
@@ -18,8 +17,8 @@ exports.getReviewsByRecipe = async (req, res, next) => {
     );
     return res.status(200).json({
       status: "success",
-      data: result  
-})
+      data: result,
+    });
   } catch (error) {
     next(error);
   }
@@ -34,8 +33,8 @@ exports.addReview = async (req, res, next) => {
     });
     return res.status(201).json({
       status: "success",
-      data: newReview
-    })
+      data: newReview,
+    });
   } catch (error) {
     next(error);
   }
@@ -51,8 +50,8 @@ exports.updateReview = async (req, res, next) => {
     );
     return res.status(200).json({
       status: "success",
-      data: updatedReview
-    })
+      data: updatedReview,
+    });
   } catch (error) {
     next(error);
   }
@@ -63,8 +62,8 @@ exports.deleteReview = async (req, res, next) => {
     const deletedReview = await deleteReview(req.params.id, req.user.id);
     return res.status(200).json({
       status: "success",
-      data: deletedReview
-    })
+      data: deletedReview,
+    });
   } catch (error) {
     next(error);
   }

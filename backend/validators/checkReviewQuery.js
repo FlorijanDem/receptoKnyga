@@ -1,4 +1,4 @@
-const { query, validationResult } = require("express-validator");
+const { query } = require("express-validator");
 
 exports.checkReviewsQuery = [
   query("page")
@@ -9,11 +9,4 @@ exports.checkReviewsQuery = [
     .optional()
     .isInt({ min: 1, max: 100 })
     .withMessage("Limit must be between 1 and 100"),
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ status: "error", errors: errors.array() });
-    }
-    next();
-  },
 ];

@@ -1,13 +1,48 @@
-const { param, validationResult } = require("express-validator");
+const { param } = require("express-validator");
+const { getReviewById } = require("../models/reviewModel");
+const { getUserById } = require("../models/userModel");
 
-exports.checkReviewsParams = [
-  param("recipe_id").isInt().withMessage("Recipe ID must be an integer"),
-  param("id").optional().isInt().withMessage("Review ID must be an integer"),
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ status: "error", errors: errors.array() });
+exports.checkIfReviewed = [
+  param("recipe_id").custom(async (recipe_id, { req }) => {
+    try {
+      const user = await getUserById(req.user?.id);
+      if (!user) {
+        throw new Error("User not found");
+      }
+      if (user.role === "admin") {
+        return true;
+      }
+      const existingReview = await getReviewById(recipe_id, req.user?.id);
+      if (existingReview) {
+        throw new Error("You have already reviewed this recipe");
+      }
+      return true;
+    } catch (error) {
+      throw new Error(error.message);
     }
-    next();
-  },
+  }),
+];
+
+exports.checkReviewCreator = [
+  param("review_id").custom(async (review_id, { req }) => {
+    try {
+      const user = await getUserById(req.user?.id);
+      if (!user) {
+        throw new Error("User not found");
+      }
+      if (user.role === "admin") {
+        return true;
+      }
+      const review = await getReviewById(review_id);
+      if (!review) {
+        throw new Error("Review not found");
+      }
+      if (review.user_id !== req.user?.id) {
+        throw new Error("You can't edit or delete others' reviews");
+      }
+      return true;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }),
 ];

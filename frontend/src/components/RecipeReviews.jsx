@@ -71,8 +71,7 @@ const RecipeReviews = ({ refresh }) => {
       setEditingReview(null);
       reset();
     } catch (error) {
-      console.log(error);
-      setError("Failed to update review");
+      setError(error);
     }
   };
 
@@ -93,8 +92,7 @@ const RecipeReviews = ({ refresh }) => {
       setDeleteReviewId(null);
       navigate(`/recipe/${id}`);
     } catch (error) {
-      console.error("Error deleting review:", error);
-      setError("Failed to delete review");
+      setError(error);
       setOpenDelete(false);
     }
   };

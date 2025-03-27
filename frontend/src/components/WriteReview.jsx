@@ -44,7 +44,7 @@ function WriteReview({ recipe_id, isLoggedIn, setRefresh }) {
           );
           setHasReviewed(!!userReview);
         } catch (err) {
-          console.error("Error checking reviews:", err);
+          setError(err);
           setHasReviewed(false);
         }
       };
