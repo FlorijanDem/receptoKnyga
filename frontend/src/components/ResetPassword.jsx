@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router';
 
+const API_URL = import.meta.env.VITE_API_URL;
+
+
 const ResetPassword = () => {
     const { token } = useParams();
     const navigate = useNavigate();
@@ -11,7 +14,7 @@ const ResetPassword = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         // Check if passwords match
         if (newPassword !== confirmPassword) {
             setMessage("Passwords do not match");
@@ -19,7 +22,7 @@ const ResetPassword = () => {
         }
 
         try {
-            const response = await axios.post(`http://localhost:3002/api/v1/auth/reset-password/${token}`, { newPassword });
+            const response = await axios.post(`${API_URL}/auth/reset-password/${token}`, { newPassword });
             setMessage(response.data.message);
             navigate('/login');
         } catch (error) {
@@ -29,7 +32,7 @@ const ResetPassword = () => {
 
     return (
         <div className='flex flex-col items-center justify-center'>
-            <p className='text-lg font-bold mb-4 mt-40 text-blue-700'>Having trouble logging in? Reset your password<br/><span className='ml-8'>and get back to tracking your calories!</span></p>
+            <p className='text-lg font-bold mb-4 mt-40 text-blue-700'>Having trouble logging in? Reset your password<br /><span className='ml-8'>and get back to tracking your calories!</span></p>
             <h2 className='text-2xl font-bold mb-4 text-gray-800'>Reset Password</h2>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="newPassword" className='flex flex-col block mb-1 text-md font-medium text-gray-900'>
