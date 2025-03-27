@@ -11,6 +11,12 @@ const Login = () => {
           Register
         </Link>
       </p>
+      <p>
+        Forgot your password?{" "}
+        <Link to="/forgot-password" className="text-blue-600">
+          Reset Password
+        </Link>
+      </p>
     </div>
   );
 };
