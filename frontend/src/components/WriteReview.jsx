@@ -52,6 +52,10 @@ function WriteReview({ recipe_id, isLoggedIn, setRefresh }) {
     }
   }, [user, recipe_id, setValue]);
 
+  const isZalgo = (value) => {
+    const zalgoRegex = /[\u0300-\u036F\u1AB0-\u1AFF\u1DC0-\u1DFF\uFE20-\uFE2F]/;
+    return !zalgoRegex.test(value) || "Special characters are not allowed!";
+  };
   const onSubmit = async (data) => {
     try {
       const response = await axios.post(
@@ -136,10 +140,11 @@ function WriteReview({ recipe_id, isLoggedIn, setRefresh }) {
 
           <textarea
             {...register("review_text", {
+              validate: isZalgo,
               required: "Review text is required",
               maxLength: {
                 value: 500,
-                message: "Review cannot exceed 500 characters",
+                message: "Review cannot exceed 500 characters and cannot contain special characters",
               },
             })}
             placeholder="Write your review here..."

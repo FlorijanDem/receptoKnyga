@@ -52,6 +52,11 @@ const RecipeReviews = ({ refresh }) => {
     fetchReviews();
   }, [id, refresh]);
 
+  const isZalgo = (value) => {
+    const zalgoRegex = /[\u0300-\u036F\u1AB0-\u1AFF\u1DC0-\u1DFF\uFE20-\uFE2F]/;
+    return !zalgoRegex.test(value) || "Special characters are not allowed!";
+  };
+
   const handleEditClick = (review) => {
     setEditingReview(review.id);
     setValue("rating", review.rating, { shouldValidate: true });
@@ -162,10 +167,11 @@ const RecipeReviews = ({ refresh }) => {
                 )}
                 <textarea
                   {...register("review_text", {
+                    validate: isZalgo,
                     required: "Review text is required",
                     maxLength: {
                       value: 500,
-                      message: "Review cannot exceed 500 characters",
+                      message: "Review cannot exceed 500 characters and cannot contain special characters",
                     },
                   })}
                   className="border border-[var(--color-recipe-secondary)] bg-[var(--color-recipe-fifth)] rounded-md p-2 w-full"

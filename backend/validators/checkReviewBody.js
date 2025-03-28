@@ -8,5 +8,12 @@ exports.checkReviewsBody = [
     .isString()
     .trim()
     .isLength({ min: 1, max: 500 })
-    .withMessage("Review text must be 1-500 characters"),
+    .withMessage("Review text must be 1-500 characters")
+    .custom((value) => {
+      const zalgoRegex = /[\u0300-\u036F\u1AB0-\u1AFF\u1DC0-\u1DFF\uFE20-\uFE2F]/;
+      if (zalgoRegex.test(value)) {
+        throw new Error("Zalgo text is not allowed!");
+      }
+      return true;
+    })
 ];
