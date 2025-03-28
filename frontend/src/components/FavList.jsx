@@ -112,7 +112,7 @@ const FavList = ({ userId = null, showAll = false }) => {
   }, [userId, showAll]);
 
   return (
-    <div className="flex flex-col md:flex-row bg-recipe-sixth">
+    <div className="flex flex-col md:flex-row bg-recipe-sixth mx-auto w-max">
       <nav className="hidden lg:block md:w-[286px] bg-red-700 md:min-h-screen"></nav>
       <section className="pt-[40px] md:pl-[40px]">
         <h1 className="text-recipe-secondary font-jakarta font-[500] text-[16px] pb-[27px]">
