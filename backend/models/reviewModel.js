@@ -18,6 +18,15 @@ exports.getReviewsByRecipe = async (recipe_id) => {
   return reviews;
 };
 
+exports.getReviewById = async (id) => {
+  const [review] = await sql`     
+  SELECT reviews.*
+  FROM reviews
+  WHERE reviews.id = ${id}
+  `;
+  return review;
+};
+
 exports.addReview = async (data) => {
   const [newReview] = await sql`
   INSERT INTO reviews (recipe_id, user_id, rating, review_text)
@@ -43,10 +52,11 @@ exports.updateReview = async (user_id, data, review_id) => {
   return review;
 };
 
-exports.deleteReview = async (id) => {
-  const deletedReview = await sql`
+exports.deleteReview = async (id, user_id = null) => {
+  const [deletedReview] = await sql`
     DELETE FROM reviews
     WHERE id = ${id}
+    ${user_id ? sql`AND user_id = ${user_id}` : sql``}
     RETURNING *
     `;
   return deletedReview;

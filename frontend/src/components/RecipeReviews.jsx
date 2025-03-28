@@ -71,7 +71,7 @@ const RecipeReviews = ({ refresh }) => {
       setEditingReview(null);
       reset();
     } catch (error) {
-      setError(error);
+      setError(error.response?.data?.message);
     }
   };
 
@@ -92,7 +92,7 @@ const RecipeReviews = ({ refresh }) => {
       setDeleteReviewId(null);
       navigate(`/recipe/${id}`);
     } catch (error) {
-      setError(error);
+      setError(error.response?.data?.message);
       setOpenDelete(false);
     }
   };

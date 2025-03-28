@@ -1,6 +1,6 @@
 const { param } = require("express-validator");
 const { getReviewById } = require("../models/reviewModel");
-const { getUserById } = require("../models/userModel");
+// const { getUserByid } = require("../models/userModel");
 
 exports.checkIfReviewed = [
   param("recipe_id").custom(async (recipe_id, { req }) => {
@@ -23,10 +23,11 @@ exports.checkReviewCreator = [
       if (!review) {
         throw new Error("Review not found");
       }
-      const user = await getUserById(req.user?.id);
-      if (user.role === "admin") {
+      
+      if (req.user.role === "admin") {
         return true;
       }
+      
       if (review.user_id !== req.user?.id) {
         throw new Error("You can't edit or delete others reviews");
       }

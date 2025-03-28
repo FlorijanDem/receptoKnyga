@@ -46,7 +46,7 @@ exports.updateReview = async (req, res, next) => {
     const updatedReview = await updateReview(
       req.user.id,
       { rating, review_text },
-      req.params.id
+      req.params.review_id
     );
     return res.status(200).json({
       status: "success",
@@ -59,7 +59,7 @@ exports.updateReview = async (req, res, next) => {
 
 exports.deleteReview = async (req, res, next) => {
   try {
-    const deletedReview = await deleteReview(req.params.id, req.user.id);
+    const deletedReview = await deleteReview(req.params.review_id, req.user.role !== "admin" ? req.user.id : null);
     return res.status(200).json({
       status: "success",
       data: deletedReview,

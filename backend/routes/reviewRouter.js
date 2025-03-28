@@ -22,7 +22,7 @@ reviewRouter
 
 // "/:recipe_id/:review_id"
 reviewRouter
-  .route("/:recipe_id/:id")
+  .route("/:recipe_id/:review_id")
   .patch(protect, checkReviewCreator, checkReviewsBody, validate, updateReview)
   .delete(protect, checkReviewCreator, validate, deleteReview);
 
