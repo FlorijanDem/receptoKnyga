@@ -17,13 +17,13 @@ const reviewRouter = require("express").Router();
 
 reviewRouter
   .route("/:recipe_id")
-  .get(checkReviewsQuery, validate, getReviewsByRecipe)
-  .post(checkIfReviewed, protect, checkReviewsBody, addReview);
+  .get(protect, checkReviewsQuery, validate, getReviewsByRecipe)
+  .post(protect, checkIfReviewed, checkReviewsBody, validate, addReview);
 
 // "/:recipe_id/:review_id"
 reviewRouter
   .route("/:recipe_id/:id")
-  .patch(protect, checkReviewCreator, checkReviewsBody, updateReview)
-  .delete(protect, validate, checkReviewCreator, deleteReview);
+  .patch(protect, checkReviewCreator, checkReviewsBody, validate, updateReview)
+  .delete(protect, checkReviewCreator, validate, deleteReview);
 
 module.exports = reviewRouter;

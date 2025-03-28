@@ -5,13 +5,6 @@ const { getUserById } = require("../models/userModel");
 exports.checkIfReviewed = [
   param("recipe_id").custom(async (recipe_id, { req }) => {
     try {
-      const user = await getUserById(req.user?.id);
-      if (!user) {
-        throw new Error("User not found");
-      }
-      if (user.role === "admin") {
-        return true;
-      }
       const existingReview = await getReviewById(recipe_id, req.user?.id);
       if (existingReview) {
         throw new Error("You have already reviewed this recipe");
@@ -26,19 +19,16 @@ exports.checkIfReviewed = [
 exports.checkReviewCreator = [
   param("review_id").custom(async (review_id, { req }) => {
     try {
-      const user = await getUserById(req.user?.id);
-      if (!user) {
-        throw new Error("User not found");
-      }
-      if (user.role === "admin") {
-        return true;
-      }
       const review = await getReviewById(review_id);
       if (!review) {
         throw new Error("Review not found");
       }
+      const user = await getUserById(req.user?.id);
+      if (user.role === "admin") {
+        return true;
+      }
       if (review.user_id !== req.user?.id) {
-        throw new Error("You can't edit or delete others' reviews");
+        throw new Error("You can't edit or delete others reviews");
       }
       return true;
     } catch (error) {

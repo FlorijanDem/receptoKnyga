@@ -88,7 +88,7 @@ function WriteReview({ recipe_id, isLoggedIn, setRefresh }) {
         <div className="flex flex-col items-center">
           <button
             onClick={() => setShowForm(true)}
-            className="bg-[var(--color-recipe-primary)] text-white px-4 py-2 rounded-md mt-4"
+            className="bg-[var(--color-recipe-primary)] text-white px-4 py-2 rounded-md mt-4 cursor-pointer"
           >
             Leave a Review
           </button>
@@ -155,13 +155,22 @@ function WriteReview({ recipe_id, isLoggedIn, setRefresh }) {
           {error && (
             <p className="text-[var(--color-recipe-fourth)] mt-2">{error}</p>
           )}
-
+  <div className="flex justify-center mt-4 gap-2"> 
           <button
             type="submit"
-            className="bg-[var(--color-recipe-primary)] text-white px-4 py-2 rounded-md mt-4"
+            className="bg-[var(--color-recipe-primary)] text-white px-4 py-2 rounded-md cursor-pointer"
           >
             Submit Review
           </button>
+          <button
+                className="bg-[var(--color-recipe-secondary)] text-[var(--color-recipe-fifth)] px-4 py-2 rounded-md cursor-pointer"
+                onClick={() => {
+                  setShowForm(false);
+                }}
+              >
+                Cancel
+              </button>
+              </div>
         </form>
       )}
     </>
