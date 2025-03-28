@@ -1,5 +1,5 @@
 import React from "react";
-import { FormProvider, useFieldArray } from "react-hook-form";
+import { FormProvider } from "react-hook-form";
 import FormField from "../FormField";
 import IngredientField from "../IngredientField";
 import { RECIPE_LABELS, RECIPE_TYPES, RECIPE_VALIDATION } from "../../utils/validation/recipeValidation";
@@ -20,6 +20,7 @@ import { RECIPE_LABELS, RECIPE_TYPES, RECIPE_VALIDATION } from "../../utils/vali
  * @param {Function} props.setActiveIndex - Funkcija aktyviam indeksui nustatyti
  * @param {Function} props.addProductField - Funkcija naujam produkto laukui pridėti
  * @param {Function} props.remove - Funkcija produkto laukui pašalinti
+ * @param {Object[]} props.fields - Ingredientų laukų masyvas
  */
 const RecipeFormLayout = ({
   methods,
@@ -33,14 +34,9 @@ const RecipeFormLayout = ({
   selectProduct,
   setActiveIndex,
   addProductField,
-  remove
+  remove,
+  fields
 }) => {
-  // Gauname laukų masyvą iš methods
-  const { fields } = useFieldArray({
-    control: methods.control,
-    name: "products"
-  });
-
   return (
     <div className="max-w-lg mx-auto bg-white p-6 shadow-md rounded-lg">
       <h2 className="text-xl font-semibold text-center text-gray-700 mb-4">

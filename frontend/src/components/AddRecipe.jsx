@@ -6,7 +6,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import RecipeFormLayout from "./layout/RecipeFormLayout";
 import {
   NON_VEGETARIAN_CATEGORIES,
-  NON_VEGETARIAN_KEYWORDS,
+  NON_VEGETARIAN_KEYWORDS
 } from "../utils/validation/recipeValidation";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -29,18 +29,18 @@ function AddRecipe() {
       servings: "",
       type: "non-veg",
       photo: "",
-      products: [{ title: "", amount: "" }],
+      products: [{ title: "", amount: "" }]
     },
-    mode: "onBlur",
+    mode: "onBlur"
   });
 
   const { control, watch, setValue, trigger } = methods;
 
   const recipeType = watch("type");
 
-  const { append, remove } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
-    name: "products",
+    name: "products"
   });
 
   useEffect(() => {
@@ -223,6 +223,7 @@ function AddRecipe() {
       setActiveIndex={setActiveIndex}
       addProductField={addProductField}
       remove={remove}
+      fields={fields}
       recipeType={recipeType}
     />
   );

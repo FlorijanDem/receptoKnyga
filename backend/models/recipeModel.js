@@ -160,7 +160,7 @@ exports.getRecipeById = async (id) => {
     recipe.products = await Promise.all(
       productIDs.map(async ({ product_id }) => {
         const [product] = await sql`
-          SELECT products.title, products.units_of_meassurement, recipes_products.amount
+          SELECT products.title, recipes_products.amount
           FROM products
           JOIN recipes_products
           ON products.id = recipes_products.product_id
@@ -194,15 +194,6 @@ exports.createRecipe = async (recipe) => {
         FROM products
         WHERE title = ${product.title}
         `;
-
-        if (!productID) {
-          // Need to fix products table
-          [productID] = await sql`
-           INSERT INTO products ${sql(product, "title", "units_of_meassurement")}
-
-           RETURNING id
-          `;
-        }
 
         const productObj = { id: productID.id, amount: product.amount };
 
@@ -245,14 +236,6 @@ exports.updateRecipe = async (id, data) => {
         FROM products
         WHERE title = ${product.title}
         `;
-
-          if (!productID) {
-            [productID] = await sql`
-           INSERT INTO products ${sql(product, "title", "units_of_meassurement")}
-
-           RETURNING id
-          `;
-          }
 
           const productObj = { id: productID.id, amount: product.amount };
 
