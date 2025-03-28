@@ -34,6 +34,16 @@ const createDBtables = async () => {
         )
     `;
 
+    // Create characteristics_history_height table
+    await sql`
+    CREATE TABLE IF NOT EXISTS characteristics_history_weight (
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+      weight FLOAT NOT NULL,
+      date DATE NOT NULL DEFAULT CURRENT_DATE,
+      UNIQUE(user_id, date) -- Prevents duplicate entries for same user on same date
+    )
+  `;
     // Create recipes table
     // The "type" field represents the recipe category, such as "Vegetarian" or "Vegan".
     // If no category it remains NULL.
