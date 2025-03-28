@@ -7,7 +7,7 @@ import UserContext from "../contexts/UserContext";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-const UserForm = ({ action }) => {
+const UserForm = ({ action, recipeId }) => {
   const { setUser } = useContext(UserContext);
   const [error, setError] = useState(null);
   const { showBoundary } = useErrorBoundary();
@@ -32,7 +32,7 @@ const UserForm = ({ action }) => {
       );
 
       setUser(response.user);
-      navigate("/");
+      navigate(`${recipeId ? `/recipe/${recipeId}` : "/"}`);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
