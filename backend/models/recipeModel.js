@@ -1,14 +1,12 @@
 const { sql } = require("../dbConnection");
 
-// Does not work without DB
-
 exports.searchRecipes = async (filters) => {
   const {
-    q, // bendras paieškos tekstas
-    type, // recepto tipas
-    product, // recepto produktas
-    preparation_time, // paruošimo laikas
-    servings, // porcijų skaičius
+    q, 
+    type, 
+    product, 
+    preparation_time, 
+    servings, 
     limit = 12,
     offset = 0,
   } = filters;
@@ -129,7 +127,6 @@ exports.searchRecipes = async (filters) => {
         : sql``
     }
   `;
-  // patikrinti ar nesukeicia reiksmes vietomis
   const [recipes, [{ total }]] = await Promise.all([searchQuery, countQuery]);
 
   return {
@@ -139,7 +136,6 @@ exports.searchRecipes = async (filters) => {
 };
 
 exports.getRecipeById = async (id) => {
-  // Needs refinment when DB is ready
   const recipe = await sql.begin(async () => {
     const [recipe] = await sql`
     SELECT *
@@ -178,7 +174,6 @@ exports.getRecipeById = async (id) => {
 };
 
 exports.createRecipe = async (recipe) => {
-  // Needs refinement when DB is ready
   const newRecipe = await sql.begin(async () => {
     const [newRecipe] = await sql`
     INSERT INTO recipes ("title","photo","method","type","preparation_time","servings", "description", "user_id")
