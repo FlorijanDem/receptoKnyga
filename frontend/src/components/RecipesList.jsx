@@ -4,11 +4,13 @@ import { useErrorBoundary } from "react-error-boundary";
 import RecipePreviewCard from "./RecipePreviewCard";
 import RecipesListPagination from "./RecipesListPagination";
 import SearchContext from "../contexts/SearchContext";
+import UserContext from "../contexts/UserContext";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 const RecipesList = ({ filter, setFilter }) => {
   const { currentQuery, filters } = useContext(SearchContext);
+  const { user } = useContext(UserContext);
   const [recipes, setRecipes] = useState([]);
   const [recipeCount, setRecipeCount] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -19,11 +21,10 @@ const RecipesList = ({ filter, setFilter }) => {
     try {
       setLoading(true);
 
-      // Fetch current user's ID
-      const userResponse = await axios.get(`${API_URL}/auth/me`, {
-        withCredentials: true,
-      });
-      const userId = userResponse.data.user.id;
+      if (!user) {
+        throw new Error("Please log in to view recipes.");
+      }
+      const userId = user.id;
 
       // Fetch user's favorites
       const favoritesResponse = await axios.get(
@@ -34,7 +35,7 @@ const RecipesList = ({ filter, setFilter }) => {
       );
       const favoriteIds = new Set(favoritesResponse.data.data);
 
-      // Fetch recipes with pagination
+      // Create URL parameters from filter object and context filters
       const params = new URLSearchParams();
       params.append("page", filter.page);
       params.append("limit", filter.limit);
@@ -42,20 +43,20 @@ const RecipesList = ({ filter, setFilter }) => {
       if (filters.type) params.append("type", filters.type);
       if (filters.product) params.append("product", filters.product);
 
-      const recipesResponse = await axios.get(
+      const { data: response } = await axios.get(
         `${API_URL}/recipes?${params.toString()}`,
         {
           withCredentials: true,
         }
       );
 
-      const recipesWithFavorites = recipesResponse.data.data.map((recipe) => ({
+      const recipesWithFavorites = response.data.map((recipe) => ({
         ...recipe,
         isFavorite: favoriteIds.has(recipe.id),
       }));
 
       setRecipes(recipesWithFavorites);
-      setRecipeCount(recipesResponse.data.results);
+      setRecipeCount(response.results);
       setError(null);
       setLoading(false);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -72,12 +73,17 @@ const RecipesList = ({ filter, setFilter }) => {
           setError("Network error. Please check your internet connection.");
         }
       } else {
-        showBoundary(error);
+        setError(error.message); // Handle the case where user is null
+        if (!(error instanceof Error)) {
+          showBoundary(error);
+        }
       }
     }
   };
 
+  // React to filter changes
   useEffect(() => {
+    // When filters change, return to first page
     setFilter((prev) => ({
       ...prev,
       page: 1,

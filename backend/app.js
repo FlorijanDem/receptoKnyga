@@ -15,11 +15,12 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: true,
+    origin: process.env.FRONTEND_URL || true,
     credentials: true,
   })
 );
 
+// Routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/recipes", recipeRouter);
 app.use("/api/v1/characteristics", characteristicsRouter);

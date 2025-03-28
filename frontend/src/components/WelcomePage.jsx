@@ -79,7 +79,7 @@ const WelcomePage = () => {
             <Link to={`/login`} key={recipe.id}>
               <div className="break-inside-avoid mb-1.25 group relative overflow-hidden bg-recipe-third">
                 <img
-                  src={recipe.photo}
+                  src={recipe.photo || null}
                   alt={recipe.title}
                   className="w-full h-full object-cover transition duration-400 ease-in-out group-hover:scale-110 group-hover:opacity-50"
                 />

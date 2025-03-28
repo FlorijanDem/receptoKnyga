@@ -53,16 +53,52 @@ const createDBtables = async () => {
         )
     `;
 
-    // Create products table,
-    // every product have own id who putted into "recipes.products" array
+    // Create products table with all nutritional fields
     await sql`
-        CREATE TABLE IF NOT EXISTS products (
-            id SERIAL PRIMARY KEY,
-            title TEXT NOT NULL,
-            amount NUMERIC,
-            units_of_meassurement VARCHAR
-        )
-    `;
+    CREATE TABLE IF NOT EXISTS products (
+        id SERIAL PRIMARY KEY,
+        title TEXT NOT NULL,
+        othername TEXT,
+        category TEXT,
+        potassium INTEGER,
+        selenium DOUBLE PRECISION,
+        sodium INTEGER,
+        zinc DOUBLE PRECISION,
+        calories INTEGER,
+        carbohydrates DOUBLE PRECISION,
+        fiber DOUBLE PRECISION,
+        netcarbs DOUBLE PRECISION,
+        fats DOUBLE PRECISION,
+        saturated DOUBLE PRECISION,
+        mufa DOUBLE PRECISION,
+        pufa DOUBLE PRECISION,
+        pufa_w6 DOUBLE PRECISION,
+        pufa_w3 DOUBLE PRECISION,
+        protein DOUBLE PRECISION,
+        vit_a_rae INTEGER,
+        vit_b1 DOUBLE PRECISION,
+        vit_b2 DOUBLE PRECISION,
+        vit_b3 DOUBLE PRECISION,
+        vit_b5 DOUBLE PRECISION,
+        vit_b6 DOUBLE PRECISION,
+        vit_b9 INTEGER,
+        vit_b12 DOUBLE PRECISION,
+        vit_c DOUBLE PRECISION,
+        vit_d DOUBLE PRECISION,
+        vit_e DOUBLE PRECISION,
+        vit_k DOUBLE PRECISION,
+        choline DOUBLE PRECISION,
+        betaine DOUBLE PRECISION,
+        calcium INTEGER,
+        copper DOUBLE PRECISION,
+        fluoride DOUBLE PRECISION,
+        iron DOUBLE PRECISION,
+        magnesium INTEGER,
+        manganese DOUBLE PRECISION,
+        phoshorus INTEGER,
+        amount NUMERIC,
+        units_of_meassurement VARCHAR
+    );`;
 
     // If I understand correctly, the amount inside can be anything
     await sql`
@@ -104,7 +140,7 @@ const dbSettings = async () => {
 
     console.log("pg_trgm plėtinys sėkmingai įdiegtas ir aktyvuotas.");
 
-    //  indeksai recipes products lentelei
+    // indeksai recipes products lentelei
     await sql`CREATE INDEX IF NOT EXISTS recipes_title_trgm_idx ON recipes USING gin (title gin_trgm_ops)`;
     await sql`CREATE INDEX IF NOT EXISTS recipes_description_trgm_idx ON recipes USING gin (description gin_trgm_ops)`;
     await sql`CREATE INDEX IF NOT EXISTS products_title_trgm_idx ON products USING gin (title gin_trgm_ops)`;

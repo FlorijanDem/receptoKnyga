@@ -118,9 +118,7 @@ const FavList = ({ userId = null, showAll = false }) => {
         <h1 className="text-recipe-secondary font-jakarta font-[500] text-[16px] pb-[27px]">
           {showAll
             ? "All Users' Favorite Recipes"
-            : userId
-            ? `User ${userId}'s Favorite Recipes`
-            : "My Favorite Recipes"}
+            : userId && `Favorite Recipes`}
         </h1>
         {loading ? (
           <p className="text-center text-gray-500">Loading...</p>

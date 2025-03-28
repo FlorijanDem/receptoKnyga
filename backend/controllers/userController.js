@@ -37,8 +37,8 @@ exports.registerUser = async (req, res, next) => {
     const token = signToken(user.id);
     sendCookie(token, res);
 
-    user.id = undefined;
-    user.password = undefined;
+    //user.id = undefined;
+    //user.password = undefined;
 
     res.status(201).json({
       message: "User created",
@@ -54,7 +54,7 @@ exports.loginUser = async (req, res, next) => {
 
   try {
     const user = await getUserByEmail(email);
-    
+
     if (!user) {
       return res.status(401).json({
         message: "Invalid email or password",
@@ -77,8 +77,8 @@ exports.loginUser = async (req, res, next) => {
     const token = signToken(user.id);
     sendCookie(token, res);
 
-    user.id = undefined;
-    user.password = undefined;
+    // user.id = undefined;
+    //user.password = undefined;
 
     res.status(200).json({
       message: "You are login",
@@ -135,7 +135,7 @@ exports.getMe = async (req, res, next) => {
       return res.status(200).json({ user: null });
     }
 
-    user.password = undefined;
+    //  user.password = undefined;
 
     res.status(200).json({ user });
   } catch (err) {
