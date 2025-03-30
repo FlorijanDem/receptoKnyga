@@ -56,14 +56,48 @@ const createDBtables = async () => {
     // Create products table,
     // every product have own id who putted into "recipes.products" array
     await sql`
-        CREATE TABLE IF NOT EXISTS products (
-            id SERIAL PRIMARY KEY,
-            title TEXT NOT NULL,
-            amount NUMERIC,
-            units_of_meassurement VARCHAR
-        )
-    `;
-
+    CREATE TABLE IF NOT EXISTS products(
+    id SERIAL PRIMARY KEY,
+    title TEXT,
+    othername TEXT,
+    category TEXT,
+    potassium INTEGER,
+    selenium DOUBLE PRECISION,
+    sodium INTEGER,
+    zinc DOUBLE PRECISION,
+    calories INTEGER,
+    carbohydrates DOUBLE PRECISION,
+    fiber DOUBLE PRECISION,
+    netcarbs DOUBLE PRECISION,
+    fats DOUBLE PRECISION,
+    saturated DOUBLE PRECISION,
+    mufa DOUBLE PRECISION,
+    pufa DOUBLE PRECISION,
+    pufa_w6 DOUBLE PRECISION,
+    pufa_w3 DOUBLE PRECISION,
+    protein DOUBLE PRECISION,
+    vit_a_rae INTEGER,
+    vit_b1 DOUBLE PRECISION,
+    vit_b2 DOUBLE PRECISION,
+    vit_b3 DOUBLE PRECISION,
+    vit_b5 DOUBLE PRECISION,
+    vit_b6 DOUBLE PRECISION,
+    vit_b9 INTEGER,
+    vit_b12 DOUBLE PRECISION,
+    vit_c DOUBLE PRECISION,
+    vit_d DOUBLE PRECISION,
+    vit_e DOUBLE PRECISION,
+    vit_k DOUBLE PRECISION,
+    choline DOUBLE PRECISION,
+    betaine DOUBLE PRECISION,
+    calcium INTEGER,
+    copper DOUBLE PRECISION,
+    fluoride DOUBLE PRECISION,
+    iron DOUBLE PRECISION,
+    magnesium INTEGER,
+    manganese DOUBLE PRECISION,
+    phoshorus INTEGER
+);`;
     // If I understand correctly, the amount inside can be anything
     await sql`
         CREATE TABLE IF NOT EXISTS recipes_products (
@@ -73,13 +107,25 @@ const createDBtables = async () => {
             product_id INTEGER REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE
         )
     `;
+
+    // Reviews table
+    await sql`
+        CREATE TABLE IF NOT EXISTS reviews (
+        id SERIAL PRIMARY KEY,
+        recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE ON UPDATE CASCADE,
+        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+        rating INTEGER NOT NULL,
+        review_text TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+        `;
   } catch (err) {
     console.error("Failed to create tables:", err);
   }
 };
 
 const dbSettings = async () => {
-    // Aktyvuoja pg_trgm plėtinį postgreSQL duomenų bazėje, kurio pagrindu realizuota netiksli paieska pagal fragmentą
+  // Aktyvuoja pg_trgm plėtinį postgreSQL duomenų bazėje, kurio pagrindu realizuota netiksli paieska pagal fragmentą
   try {
     const trgmCheck = await sql`
         SELECT EXISTS (

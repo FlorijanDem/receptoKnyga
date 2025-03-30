@@ -15,6 +15,7 @@ function Layout() {
     <>
       <SearchProvider>
         <Nav />
+        <main>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/recipe/:id" element={<RecipePage />} />
@@ -24,6 +25,7 @@ function Layout() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/addRecipe" element={<AddRecipe />} />
           </Routes>
+        </main>
       </SearchProvider>
       <Footer />
     </>

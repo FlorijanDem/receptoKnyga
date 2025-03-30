@@ -64,6 +64,9 @@ DB_SSL =
 JWT_SECRET =
 JWT_EXPIRES_IN = 90d
 JWT_COOKIE_EXPIRES_IN = 90
+
+# Disable every backend starts checking the env file
+# DISABLE_CHECKING = true
 ```
 
 ### 4️⃣ Run

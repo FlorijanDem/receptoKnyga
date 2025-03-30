@@ -1,22 +1,14 @@
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import UserForm from "./UserForm";
 
 const Login = () => {
+  const location = useLocation();
+  const recipeId = location.state?.recipeId;
+  console.log(recipeId);
+
   return (
     <div className="login-page">
-      <UserForm action="login" />
-      <p>
-        Don't have an account?{" "}
-        <Link to="/register" className="text-blue-600">
-          Register
-        </Link>
-      </p>
-      <p>
-        Forgot your password?{" "}
-        <Link to="/forgot-password" className="text-blue-600">
-          Reset Password
-        </Link>
-      </p>
+      <UserForm action="login" recipeId={recipeId} />
     </div>
   );
 };

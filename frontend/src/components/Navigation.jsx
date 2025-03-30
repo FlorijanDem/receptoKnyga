@@ -6,6 +6,7 @@ import NavCartIcon from "../assets/icons/Cart.svg";
 import NavProfileIcon from "../assets/icons/Profil.svg";
 import NavMenuIcon from "../assets/icons/Menu.svg";
 import NavFilterIcon from "../assets/icons/Filter.svg";
+import NavAddRecipeIcon from "../assets/icons/AddRecipe.svg";
 
 import SearchBar from "./SearchBar";
 import Sidebar from "./Sidebar";
@@ -13,6 +14,12 @@ import SearchContext from "../contexts/SearchContext";
 import FilterForm from "./FilterForm";
 
 const icons = [
+  {
+    src: NavAddRecipeIcon,
+    alt: "add recipe Icon",
+    pagename: "AddRecipe",
+    path: "/addRecipe",
+  },
   { src: NavLikeIcon, alt: "like Icon", pagename: "Like", path: "/favourite" },
   {
     src: NavSettingIcon,
@@ -37,10 +44,11 @@ const icons = [
 const Navigation = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isFilterFormOpen, setIsFilterFormOpen] = useState(false);
-  const { setDraftQuery, setCurrentQuery, setFilters } = useContext(SearchContext);
+  const { setDraftQuery, setCurrentQuery, setFilters } =
+    useContext(SearchContext);
 
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
-  
+
   // Funkcija filtravimo formos atidarymui/uždarymui
   const toggleFilterForm = () => {
     setIsFilterFormOpen(!isFilterFormOpen);
@@ -48,7 +56,7 @@ const Navigation = () => {
     if (isFilterFormOpen) {
       setFilters({
         type: "",
-        product: ""
+        product: "",
       });
     }
   };
@@ -59,7 +67,7 @@ const Navigation = () => {
     setCurrentQuery("");
     setFilters({
       type: "",
-      product: ""
+      product: "",
     });
   };
 
@@ -83,8 +91,10 @@ const Navigation = () => {
         <div className="2xl:max-w-[1000px] md:max-w-[600px] w-full mt-4 flex md:mt-0 md:ml-[4rem] search-bar-container items-center flex-grow md:pr-[2rem]">
           <SearchBar />
           <div className="ml-[1rem] mr-[1.563rem]">
-            <button 
-              className={`${isFilterFormOpen ? 'bg-gray-200 rounded-full' : ''}`} 
+            <button
+              className={`${
+                isFilterFormOpen ? "bg-gray-200 rounded-full" : ""
+              }`}
               onClick={toggleFilterForm}
             >
               <img
@@ -107,15 +117,12 @@ const Navigation = () => {
         </div>
       </div>
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-      
+
       {/* Pridedame filtravimo formą */}
       <div className="relative">
-        <FilterForm 
-          isOpen={isFilterFormOpen} 
-          onClose={toggleFilterForm} 
-        />
+        <FilterForm isOpen={isFilterFormOpen} onClose={toggleFilterForm} />
       </div>
-      
+
       {/* Pridedame papildomą margin, kai filtravimo forma yra atidaryta */}
       {isFilterFormOpen && <div className="h-[350px] md:h-[200px]"></div>}
     </nav>
