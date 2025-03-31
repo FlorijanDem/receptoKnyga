@@ -150,6 +150,10 @@ const UserForm = ({ action, recipeId }) => {
               Register
             </Link>
             Don't have an account?
+            <Link to="/forgot-password" className="text-blue-600">
+              Reset Password
+            </Link>
+            Forgot your password?
           </p>
         )}
       </form>
