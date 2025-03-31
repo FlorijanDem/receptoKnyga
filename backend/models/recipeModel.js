@@ -1,14 +1,12 @@
 const { sql } = require("../dbConnection");
 
-// Does not work without DB
-
 exports.searchRecipes = async (filters) => {
   const {
-    q, // bendras paieškos tekstas
-    type, // recepto tipas
-    product, // recepto produktas
-    preparation_time, // paruošimo laikas
-    servings, // porcijų skaičius
+    q, 
+    type, 
+    product, 
+    preparation_time, 
+    servings, 
     limit = 12,
     offset = 0,
   } = filters;
@@ -129,7 +127,6 @@ exports.searchRecipes = async (filters) => {
         : sql``
     }
   `;
-  // patikrinti ar nesukeicia reiksmes vietomis
   const [recipes, [{ total }]] = await Promise.all([searchQuery, countQuery]);
 
   return {
@@ -139,7 +136,6 @@ exports.searchRecipes = async (filters) => {
 };
 
 exports.getRecipeById = async (id) => {
-  // Needs refinment when DB is ready
   const recipe = await sql.begin(async () => {
     const [recipe] = await sql`
     SELECT *
@@ -178,7 +174,6 @@ exports.getRecipeById = async (id) => {
 };
 
 exports.createRecipe = async (recipe) => {
-  // Needs refinement when DB is ready
   const newRecipe = await sql.begin(async () => {
     const [newRecipe] = await sql`
     INSERT INTO recipes ("title","photo","method","type","preparation_time","servings", "description", "user_id")
@@ -195,29 +190,16 @@ exports.createRecipe = async (recipe) => {
         WHERE title = ${product.title}
         `;
 
-        if (!productID) {
-          // Need to fix products table
-          [productID] = await sql`
-           INSERT INTO products ${sql(product, "title", "units_of_meassurement")}
-
-           RETURNING id
-          `;
-        }
-
         const productObj = { id: productID.id, amount: product.amount };
 
         return productObj;
       })
     );
 
-    await Promise.all(
-      productIDs.map(async (productID) => {
-        await sql`
-        INSERT INTO recipes_products (recipe_id, product_id, amount)
-        VALUES (${newRecipe.id}, ${productID?.id}, ${productID?.amount})
-        `;
-      })
-    );
+    await sql`
+    INSERT INTO recipes_products (recipe_id, product_id, amount)
+    VALUES ${sql(productIDs.map(p => [newRecipe.id, p.id, p.amount]))}
+    `;
 
     return newRecipe;
   });
@@ -226,33 +208,38 @@ exports.createRecipe = async (recipe) => {
 };
 
 exports.updateRecipe = async (id, data) => {
-  const columns = Object.keys(data).filter((key) => key !== "products");
-
-  //   Needs testing when DB is ready
   const updatedRecipe = await sql.begin(async () => {
+    const [recipe] = await sql`
+    SELECT *
+    FROM recipes
+    WHERE id = ${id}
+    `;
+
+    if (!recipe) {
+      throw new Error("Recipe not found");
+    }
+
+    await sql`
+    DELETE FROM recipes_products
+    WHERE recipe_id = ${id}
+    `;
+
     const [updatedRecipe] = await sql`
     UPDATE recipes
-    SET ${sql(data, columns)}
+    SET ${sql(data, "title", "photo", "method", "type", "preparation_time", "servings", "description")}
     WHERE id = ${id}
+
     RETURNING *
     `;
 
-    if (data.products?.length > 0) {
+    if (data.products) {
       const productIDs = await Promise.all(
-        data.products?.map(async (product) => {
+        data.products.map(async (product) => {
           let [productID] = await sql`
-        SELECT id
-        FROM products
-        WHERE title = ${product.title}
-        `;
-
-          if (!productID) {
-            [productID] = await sql`
-           INSERT INTO products ${sql(product, "title", "units_of_meassurement")}
-
-           RETURNING id
+          SELECT id
+          FROM products
+          WHERE title = ${product.title}
           `;
-          }
 
           const productObj = { id: productID.id, amount: product.amount };
 
@@ -260,21 +247,10 @@ exports.updateRecipe = async (id, data) => {
         })
       );
 
-      await Promise.all(
-        productIDs?.map(async (productID) => {
-          await sql.begin(async () => {
-            await sql`
-            DELETE FROM recipes_products
-            WHERE recipe_id = ${updatedRecipe.id}
-            `;
-
-            await sql`
-            INSERT INTO recipes_products (recipe_id, product_id, amount)
-            VALUES (${updatedRecipe.id}, ${productID?.id}, ${productID?.amount})
-            `;
-          });
-        })
-      );
+      await sql`
+      INSERT INTO recipes_products (recipe_id, product_id, amount)
+      VALUES ${sql(productIDs.map(p => [id, p.id, p.amount]))}
+      `;
     }
 
     return updatedRecipe;
@@ -284,13 +260,15 @@ exports.updateRecipe = async (id, data) => {
 };
 
 exports.deleteRecipe = async (id) => {
-  const deletedRecipe = await sql`
-    DELETE FROM recipes
-    WHERE id = ${id}
-    RETURNING *
+  await sql.begin(async () => {
+    await sql`
+    DELETE FROM recipes_products
+    WHERE recipe_id = ${id}
     `;
 
-  return deletedRecipe;
+    await sql`
+    DELETE FROM recipes
+    WHERE id = ${id}
+    `;
+  });
 };
-
-// Function to search recipes : title, description.
