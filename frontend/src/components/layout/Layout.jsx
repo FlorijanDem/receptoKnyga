@@ -9,7 +9,7 @@ import ShoppingList from "../../navBarPages/ShoppingList";
 import { Routes, Route } from "react-router";
 import { SearchProvider } from "../../contexts/SearchContext";
 import AddRecipe from "../AddRecipe";
-
+import Dashboard from "../../navBarPages/Dashboard";
 function Layout() {
   return (
     <>
@@ -24,6 +24,7 @@ function Layout() {
             <Route path="/shoppingList" element={<ShoppingList />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/addRecipe" element={<AddRecipe />} />
+            <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
         </main>
       </SearchProvider>

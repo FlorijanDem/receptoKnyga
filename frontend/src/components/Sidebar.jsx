@@ -1,77 +1,90 @@
-import { useEffect, useRef } from "react";
-import NavLikeIcon from "../assets/icons/Like.svg";
-import NavSettingIcon from "../assets/icons/Settings.svg";
-import NavCartIcon from "../assets/icons/Cart.svg";
-import NavProfileIcon from "../assets/icons/Profil.svg";
-import { IoClose } from "react-icons/io5";
 import { Link } from "react-router";
+import LogoutButton from "../navBarPages/LogoutButton";
 
-const ICON_SIZE = 44;
+import dashboardIcon from "../assets/icons/home.svg";
+import favouriteIcon from "../assets/icons/heart.svg";
+import shoppingIcon from "../assets/icons/shopping-cart.svg";
+import settingsIcon from "../assets/icons/setting.svg";
+import profileIcon from "../assets/icons/profile-circle.svg";
+import briefcaseIcon from "../assets/icons/briefcase.svg";
+import addRecipeIcon from "../assets/icons/addRecipeSideBar.svg";
 
-const IconButton = ({ icon, to, onClick }) => (
-  <Link to={to} onClick={onClick}>
-    <button className="transition-transform duration-300 hover:scale-110 active:scale-90 mx-1 mb-3">
-      <img src={icon} alt={icon} width={ICON_SIZE} height={ICON_SIZE} />
-    </button>
-  </Link>
+const SIDEBAR_LINKS_CLASS = [
+  "flex items-center justify-start ml-[16px]",
+  "text-jakarta text-recipe-secondary text-[16px] font-medium tracking-[-0.32px]",
+  "hover:bg-recipe-primary hover:text-white",
+  "rounded-md transition-colors duration-200",
+  "w-full h-[56px] px-[1rem] group",
+].join(" ");
+
+const SIDEBAR_ICONS_CLASS = [
+  "mr-[0.75rem]",
+  "group-hover:filter group-hover:brightness-0 group-hover:invert",
+].join(" ");
+
+const MENU_ITEMS = {
+  main: [
+    { to: "/dashboard", icon: dashboardIcon, text: "Dashboard" },
+    { to: "/favourite", icon: favouriteIcon, text: "Favorite" },
+    { to: "/shoppingList", icon: shoppingIcon, text: "Shopping List" },
+    { to: "/addRecipe", icon: addRecipeIcon, text: "Add recipe" },
+  ],
+  preferences: [
+    { to: "/settings", icon: settingsIcon, text: "Settings" },
+    { to: "/profile", icon: profileIcon, text: "Profile" },
+    { to: "#", icon: briefcaseIcon, text: "Dark Mode" },
+  ],
+};
+
+const MenuSection = ({ title, items, toggleSidebar }) => (
+  <div>
+    <h1 className="text-jakarta text-recipe-seventh font-semibold text-[12px] tracking-[0.2rem] opacity-40 pb-[2.625rem] pl-[2rem]">
+      {title}
+    </h1>
+    {items.map((item, index) => (
+      <Link
+        key={item.text}
+        to={item.to}
+        className={SIDEBAR_LINKS_CLASS}
+        onClick={toggleSidebar}
+      >
+        <img
+          src={item.icon}
+          alt={`${item.text.toLowerCase()}Icon`}
+          className={SIDEBAR_ICONS_CLASS}
+        />
+        {item.text}
+      </Link>
+    ))}
+  </div>
 );
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
-  const sidebarRef = useRef(null);
+  const handleSidebarClick = (e) => e.stopPropagation();
 
-  const handleClickOutside = (event) => {
-    if (isOpen && !sidebarRef.current.contains(event.target)) {
-      toggleSidebar();
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isOpen]);
+  if (!isOpen) return null;
 
   return (
-    <>
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black transition-opacity duration-300 z-40 opacity-50"
-          onClick={toggleSidebar}
-        ></div>
-      )}
-      <div
-        ref={sidebarRef}
-        className={`fixed top-0 left-0 h-full w-[50px] bg-recipe-fifth border-r-1 border-recipe-secondary text-recipe-third transform flex flex-col z-50 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out`}
-      >
-        <button onClick={toggleSidebar} className="p-[0.85rem]">
-          <IoClose className={`h-[25px] w-[25px]`} />
-        </button>
-
-        <IconButton
-          icon={NavLikeIcon}
-          to="/Favourite"
-          onClick={toggleSidebar}
+    <div
+      className="fixed inset-0 bg-recipe-fifth w-[17.875rem] h-[100vh] flex flex-col justify-between"
+      onClick={handleSidebarClick}
+    >
+      <div className="pt-[2.25rem] pr-[2rem] space-y-[1.75rem]">
+        <MenuSection
+          title="MAIN MENU"
+          items={MENU_ITEMS.main}
+          toggleSidebar={toggleSidebar}
         />
-        <IconButton
-          icon={NavSettingIcon}
-          to="/Settings"
-          onClick={toggleSidebar}
-        />
-        <IconButton
-          icon={NavCartIcon}
-          to="/ShoppingList"
-          onClick={toggleSidebar}
-        />
-        <IconButton
-          icon={NavProfileIcon}
-          to="/Profile"
-          onClick={toggleSidebar}
+        <MenuSection
+          title="PREFERENCES"
+          items={MENU_ITEMS.preferences}
+          toggleSidebar={toggleSidebar}
         />
       </div>
-    </>
+      <div className="mb-[2rem]">
+        <LogoutButton toggleSidebar={toggleSidebar} />
+      </div>
+    </div>
   );
 };
 

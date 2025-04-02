@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { Link } from "react-router";
 import NavLikeIcon from "../assets/icons/Like.svg";
 import NavSettingIcon from "../assets/icons/Settings.svg";
@@ -47,12 +47,35 @@ const Navigation = () => {
   const { setDraftQuery, setCurrentQuery, setFilters } =
     useContext(SearchContext);
 
+  const sidebarRef = useRef(null); // Ref to track the sidebar element
+
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
-  // Funkcija filtravimo formos atidarymui/uždarymui
+  // Function to handle clicks outside the sidebar
+  const handleClickOutside = (event) => {
+    if (
+      sidebarRef.current &&
+      !sidebarRef.current.contains(event.target) &&
+      isSidebarOpen
+    ) {
+      setSidebarOpen(false); // Close the sidebar
+    }
+  };
+
+  // Add event listener for clicks outside the sidebar
+  useEffect(() => {
+    if (isSidebarOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isSidebarOpen]);
+
+  // Function to handle filter form open/close
   const toggleFilterForm = () => {
     setIsFilterFormOpen(!isFilterFormOpen);
-    // Jei forma uždaroma, išvalome filtrus
+    // Clear filters when closing the form
     if (isFilterFormOpen) {
       setFilters({
         type: "",
@@ -61,7 +84,7 @@ const Navigation = () => {
     }
   };
 
-  // Funkcija, kuri išvalo paieškos lauką ir rezultatus
+  // Function to clear search field and results
   const handleLogoClick = () => {
     setDraftQuery("");
     setCurrentQuery("");
@@ -106,7 +129,7 @@ const Navigation = () => {
           </div>
         </div>
 
-        <div className="hidden md:flex md:ml-auto md:justify-end md:mr-[3.75rem]  desktop-icons flex-shrink-0">
+        <div className="hidden md:flex md:ml-auto md:justify-end md:mr-[3.75rem] desktop-icons flex-shrink-0">
           {icons.map((icon, index) => (
             <Link to={icon.path} key={index}>
               <button className={iconStyle}>
@@ -116,14 +139,16 @@ const Navigation = () => {
           ))}
         </div>
       </div>
-      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+      <div ref={sidebarRef}>
+        <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+      </div>
 
-      {/* Pridedame filtravimo formą */}
+      {/* Add the filter form */}
       <div className="relative">
         <FilterForm isOpen={isFilterFormOpen} onClose={toggleFilterForm} />
       </div>
 
-      {/* Pridedame papildomą margin, kai filtravimo forma yra atidaryta */}
+      {/* Add extra margin when the filter form is open */}
       {isFilterFormOpen && <div className="h-[350px] md:h-[200px]"></div>}
     </nav>
   );
