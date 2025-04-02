@@ -1,9 +1,13 @@
-// characteristicsHistoryController.js
 const {
   getWeightHistoryByUserId,
   addWeightEntry,
   updateWeightEntry,
 } = require("../models/characteristicsHistoryModel");
+
+const {
+  validateAddWeight,
+  validateUpdateWeight,
+} = require("../validators/checkCharacteristicsHistoryBody");
 
 exports.getWeightHistory = async (req, res, next) => {
   try {
@@ -20,12 +24,7 @@ exports.getWeightHistory = async (req, res, next) => {
 exports.addWeight = async (req, res, next) => {
   try {
     const { weight, date } = req.body;
-    if (!weight) {
-      return res.status(400).json({
-        status: "fail",
-        message: "Weight is required",
-      });
-    }
+    if (!validateAddWeight(weight, res)) return;
 
     const entry = await addWeightEntry(req.user?.id, weight, date);
     res.status(201).json({
@@ -40,12 +39,7 @@ exports.addWeight = async (req, res, next) => {
 exports.updateWeight = async (req, res, next) => {
   try {
     const { entryId, weight, date } = req.body;
-    if (!entryId || !weight) {
-      return res.status(400).json({
-        status: "fail",
-        message: "Entry ID and weight are required",
-      });
-    }
+    if (!validateUpdateWeight(entryId, weight, res)) return;
 
     const entry = await updateWeightEntry(entryId, req.user?.id, weight, date);
     if (!entry) {
