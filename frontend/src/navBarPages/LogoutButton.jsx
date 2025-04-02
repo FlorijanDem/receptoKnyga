@@ -4,13 +4,12 @@ import { useErrorBoundary } from "react-error-boundary";
 import LogoutIcon from "../assets/icons/logout.svg";
 const API_URL = import.meta.env.VITE_API_URL;
 
-// Define the styles for the LogoutButton to match SidebarLinks
 const LogoutButtonStyles =
   "flex items-center justify-start text-jakarta text-recipe-secondary text-[16px] font-medium " +
   "hover:bg-recipe-primary hover:text-white rounded-md transition-colors duration-200 " +
-  "w-full h-[56px] px-[1rem] group"; // Added 'group' for hover targeting
+  "w-full h-[56px] px-[1rem] group";
 const LogoutIconStyles =
-  "mr-[0.75rem] group-hover:filter group-hover:brightness-0 group-hover:invert"; // Filter to make icon white on hover
+  "mr-[0.75rem] group-hover:filter group-hover:brightness-0 group-hover:invert";
 
 const LogoutButton = ({ setError }) => {
   const navigate = useNavigate();
