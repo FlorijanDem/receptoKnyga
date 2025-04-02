@@ -7,10 +7,11 @@ import shoppingIcon from "../assets/icons/shopping-cart.svg";
 import settingsIcon from "../assets/icons/setting.svg";
 import profileIcon from "../assets/icons/profile-circle.svg";
 import briefcaseIcon from "../assets/icons/briefcase.svg";
+import addRecipeIcon from "../assets/icons/addRecipeSideBar.svg";
 
 const SIDEBAR_LINKS_CLASS = [
-  "flex items-center justify-start",
-  "text-jakarta text-recipe-secondary text-[16px] font-medium",
+  "flex items-center justify-start ml-[16px]",
+  "text-jakarta text-recipe-secondary text-[16px] font-medium tracking-[-0.32px]",
   "hover:bg-recipe-primary hover:text-white",
   "rounded-md transition-colors duration-200",
   "w-full h-[56px] px-[1rem] group",
@@ -26,6 +27,7 @@ const MENU_ITEMS = {
     { to: "/dashboard", icon: dashboardIcon, text: "Dashboard" },
     { to: "/favourite", icon: favouriteIcon, text: "Favorite" },
     { to: "/shoppingList", icon: shoppingIcon, text: "Shopping List" },
+    { to: "/addRecipe", icon: addRecipeIcon, text: "Add recipe" },
   ],
   preferences: [
     { to: "/settings", icon: settingsIcon, text: "Settings" },
