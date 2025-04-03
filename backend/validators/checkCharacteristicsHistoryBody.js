@@ -1,26 +1,42 @@
-const validateAddWeight = (weight, res) => {
-  if (!weight) {
-    res.status(400).json({
-      status: "fail",
-      message: "Weight is required",
-    });
-    return false;
-  }
-  return true;
-};
+const { body, checkExact } = require("express-validator");
 
-const validateUpdateWeight = (entryId, weight, res) => {
-  if (!entryId || !weight) {
-    res.status(400).json({
-      status: "fail",
-      message: "Entry ID and weight are required",
-    });
-    return false;
-  }
-  return true;
-};
+exports.checkAddWeightBody = [
+  body("weight")
+    .trim()
+    .isFloat({ min: 10, max: 500 })
+    .withMessage("Weight must be a number between 10 and 500"),
 
-module.exports = {
-  validateAddWeight,
-  validateUpdateWeight,
-};
+  body("date")
+    .optional()
+    .trim()
+    .isISO8601()
+    .withMessage("Date must be a valid ISO 8601 date string"),
+
+  checkExact([], {
+    message: (fields) =>
+      fields.map((field) => `Invalid field: ${field.path}`).join("; "),
+  }),
+];
+
+exports.checkUpdateWeightBody = [
+  body("entryId")
+    .trim()
+    .isInt({ min: 1 })
+    .withMessage("Entry ID must be a positive integer"),
+
+  body("weight")
+    .trim()
+    .isFloat({ min: 10, max: 500 })
+    .withMessage("Weight must be a number between 10 and 500"),
+
+  body("date")
+    .optional()
+    .trim()
+    .isISO8601()
+    .withMessage("Date must be a valid ISO 8601 date string"),
+
+  checkExact([], {
+    message: (fields) =>
+      fields.map((field) => `Invalid field: ${field.path}`).join("; "),
+  }),
+];

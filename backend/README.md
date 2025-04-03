@@ -98,6 +98,12 @@ node server.js
 | PUT    | `/api/v1/recipes/:id`       | Update a recipe           | ✅ Yes        |
 | DELETE | `/api/v1/recipes/:id`       | Delete a recipe           | ✅ Yes        |
 
+### 🥕 Products
+
+| Method | Endpoint              | Description        | Auth Required |
+| ------ | --------------------- | ------------------ | ------------- |
+| GET    | `/api/v1/products/?q=` | Search products    | ✅ Yes        |
+
 ### ✏️ Characteristics
 
 | Method | Endpoint                  | Description               | Auth Required |

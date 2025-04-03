@@ -4,11 +4,6 @@ const {
   updateWeightEntry,
 } = require("../models/characteristicsHistoryModel");
 
-const {
-  validateAddWeight,
-  validateUpdateWeight,
-} = require("../validators/checkCharacteristicsHistoryBody");
-
 exports.getWeightHistory = async (req, res, next) => {
   try {
     const history = await getWeightHistoryByUserId(req.user?.id);
@@ -24,8 +19,7 @@ exports.getWeightHistory = async (req, res, next) => {
 exports.addWeight = async (req, res, next) => {
   try {
     const { weight, date } = req.body;
-    if (!validateAddWeight(weight, res)) return;
-
+    // No need for validateAddWeight check here anymore
     const entry = await addWeightEntry(req.user?.id, weight, date);
     res.status(201).json({
       status: "success",
@@ -39,8 +33,7 @@ exports.addWeight = async (req, res, next) => {
 exports.updateWeight = async (req, res, next) => {
   try {
     const { entryId, weight, date } = req.body;
-    if (!validateUpdateWeight(entryId, weight, res)) return;
-
+    // No need for validateUpdateWeight check here anymore
     const entry = await updateWeightEntry(entryId, req.user?.id, weight, date);
     if (!entry) {
       return res.status(404).json({

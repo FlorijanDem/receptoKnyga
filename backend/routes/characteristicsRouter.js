@@ -1,4 +1,3 @@
-// characteristicsRouter.js
 const express = require("express");
 const characteristicsRouter = express.Router();
 const {
@@ -13,6 +12,10 @@ const {
 const {
   checkUpdateCharacteristicsBody,
 } = require("../validators/checkCharacteristicsBody");
+const {
+  checkAddWeightBody,
+  checkUpdateWeightBody,
+} = require("../validators/checkCharacteristicsHistoryBody");
 const { protect } = require("../controllers/userController");
 const validate = require("../validators/validate");
 
@@ -28,8 +31,8 @@ characteristicsRouter
 
 characteristicsRouter
   .route("/history")
-  .get(protect, getWeightHistory) // GET /api/v1/characteristics/weight-history
-  .post(protect, addWeight) // POST /api/v1/characteristics/weight-history
-  .patch(protect, updateWeight); // PATCH /api/v1/characteristics/weight-history
+  .get(protect, getWeightHistory)
+  .post(protect, checkAddWeightBody, validate, addWeight)
+  .patch(protect, checkUpdateWeightBody, validate, updateWeight);
 
 module.exports = characteristicsRouter;
