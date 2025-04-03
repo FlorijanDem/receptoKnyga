@@ -8,7 +8,6 @@ const AdminNavigation = () => {
   const { setAdminFilters } = useContext(AdminFilterContext);
   const { user } = useContext(UserContext);
   const { adminPage, setAdminPage } = useContext(AdminFilterContext);
-
   const { register, reset } = useForm();
   const navigate = useNavigate();
 

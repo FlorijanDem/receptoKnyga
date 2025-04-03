@@ -16,8 +16,14 @@ function AppContent() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Routes>
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
-        <Route path="/*" element={user ? <Layout /> : <GuestLayout />} />
+        <Route
+          path="/reset-password/:token"
+          element={<ResetPassword />}
+        />
+        <Route
+          path="/*"
+          element={user ? <Layout /> : <GuestLayout />}
+        />
       </Routes>
     </Suspense>
   );
