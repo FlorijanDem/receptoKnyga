@@ -30,6 +30,8 @@ function Layout() {
             <Route path="/shoppingList" element={<ShoppingList />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/addRecipe" element={<AddRecipe />} />
+            <Route path="/editRecipe" element={<AddRecipe action="edit" />} />
+
             <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
         </main>

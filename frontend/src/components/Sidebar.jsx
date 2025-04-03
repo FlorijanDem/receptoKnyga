@@ -41,7 +41,7 @@ const MenuSection = ({ title, items, toggleSidebar }) => (
     <h1 className="text-jakarta text-recipe-seventh font-semibold text-[12px] tracking-[0.2rem] opacity-40 pb-[2.625rem] pl-[2rem]">
       {title}
     </h1>
-    {items.map((item, index) => (
+    {items.map((item) => (
       <Link
         key={item.text}
         to={item.to}

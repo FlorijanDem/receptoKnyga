@@ -14,7 +14,7 @@ const RecipePageControls = ({ recipe, setRecipe, setRefresh }) => {
   // console.log(recipe);
 
   const editRecipe = async () => {
-    // Need add recipe form
+    navigate(`/editRecipe`, { state: { recipe } });
     console.log("Edit recipe");
   };
 
