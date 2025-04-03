@@ -18,16 +18,16 @@ const RecipesList = ({ filter, setFilter }) => {
   const fetchRecipes = async (query = "") => {
     try {
       setLoading(true);
-      
+
       // Sukuriame URL parametrus iš filtro objekto ir konteksto filtrų
       const params = new URLSearchParams();
-      params.append('page', filter.page);
-      params.append('limit', filter.limit);
-      
-      if (query) params.append('q', query);
-      if (filters.type) params.append('type', filters.type);
-      if (filters.product) params.append('product', filters.product);
-      
+      params.append("page", filter.page);
+      params.append("limit", filter.limit);
+
+      if (query) params.append("q", query);
+      if (filters.type) params.append("type", filters.type);
+      if (filters.product) params.append("product", filters.product);
+
       const { data: response } = await axios.get(
         `${API_URL}/recipes?${params.toString()}`,
         {
@@ -59,9 +59,9 @@ const RecipesList = ({ filter, setFilter }) => {
   // Reaguojame į filtrų pasikeitimus
   useEffect(() => {
     // Kai pasikeičia filtrai, grįžtame į pirmą puslapį
-    setFilter(prev => ({
+    setFilter((prev) => ({
       ...prev,
-      page: 1
+      page: 1,
     }));
   }, [filters, setFilter]);
 
@@ -77,7 +77,7 @@ const RecipesList = ({ filter, setFilter }) => {
         <p className="error">{error}</p>
       ) : (
         <section className="recipes-list-container">
-          <h1>Recipes List</h1>
+          <h1>Recommended Recipes</h1>
           <RecipesListPagination
             filter={filter}
             setFilter={setFilter}
