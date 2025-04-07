@@ -37,10 +37,8 @@ const ResetPassword = () => {
             navigate('/login');
         } catch (error) {
             if (error.response && error.response.data) {
-                // Display specific validation error messages from the backend
                 setMessage(error.response.data.message || 'Error resetting password');
             } else {
-                // Generic error message in case something else fails
                 setMessage('Error resetting password');
             }
         }
@@ -78,7 +76,8 @@ const ResetPassword = () => {
                     {errors["new-password"] && (
                         <p className="form-input-error">
                             {errors["new-password"].message}
-                        </p>)}
+                        </p>
+                    )}
                 </div>
                 <div>
                     <label htmlFor="confirm-new-password" className='flex flex-col block mb-1 text-md font-medium text-gray-900'>
@@ -99,7 +98,8 @@ const ResetPassword = () => {
                     {errors["confirm-new-password"] && (
                         <p className="form-input-error">
                             {errors["confirm-new-password"].message}
-                        </p>)}
+                        </p>
+                    )}
                 </div>
                 <button className="flex flex-col mt-4 text-white bg-blue-600 hover:bg-blue-800 font-medium rounded-lg text-sm px-4 py-2" type="submit">Reset Password</button>
                 {message && <p>{message}</p>}
