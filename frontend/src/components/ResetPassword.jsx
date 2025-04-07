@@ -57,17 +57,6 @@ const ResetPassword = () => {
                         className='bg-gray-200 rounded-lg p-2 ring-1 ring-gray-400 w-60 mb-4'
                         type="password"
                         id='new-password'
-                        {...register("new-password", {
-                            required: "New password is required",
-                            minLength: {
-                                value: 8,
-                                message: "New password must be at least 8 characters long",
-                            },
-                            maxLength: {
-                                value: 20,
-                                message: "New password must be no more than 20 characters",
-                            },
-                        })}
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                         placeholder="Enter new password"
@@ -87,9 +76,6 @@ const ResetPassword = () => {
                         className='bg-gray-200 rounded-lg p-2 ring-1 ring-gray-400 w-60'
                         type="password"
                         id='confirm-new-password'
-                        {...register("confirm-new-password", {
-                            required: "Please confirm your password",
-                        })}
                         value={confirmNewPassword}
                         onChange={(e) => setConfirmNewPassword(e.target.value)}
                         placeholder="Confirm new password"
