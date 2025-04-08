@@ -5,6 +5,7 @@ const {
   getUserByid,
   updateUser,
   getAllUsers,
+  countUsers,
 } = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const argon2 = require("argon2");
@@ -173,12 +174,13 @@ exports.updateUser = async (req, res, next) => {
 exports.getAllUsers = async (req, res, next) => {
   try {
     const users = await getAllUsers(req.query);
+    const count = await countUsers(req.query);
 
     users.forEach((user) => {
       user.password = undefined;
     });
 
-    res.status(200).json({ status: "success", data: users });
+    res.status(200).json({ status: "success", count, data: users });
   } catch (err) {
     next(new AppError(err.message, 500));
   }

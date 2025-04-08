@@ -2,7 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useErrorBoundary } from "react-error-boundary";
 import RecipePreviewCard from "./RecipePreviewCard";
-import RecipesListPagination from "./RecipesListPagination";
+import ListPagination from "./ListPagination";
 import SearchContext from "../contexts/SearchContext";
 import { AdminFilterContext } from "../contexts/AdminFilterContext";
 import UserContext from "../contexts/UserContext";
@@ -88,10 +88,10 @@ const RecipesList = ({ filter, setFilter }) => {
       ) : (
         <section className="recipes-list-container">
           <h1>Recipes List</h1>
-          <RecipesListPagination
+          <ListPagination
             filter={filter}
             setFilter={setFilter}
-            recipeCount={recipeCount}
+            count={recipeCount}
           />
           <div className="recipes-list">
             {recipes?.length === 0 && <p>No recipes found</p>}
@@ -99,10 +99,10 @@ const RecipesList = ({ filter, setFilter }) => {
               <RecipePreviewCard key={recipe.id} recipe={recipe} />
             ))}
           </div>
-          <RecipesListPagination
+          <ListPagination
             filter={filter}
             setFilter={setFilter}
-            recipeCount={recipeCount}
+            count={recipeCount}
           />
         </section>
       )}
