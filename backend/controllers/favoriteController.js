@@ -1,19 +1,14 @@
-const AppError = require("../utils/appError");
 const {
   addFavorite,
   removeFavorite,
   getUserFavorites,
-  getAllFavorites: getAllFavoritesModel, // Renamed for clarity
+  getAllFavorites: getAllFavoritesModel,
 } = require("../models/favoriteModel");
 
 exports.addFavorite = async (req, res, next) => {
   try {
     const userId = req.user.id;
     const { recipeId } = req.body;
-
-    if (!recipeId) {
-      return next(new AppError("Recipe ID is required", 400));
-    }
 
     const favorite = await addFavorite(userId, recipeId);
 
@@ -22,7 +17,7 @@ exports.addFavorite = async (req, res, next) => {
       data: favorite,
     });
   } catch (err) {
-    next(new AppError(err.message, 400));
+    next(err);
   }
 };
 
@@ -33,23 +28,18 @@ exports.removeFavorite = async (req, res, next) => {
 
     const favorite = await removeFavorite(userId, recipeId);
 
-    if (!favorite) {
-      return next(new AppError("Favorite not found", 404));
-    }
-
     res.status(200).json({
       status: "success",
       message: "Recipe removed from favorites",
     });
   } catch (err) {
-    next(new AppError(err.message, 400));
+    next(err);
   }
 };
 
-// Updated: Get favorites for a specific user by userId (moved from previous getFavorites)
 exports.getUserFavorites = async (req, res, next) => {
   try {
-    const userId = req.params.userId; // Changed to use URL param instead of req.user.id
+    const userId = req.params.userId;
     const favorites = await getUserFavorites(userId);
 
     res.status(200).json({
@@ -57,11 +47,10 @@ exports.getUserFavorites = async (req, res, next) => {
       data: favorites,
     });
   } catch (err) {
-    next(new AppError(err.message, 400));
+    next(err);
   }
 };
 
-// New: Get all users and their favorite recipes
 exports.getAllFavorites = async (req, res, next) => {
   try {
     const favorites = await getAllFavoritesModel();
@@ -71,6 +60,6 @@ exports.getAllFavorites = async (req, res, next) => {
       data: favorites,
     });
   } catch (err) {
-    next(new AppError(err.message, 400));
+    next(err);
   }
 };

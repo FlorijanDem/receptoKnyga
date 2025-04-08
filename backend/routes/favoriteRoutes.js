@@ -3,19 +3,41 @@ const { protect } = require("../controllers/userController");
 const {
   addFavorite,
   removeFavorite,
-  getUserFavorites, // Renamed for clarity
+  getUserFavorites,
   getAllFavorites,
 } = require("../controllers/favoriteController");
+const {
+  checkAddFavorite,
+  checkRemoveFavorite,
+  checkGetUserFavorites,
+  checkGetAllFavorites,
+} = require("../validators/favoritesValidation");
+const { validationResult } = require("express-validator");
 
 const router = express.Router();
 
-// Route to get all users and their favorite recipes
-router.route("/").get(getAllFavorites).post(protect, addFavorite);
+const handleValidationErrors = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      status: "fail",
+      errors: errors.array(),
+    });
+  }
+  next();
+};
 
-// Route to get a specific user's favorite recipes and delete a favorite
-router.route("/:userId").get(getUserFavorites);
+router
+  .route("/")
+  .get(checkGetAllFavorites, handleValidationErrors, getAllFavorites)
+  .post(protect, checkAddFavorite, handleValidationErrors, addFavorite);
 
-// Delete route remains specific to a recipeId (protected)
-router.route("/:recipeId").delete(protect, removeFavorite);
+router
+  .route("/:userId")
+  .get(checkGetUserFavorites, handleValidationErrors, getUserFavorites);
+
+router
+  .route("/:recipeId")
+  .delete(protect, checkRemoveFavorite, handleValidationErrors, removeFavorite);
 
 module.exports = router;

@@ -1,21 +1,36 @@
-const express = require("express");
-const { protect } = require("../controllers/userController");
-const {
-  addFavorite,
-  removeFavorite,
-  getUserFavorites, // Renamed for clarity
-  getAllFavorites,
-} = require("../controllers/favoriteController");
+const { body, param } = require("express-validator");
 
-const router = express.Router();
+exports.checkAddFavorite = [
+  body("recipeId")
+    .exists()
+    .withMessage("Recipe ID is required")
+    .isString()
+    .withMessage("Recipe ID must be a string")
+    .trim()
+    .notEmpty()
+    .withMessage("Recipe ID cannot be empty"),
+];
 
-// Route to get all users and their favorite recipes
-router.route("/").get(getAllFavorites).post(protect, addFavorite);
+exports.checkRemoveFavorite = [
+  param("recipeId")
+    .exists()
+    .withMessage("Recipe ID is required")
+    .isString()
+    .withMessage("Recipe ID must be a string")
+    .trim()
+    .notEmpty()
+    .withMessage("Recipe ID cannot be empty"),
+];
 
-// Route to get a specific user's favorite recipes and delete a favorite
-router.route("/:userId").get(getUserFavorites);
+exports.checkGetUserFavorites = [
+  param("userId")
+    .exists()
+    .withMessage("User ID is required")
+    .isString()
+    .withMessage("User ID must be a string")
+    .trim()
+    .notEmpty()
+    .withMessage("User ID cannot be empty"),
+];
 
-// Delete route remains specific to a recipeId (protected)
-router.route("/:recipeId").delete(protect, removeFavorite);
-
-module.exports = router;
+exports.checkGetAllFavorites = [];
