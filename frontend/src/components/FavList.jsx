@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useErrorBoundary } from "react-error-boundary";
 import RecipePreviewCard from "./RecipePreviewCard";
-
+import Sidebar from "../components/Sidebar";
 const API_URL = import.meta.env.VITE_API_URL;
 
 const FavList = ({ userId = null, showAll = false }) => {
@@ -112,8 +112,10 @@ const FavList = ({ userId = null, showAll = false }) => {
   }, [userId, showAll]);
 
   return (
-    <div className="flex flex-col md:flex-row bg-recipe-sixth mx-auto w-max">
-      <nav className="hidden lg:block md:w-[286px] bg-red-700 md:min-h-screen"></nav>
+    <div className="flex flex-col md:flex-row bg-recipe-sixth">
+      <nav className="hidden lg:block md:w-[286px] ">
+        <Sidebar isOpen={true}></Sidebar>
+      </nav>
       <section className="pt-[40px] md:pl-[40px]">
         <h1 className="text-recipe-secondary font-jakarta font-[500] text-[16px] pb-[27px]">
           {showAll
@@ -133,7 +135,7 @@ const FavList = ({ userId = null, showAll = false }) => {
               : "You haven’t favorited any recipes yet."}
           </p>
         ) : (
-          <div className="flex flex-col gap-[32px] items-center md:grid md:grid-cols-2 xl:grid-cols-3 xll:grid-cols-4">
+          <div className="flex flex-col gap-[32px] items-center md:grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             {favoriteRecipes.map((recipe) => (
               <RecipePreviewCard
                 key={`${recipe.userId || "current"}-${recipe.id}`}

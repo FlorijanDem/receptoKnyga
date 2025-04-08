@@ -7,6 +7,8 @@ const {
 } = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const argon2 = require("argon2");
+const { sql } = require("../dbConnection");
+const sendEmail = require("../utils/sendEmail");
 
 const signToken = (id) => {
   const token = jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -37,8 +39,8 @@ exports.registerUser = async (req, res, next) => {
     const token = signToken(user.id);
     sendCookie(token, res);
 
-    //user.id = undefined;
-    //user.password = undefined;
+    //  user.id = undefined;
+    user.password = undefined;
 
     res.status(201).json({
       message: "User created",
@@ -77,8 +79,8 @@ exports.loginUser = async (req, res, next) => {
     const token = signToken(user.id);
     sendCookie(token, res);
 
-    // user.id = undefined;
-    //user.password = undefined;
+    //  user.id = undefined;
+    user.password = undefined;
 
     res.status(200).json({
       message: "You are login",
@@ -111,7 +113,6 @@ exports.protect = async (req, res, next) => {
     if (!user) {
       return next(new AppError("User not found", 401));
     }
-
     req.user = user;
     next();
   } catch (err) {
@@ -151,5 +152,87 @@ exports.updateUser = async (req, res, next) => {
     res.status(200).json({ status: "success", data: user });
   } catch (err) {
     next(new AppError(err.message, 401));
+  }
+};
+
+exports.updatePassword = async (req, res, next) => {
+  const { currentPassword, newPassword } = req.body;
+
+  try {
+    const user = await getUserByid(req.user.id);
+
+    const isPasswordCorrect = await argon2.verify(
+      user.password,
+      currentPassword
+    );
+    if (!isPasswordCorrect) {
+      return res.status(401).json({
+        status: "fail",
+        message: "Current password is incorrect",
+      });
+    }
+
+    const hashedPassword = await argon2.hash(newPassword);
+
+    await sql`
+      UPDATE users
+      SET password = ${hashedPassword}
+      WHERE id = ${req.user.id}
+    `;
+
+    res.status(200).json({
+      status: "success",
+      message: "Password updated successfully",
+    });
+  } catch (err) {
+    next(new AppError(err.message, 500));
+  }
+};
+exports.forgotPassword = async (req, res, next) => {
+  try {
+    res.clearCookie("jwt");
+    const { email } = req.body;
+    const user = await getUserByEmail(email);
+    if (!user) {
+      return res.status(200).json({
+        message:
+          "If an account exists with this email, a reset link has been sent.",
+      });
+    }
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+    const resetLink = `${process.env.FRONTEND_URL}/reset-password/${token}`;
+
+    await sendEmail({
+      to: email,
+      subject: "Password Reset",
+      text: `Click this link to reset your password: ${resetLink}`,
+    });
+    res.status(200).json({ message: "Reset link sent to your email" });
+  } catch (err) {
+    next(new AppError(err.message, 500));
+  }
+};
+
+exports.resetPassword = async (req, res, next) => {
+  const { token } = req.params;
+  const { newPassword } = req.body;
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.id;
+
+    const hashedPassword = await argon2.hash(newPassword);
+
+    await sql`
+            UPDATE users
+            SET password = ${hashedPassword}
+            WHERE id = ${userId}
+        `;
+
+    res.status(200).json({ message: "Password updated successfully" });
+  } catch (err) {
+    next(new AppError(err.message, 500));
   }
 };
