@@ -48,7 +48,7 @@ exports.updateUser = async (data, id) => {
 };
 
 exports.getAllUsers = async (query) => {
-  console.log(query);
+  // console.log(query);
 
   const users = await sql`
         SELECT *

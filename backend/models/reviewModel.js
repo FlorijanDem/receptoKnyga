@@ -61,3 +61,30 @@ exports.deleteReview = async (id, user_id = null) => {
     `;
   return deletedReview;
 };
+
+exports.getAllReviews = async (query) => {
+  const reviews = await sql`
+  SELECT reviews.id, 
+        reviews.recipe_id, 
+        reviews.user_id, 
+        reviews.rating, 
+        reviews.review_text, 
+        reviews.created_at,
+        users.username
+        FROM reviews
+        LEFT JOIN users
+        ON users.id = reviews.user_id
+        ORDER BY created_at DESC
+        LIMIT ${query.limit}
+        OFFSET ${(query.page - 1) * query.limit}
+        `;
+  return reviews;
+};
+
+exports.countReviews = async () => {
+  const [{ count }] = await sql`
+  SELECT COUNT(reviews.id)
+  FROM reviews
+  `;
+  return count;
+};
