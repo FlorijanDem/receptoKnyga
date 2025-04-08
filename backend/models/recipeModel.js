@@ -5,29 +5,11 @@ exports.searchRecipes = async (filters) => {
     q, 
     type, 
     product,
-    order,
     preparation_time, 
     servings, 
     limit = 12,
     offset = 0,
   } = filters;
-
-  let orderByClause = sql`
-  ORDER BY 
-    CASE WHEN ${!!q} THEN similarity_score ELSE 0 END DESC,
-    title ASC
-`;
-
-  if (order === "new") {
-    orderByClause = sql`
-    ORDER BY r.id DESC`;
-  } else if (order === "old") {
-    orderByClause = sql`
-    ORDER BY r.id ASC`;
-  }  else if (order === "title") {
-    orderByClause = sql`
-    ORDER BY r.title ASC`;
-  }
 
   const searchQuery = sql`
     WITH recipe_scores AS (
