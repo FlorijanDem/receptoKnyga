@@ -74,6 +74,8 @@ exports.getAllReviews = async (query) => {
         FROM reviews
         LEFT JOIN users
         ON users.id = reviews.user_id
+        WHERE 1=1
+        ${query.approved === "true" ? sql`AND approved` : query.approved === "false" ? sql`AND NOT approved` : sql``}
         ORDER BY created_at DESC
         LIMIT ${query.limit}
         OFFSET ${(query.page - 1) * query.limit}
@@ -81,10 +83,12 @@ exports.getAllReviews = async (query) => {
   return reviews;
 };
 
-exports.countReviews = async () => {
+exports.countReviews = async (query) => {
   const [{ count }] = await sql`
   SELECT COUNT(reviews.id)
   FROM reviews
+  WHERE 1=1
+  ${query.approved === "true" ? sql`AND approved` : query.approved === "false" ? sql`AND NOT approved` : sql``}
   `;
   return count;
 };

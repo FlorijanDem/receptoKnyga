@@ -59,10 +59,28 @@ exports.updateReview = async (req, res, next) => {
 
 exports.deleteReview = async (req, res, next) => {
   try {
-    const deletedReview = await deleteReview(req.params.review_id, req.user.role !== "admin" ? req.user.id : null);
+    const deletedReview = await deleteReview(
+      req.params.review_id,
+      req.user.role !== "admin" ? req.user.id : null
+    );
     return res.status(200).json({
       status: "success",
       data: deletedReview,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getAllReviews = async (req, res, next) => {
+  try {
+    const reviews = await getReviewsByRecipe(req.query);
+    const count = await getReviewsByRecipe(req.query);
+
+    return res.status(200).json({
+      status: "success",
+      count,
+      data: reviews,
     });
   } catch (error) {
     next(error);
