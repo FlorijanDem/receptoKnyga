@@ -7,7 +7,8 @@ export const SearchProvider = ({ children }) => {
   const [draftQuery, setDraftQuery] = useState("");
   const [filters, setFilters] = useState({
     type: "",
-    product: ""
+    product: "",
+    order: "",
   });
 
   return (
