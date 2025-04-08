@@ -6,6 +6,7 @@ const FilterForm = ({ isOpen, onClose }) => {
   const [localFilters, setLocalFilters] = useState({
     type: "",
     product: "",
+    order: "",
   });
   const productTimeoutRef = useRef(null);
 
@@ -20,6 +21,7 @@ const FilterForm = ({ isOpen, onClose }) => {
       setLocalFilters({
         type: "",
         product: "",
+        order: "",
       });
     }
   }, [isOpen]);
@@ -51,6 +53,9 @@ const FilterForm = ({ isOpen, onClose }) => {
       queryParams.append('product', newFilters.product);
     }
     
+    if (newFilters.order) {
+      queryParams.append('order', newFilters.order);
+    }
     // Update currentQuery to trigger useEffect in RecipesList component
     setCurrentQuery(currentQuery);
   };
@@ -84,6 +89,10 @@ const FilterForm = ({ isOpen, onClose }) => {
         }, 300);
       }
     }
+
+    if (name === 'order') {
+      applyFilters(newLocalFilters);
+    }
   };
 
   const handleSubmit = (e) => {
@@ -96,6 +105,7 @@ const FilterForm = ({ isOpen, onClose }) => {
     const emptyFilters = {
       type: "",
       product: "",
+      order: "",
     };
     
     setLocalFilters(emptyFilters);
@@ -140,7 +150,31 @@ const FilterForm = ({ isOpen, onClose }) => {
               <option value="non-veg">Non-vegetarian</option>
             </select>
           </div>
-
+          <div>
+            <label className="block text-gray-700 mb-2" htmlFor="order">
+              Filter by Order
+            </label>
+            <select
+              id="order"
+              name="order"
+              value={localFilters.order}
+              onChange={handleChange}
+              className="w-full px-3 py-2 text-gray-700 bg-white border border-[#C3D4E9] rounded-md focus:outline-none focus:ring-2 focus:ring-recipe-primary appearance-none"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                backgroundPosition: `right 0.5rem center`,
+                backgroundRepeat: `no-repeat`,
+                backgroundSize: `1.5em 1.5em`,
+                paddingRight: `2.5rem`
+              }}
+            >
+              <option value="">Sort By</option>
+              <option value="new">Newest</option>
+              <option value="old">Oldest</option>
+              <option value="rating">Rating</option>
+              <option value="title">Title</option>
+            </select>
+          </div>
           <div>
             <label className="block text-gray-700 mb-2" htmlFor="product">
               Product
