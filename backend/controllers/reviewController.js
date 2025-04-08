@@ -44,12 +44,15 @@ exports.addReview = async (req, res, next) => {
 
 exports.updateReview = async (req, res, next) => {
   try {
-    const { rating, review_text } = req.body;
+    const { rating, review_text, approved } = req.body;
     const updatedReview = await updateReview(
       req.user.id,
-      { rating, review_text },
+      { rating, review_text, approved },
       req.params.review_id
     );
+
+    // console.log(updatedReview);
+
     return res.status(200).json({
       status: "success",
       data: updatedReview,

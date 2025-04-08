@@ -34,7 +34,6 @@ const AdminNavigation = () => {
       });
       navigate(`${adminPage === "recipes" ? "/" : `/${adminPage}`}`);
     }
-    console.log(adminPage);
   }, [adminPage]);
 
   //   console.log("adminFilter", adminFilters);

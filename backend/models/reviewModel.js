@@ -37,17 +37,27 @@ exports.addReview = async (data) => {
 };
 
 exports.updateReview = async (user_id, data, review_id) => {
-  const rating = Number(data.rating);
+  // console.log(data);
+  data.approved =
+    data.approved === "true"
+      ? true
+      : data.approved === "false"
+        ? false
+        : data.approved;
+
+  // const rating = Number(data.rating);
   const [review] = await sql`
     UPDATE reviews
-    SET rating = ${rating}, 
-    review_text = ${data.review_text}, 
-    created_at = NOW()
+    SET 
+    ${sql(data, "rating", "review_text", "approved")}
+
+    ${Object.keys(data).includes("approved") ? sql`` : sql`created_at = now()`}
     WHERE id = ${review_id} 
-    AND user_id = ${user_id}
+    
     RETURNING *, 
     (SELECT username FROM users WHERE users.id = reviews.user_id) AS username;
   `;
+  // AND user_id = ${user_id}
 
   return review;
 };
@@ -70,6 +80,7 @@ exports.getAllReviews = async (query) => {
         reviews.rating, 
         reviews.review_text, 
         reviews.created_at,
+        reviews.approved,
         users.username
         FROM reviews
         LEFT JOIN users
