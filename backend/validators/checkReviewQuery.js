@@ -9,4 +9,5 @@ exports.checkReviewsQuery = [
     .optional()
     .isInt({ min: 1, max: 100 })
     .withMessage("Limit must be between 1 and 100"),
+  query("approved").optional().isBoolean().withMessage("Must be boolean"),
 ];

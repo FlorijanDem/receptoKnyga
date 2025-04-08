@@ -3,8 +3,9 @@ const {
   deleteReview,
   addReview,
   updateReview,
+  getAllReviews,
 } = require("../controllers/reviewController");
-const { protect } = require("../controllers/userController");
+const { protect, allowAccessTo } = require("../controllers/userController");
 const {
   checkIfReviewed,
   checkReviewCreator,
@@ -14,6 +15,16 @@ const { checkReviewsQuery } = require("../validators/checkReviewQuery");
 const validate = require("../validators/validate");
 
 const reviewRouter = require("express").Router();
+
+reviewRouter
+  .route("/")
+  .get(
+    protect,
+    allowAccessTo("admin"),
+    checkReviewsQuery,
+    validate,
+    getAllReviews
+  );
 
 reviewRouter
   .route("/:recipe_id")
