@@ -49,6 +49,7 @@ const RecipePage = () => {
   const backToList = () => {
     navigate(`/`);
   };
+
   return (
     <>
       {loading ? (
@@ -56,21 +57,29 @@ const RecipePage = () => {
       ) : error ? (
         <p>{error}</p>
       ) : (
-        <div className="p-4 max-w-md mx-auto">
+        <div className="p-[0.688rem] max-w-md mx-auto">
           {/* Recipe Card */}
 
-          <div className="bg-white shadow-md rounded-lg p-4">
-            <img
-              src={recipe.data.photo || null}
-              alt={recipe.data.title}
-              className="w-full rounded-lg mb-2"
-            />
-            <div className="flex justify-between items-center">
-              <h2 className="text-lg font-bold">{recipe.data.title}</h2>
-              {/* <FaHeart className="text-red-500" /> */}
+          <img
+            src={recipe.data.photo || null}
+            alt={recipe.data.title}
+            className="w-full rounded-lg mb-[0.625rem]"
+          />
+          <div className="bg-recipe-fifth">
+            <div className="relative flex justify-between items-center">
+              <div className="pb-[10px]">
+                <h2 className="text-[32px] text-jakarta font-bold">
+                  {recipe.data.title}
+                </h2>
+                <h2>440+ Reviewer</h2>
+              </div>
+              {/* placeholderheart */}
+              <FaHeart className="text-red-500 w-[20px] absolute top-[0.5rem] right-[0.5rem]" />
             </div>
-            <p className="text-sm text-gray-600">{recipe.data.description}</p>
-            <p className="text-sm text-gray-600">Type: {recipe.data.type}</p>
+            <p className="text-[18px] text-jakarta">
+              {recipe.data.description}
+            </p>
+            {/* <p className="text-sm text-gray-600">Type: {recipe.data.type}</p> */}
             <p className="text-sm text-gray-600">
               Preparation time: {recipe.data.preparation_time} m.
             </p>
@@ -100,8 +109,12 @@ const RecipePage = () => {
           >
             Back to recipe list
           </button>
-          <RecipeReviews refresh={refresh}/>
-          <WriteReview recipe_id={id} setRefresh={setRefresh} isLoggedIn={true} />
+          <RecipeReviews refresh={refresh} />
+          <WriteReview
+            recipe_id={id}
+            setRefresh={setRefresh}
+            isLoggedIn={true}
+          />
         </div>
       )}
     </>
