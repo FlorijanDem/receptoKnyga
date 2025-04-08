@@ -171,7 +171,8 @@ const RecipeReviews = ({ refresh }) => {
                     required: "Review text is required",
                     maxLength: {
                       value: 500,
-                      message: "Review cannot exceed 500 characters and cannot contain special characters",
+                      message:
+                        "Review cannot exceed 500 characters and cannot contain special characters",
                     },
                   })}
                   className="border border-[var(--color-recipe-secondary)] bg-[var(--color-recipe-fifth)] rounded-md p-2 w-full"

@@ -22,18 +22,6 @@ const UsersList = () => {
       return;
     }
 
-    /*************  ✨ Codeium Command ⭐  *************/
-    /**
- * Fetches a list of users from the server based on the current filter and admin filters.
- * Updates the users state with the fetched data and sets the count of users.
- * If the current user is not an admin, redirects to the home page.
- *
-
- * @async
- * @function fetchUsers
- * @returns {Promise<void>} - A promise that resolves when the users are fetched and state is updated.
- */
-
     const fetchUsers = async () => {
       try {
         const params = new URLSearchParams();

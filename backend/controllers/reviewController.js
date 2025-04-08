@@ -3,6 +3,8 @@ const {
   deleteReview,
   addReview,
   updateReview,
+  getAllReviews,
+  countReviews,
 } = require("../models/reviewModel");
 
 exports.getReviewsByRecipe = async (req, res, next) => {
@@ -74,8 +76,8 @@ exports.deleteReview = async (req, res, next) => {
 
 exports.getAllReviews = async (req, res, next) => {
   try {
-    const reviews = await getReviewsByRecipe(req.query);
-    const count = await getReviewsByRecipe(req.query);
+    const reviews = await getAllReviews(req.query);
+    const count = await countReviews(req.query);
 
     return res.status(200).json({
       status: "success",
