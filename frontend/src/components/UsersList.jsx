@@ -60,12 +60,15 @@ const UsersList = () => {
   }, [adminFilters, filter]);
 
   return (
-    <section className="w-9/12 max-w-[600px] mx-auto py-4">
+    <section className="w-9/12 max-w-[1200px] mx-auto py-4">
       <h1 className="text-center text-3xl">Users List</h1>
       <ListPagination filter={filter} setFilter={setFilter} count={count} />
-      {users.map((user) => (
-        <UserCard key={user.id} user={user} />
-      ))}
+      <div className="users-list">
+        {users.map((user) => (
+          <UserCard key={user.id} user={user} />
+        ))}
+      </div>
+      <ListPagination filter={filter} setFilter={setFilter} count={count} />
     </section>
   );
 };
