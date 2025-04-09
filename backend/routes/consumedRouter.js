@@ -2,11 +2,14 @@ const {
   getUserConsumed,
   addConsumed,
   deleteConsumed,
+  userMacros,
+  userWeeklyMacros,
 } = require("../controllers/consumedController");
 const { protect } = require("../controllers/userController");
 const {
   checkDateParam,
   checkDeleteParams,
+  checkWeeklyDateParam,
 } = require("../validators/checkConsumedParams");
 const { checkConsumedBody } = require("../validators/checkConsumedBody");
 const validate = require("../validators/validate");
@@ -15,7 +18,15 @@ const consumedRouter = require("express").Router();
 
 consumedRouter
   .route("/:date?")
-  .get(protect, checkDateParam, getUserConsumed);
+  .get(protect, checkDateParam, validate, getUserConsumed);
+
+consumedRouter
+  .route("/macros/:date?")
+  .get(protect, checkDateParam, validate, userMacros);
+
+consumedRouter
+  .route("/weekly-macros/:startDate")
+  .get(protect, checkWeeklyDateParam, validate, userWeeklyMacros);
 
 consumedRouter
   .route("/")

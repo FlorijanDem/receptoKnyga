@@ -2,6 +2,8 @@ const {
   getUserConsumed,
   addConsumed,
   deleteConsumed,
+  userMacros,
+  userWeeklyMacros,
 } = require("../models/consumedModel");
 
 exports.getUserConsumed = async (req, res, next) => {
@@ -27,11 +29,11 @@ exports.getUserConsumed = async (req, res, next) => {
 exports.addConsumed = async (req, res, next) => {
   try {
     const { datetime, recipeTitle } = req.body;
-    const consumed = await addConsumed(req.user.id, recipeTitle, datetime);
+    const result = await addConsumed(req.user.id, recipeTitle, datetime);
 
     res.status(201).json({
       status: "success",
-      data: consumed,
+      data: result,
     });
   } catch (err) {
     next(err);
@@ -51,6 +53,34 @@ exports.deleteConsumed = async (req, res, next) => {
     res.status(200).json({
       status: "success",
       data: deleted[0],
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.userMacros = async (req, res, next) => {
+  try {
+    const { date } = req.params;
+    const result = await userMacros(req.user.id, date);
+
+    res.status(200).json({
+      status: "success",
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.userWeeklyMacros = async (req, res, next) => {
+  try {
+    const { startDate } = req.params;
+    const result = await userWeeklyMacros(req.user.id, startDate);
+
+    res.status(200).json({
+      status: "success",
+      data: result,
     });
   } catch (err) {
     next(err);
