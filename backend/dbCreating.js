@@ -126,7 +126,9 @@ const createDBtables = async () => {
         user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
         rating INTEGER NOT NULL,
         review_text TEXT NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        approved BOOLEAN DEFAULT FALSE,
+        UNIQUE (recipe_id, user_id)
         )
         `;
   } catch (err) {
