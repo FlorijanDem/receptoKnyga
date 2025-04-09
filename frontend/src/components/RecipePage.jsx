@@ -57,45 +57,78 @@ const RecipePage = () => {
       ) : error ? (
         <p>{error}</p>
       ) : (
-        <div className="p-[0.688rem] max-w-md mx-auto">
+        <div className="px-[0.688rem] md:px-[1.25rem] pt-[1.25rem]">
           {/* Recipe Card */}
 
-          <img
-            src={recipe.data.photo || null}
-            alt={recipe.data.title}
-            className="w-full rounded-lg mb-[0.625rem]"
-          />
-          <div className="bg-recipe-fifth">
-            <div className="relative flex justify-between items-center">
-              <div className="pb-[10px]">
-                <h2 className="text-[32px] text-jakarta font-bold">
-                  {recipe.data.title}
-                </h2>
-                <h2>440+ Reviewer</h2>
+          <div className="lg:grid lg:grid-cols-12 lg:gap-x-[2.125rem]">
+            <img
+              src={recipe.data.photo || null}
+              alt={recipe.data.title}
+              className="w-full rounded-[10px] mb-[0.625rem] lg:col-span-8"
+            />
+            {/* recipe details */}
+            <div className="bg-recipe-fifth px-[1.25rem] pt-[1.25rem] rounded-[10px] lg:col-span-4">
+              <div className="relative flex justify-between items-center">
+                <div className="pb-[10px]">
+                  <h2 className="text-[32px] text-jakarta font-bold mb-[8px]">
+                    {recipe.data.title}
+                  </h2>
+                  <h2>440+ Reviewer</h2>
+                </div>
+                <FaHeart className="text-red-500 w-[1.25rem] absolute top-[0.5rem] lg:top-[0rem]  right-[0]" />
               </div>
-              {/* placeholderheart */}
-              <FaHeart className="text-red-500 w-[20px] absolute top-[0.5rem] right-[0.5rem]" />
-            </div>
-            <p className="text-[18px] text-jakarta">
-              {recipe.data.description}
-            </p>
-            {/* <p className="text-sm text-gray-600">Type: {recipe.data.type}</p> */}
-            <p className="text-sm text-gray-600">
-              Preparation time: {recipe.data.preparation_time} m.
-            </p>
-            <div className="flex justify-between text-sm mt-2">
-              <span>Protein: 34g</span>
-              <span>Fat: 30g</span>
-              <span>Carbs: 104g</span>
-            </div>
-            <div className="mt-2 flex justify-between">
-              <p className="text-xl font-bold">642 Cals</p>
-              <button
-                className="bg-blue-500 text-white px-4 py-1 rounded-lg"
-                onClick={() => setShowMethod(!showMethod)}
-              >
-                {showMethod ? "Hide Instructions" : "Instructions"}
-              </button>
+              <p className="text-[16px] text-jakarta text-recipe-eighth tracking-[0.02px] mb-[0.875rem] md:pb-[40px]">
+                {recipe.data.description}
+              </p>
+
+              <div>
+                <div className="grid grid-flow-row grid-cols-2 gap-y-[1rem] gap-x-[2.75rem] max-w-xs mb-[2.188rem] md:mb-[2.5rem] md:w-[330px]">
+                  <div className="flex justify-between">
+                    <span className="text-[16px] text-recipe-secondary">
+                      Protein
+                    </span>
+                    <span className="text-[16px] font-semibold text-recipe-eighth">
+                      34g
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-[16px] text-recipe-secondary">
+                      Fat
+                    </span>
+                    <span className="text-[16px] font-semibold text-recipe-eighth">
+                      30g
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-[16px] text-recipe-secondary">
+                      Carbs
+                    </span>
+                    <span className="text-[16px] font-semibold text-recipe-eighth">
+                      104g
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-[16px] text-recipe-secondary">
+                      Serving
+                    </span>
+                    <span className="text-[16px] font-semibold text-recipe-eighth">
+                      3
+                    </span>
+                  </div>
+                </div>
+
+                <div className="pb-[1.25rem] flex justify-between items-center">
+                  <p className="text-[24px] text-jakarta font-bold md:pr-[0.625rem]">
+                    642 Cals
+                  </p>
+                  <button
+                    className="bg-recipe-primary text-white px-[1.469rem] py-[1rem] rounded-[4px]"
+                    onClick={() => setShowMethod(!showMethod)}
+                  >
+                    {showMethod ? "Hide Instructions" : "Instructions"}
+                  </button>
+                </div>
+              </div>
             </div>
             {showMethod && (
               <p className="mt-2 text-sm text-gray-800 bg-gray-100 p-2 rounded">
@@ -104,7 +137,7 @@ const RecipePage = () => {
             )}
           </div>
           <button
-            className="bg-blue-500 text-white px-4 py-1 rounded-lg my-2"
+            className="bg-recipe-primary text-white px-4 py-1 rounded-lg my-2"
             onClick={() => backToList()}
           >
             Back to recipe list
