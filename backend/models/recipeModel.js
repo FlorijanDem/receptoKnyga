@@ -168,6 +168,8 @@ exports.getRecipeById = async (id) => {
       })
     );
 
+    //macros recipe calculator
+
     const macros = await sql`
     SELECT 
     ROUND(COALESCE(SUM((recipes_products.amount::NUMERIC / 100) * products.calories), 0)::NUMERIC, 0) AS calories,
@@ -179,6 +181,8 @@ exports.getRecipeById = async (id) => {
     JOIN products ON products.id = recipes_products.product_id
     WHERE recipes.id = ${id};
     `;
+    
+    //macros details || 0 if no data 
 
     recipe.macros = {
       calories: macros[0]?.calories || 0,
