@@ -94,19 +94,19 @@ const ReviewControls = ({ review, setReview, setRefresh }) => {
 
   return (
     <>
-      <div className="recipe-controls grid grid-cols-2 gap-2 mt-4">
+      <div className="review-controls grid grid-cols-2 gap-2 mt-4">
         {/* Edit / delete recipe control buttons */}
         {(user?.id === review?.user_id || user?.role === "admin") && (
           <>
-            <button
+            {/* <button
               className="bg-[var(--color-recipe-primary)] text-[var(--color-recipe-fifth)] px-4 py-1 rounded-lg"
               //   onClick={editRecipe}
               disabled
             >
               Edit
-            </button>
+            </button> */}
             <button
-              className="bg-[var(--color-recipe-fourth)] text-[var(--color-recipe-fifth)] px-4 py-1 rounded-lg"
+              className="col-start-2 bg-[var(--color-recipe-fourth)] text-[var(--color-recipe-fifth)] px-4 py-1 rounded-lg"
               onClick={() => setOpenDelete(!openDelete)}
             >
               Delete
@@ -116,13 +116,13 @@ const ReviewControls = ({ review, setReview, setRefresh }) => {
         {user?.role === "admin" && (
           <>
             <button
-              className="bg-[var(--color-recipe-primary)] text-[var(--color-recipe-fifth)] px-4 py-1 rounded-lg"
+              className=" bg-[var(--color-recipe-primary)] text-[var(--color-recipe-fifth)] px-4 py-1 rounded-lg"
               onClick={approveReview}
             >
               {review.approved ? "Unapprove" : "Approve"}
             </button>
             <button
-              className="bg-[var(--color-recipe-fourth)] text-[var(--color-recipe-fifth)] px-4 py-1 rounded-lg"
+              className=" bg-[var(--color-recipe-fourth)] text-[var(--color-recipe-fifth)] px-4 py-1 rounded-lg"
               onClick={banUser}
             >
               {review.user_banned ? "Unban user" : "Ban user"}
