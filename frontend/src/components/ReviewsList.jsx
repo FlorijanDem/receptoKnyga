@@ -47,6 +47,7 @@ const ReviewsList = () => {
       }
     };
     fetchReviews();
+    console.log(`xxx`);
   }, [adminFilters, filter, refresh]);
 
   return (

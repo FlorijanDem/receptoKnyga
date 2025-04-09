@@ -64,6 +64,7 @@ const ReviewControls = ({ review, setReview, setRefresh }) => {
   };
   const banUser = async () => {
     if (review.user_id === user.id && user.role === "admin") {
+      toast.error("You can't ban yourself", { id: "ban-admin" });
       return;
     }
     try {
@@ -85,6 +86,7 @@ const ReviewControls = ({ review, setReview, setRefresh }) => {
       );
       // console.log(recipe);
       setRefresh((prev) => !prev);
+      navigate("/reviews");
     } catch (error) {
       console.log(error);
     }

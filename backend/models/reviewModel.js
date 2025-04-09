@@ -81,7 +81,8 @@ exports.getAllReviews = async (query) => {
         reviews.review_text, 
         reviews.created_at,
         reviews.approved,
-        users.username
+        users.username,
+        users.banned AS user_banned
         FROM reviews
         LEFT JOIN users
         ON users.id = reviews.user_id

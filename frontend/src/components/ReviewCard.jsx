@@ -1,13 +1,17 @@
 // import axios from "axios";
 import { format } from "date-fns";
 import { FaStar } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReviewControls from "./ReviewControls";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 const ReviewCard = ({ review, setRefresh }) => {
   const [currentReview, setCurrentReview] = useState(review);
+
+  useEffect(() => {
+    setCurrentReview(review);
+  }, [review]);
 
   return (
     <div
