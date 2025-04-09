@@ -161,11 +161,31 @@ exports.getRecipeById = async (id) => {
           JOIN recipes_products
           ON products.id = recipes_products.product_id
           WHERE products.id = ${product_id}
+          AND recipes_products.recipe_id = ${recipe.id}
           `;
 
         return product;
       })
     );
+
+    const macros = await sql`
+    SELECT 
+    ROUND(COALESCE(SUM((recipes_products.amount::NUMERIC / 100) * products.calories), 0)::NUMERIC, 0) AS calories,
+    ROUND(COALESCE(SUM((recipes_products.amount::NUMERIC / 100) * products.fats), 0)::NUMERIC, 1) AS fats,
+    ROUND(COALESCE(SUM((recipes_products.amount::NUMERIC / 100) * products.carbohydrates), 0)::NUMERIC, 1) AS carbohydrates,
+    ROUND(COALESCE(SUM((recipes_products.amount::NUMERIC / 100) * products.protein), 0)::NUMERIC, 1) AS proteins
+    FROM recipes
+    JOIN recipes_products ON recipes_products.recipe_id = recipes.id
+    JOIN products ON products.id = recipes_products.product_id
+    WHERE recipes.id = ${id};
+    `;
+
+    recipe.macros = {
+      calories: macros[0]?.calories || 0,
+      fats: macros[0]?.fats || 0,
+      carbohydrates: macros[0]?.carbohydrates || 0,
+      proteins: macros[0]?.proteins || 0,
+    };
 
     return recipe;
   });
