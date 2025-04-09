@@ -2,11 +2,11 @@ const { sql } = require("../dbConnection");
 
 exports.searchRecipes = async (filters) => {
   const {
-    q, 
-    type, 
-    product, 
-    preparation_time, 
-    servings, 
+    q,
+    type,
+    product,
+    preparation_time,
+    servings,
     limit = 12,
     offset = 0,
   } = filters;
@@ -38,7 +38,7 @@ exports.searchRecipes = async (filters) => {
         product
           ? sql`
         AND EXISTS (
-          SELECT 1 
+          SELECT 1
           FROM recipes_products rp
           INNER JOIN products p ON rp.product_id = p.id
           WHERE rp.recipe_id = r.id
@@ -168,29 +168,6 @@ exports.getRecipeById = async (id) => {
       })
     );
 
-    //macros recipe calculator
-
-    const macros = await sql`
-    SELECT 
-    ROUND(COALESCE(SUM((recipes_products.amount::NUMERIC / 100) * products.calories), 0)::NUMERIC, 0) AS calories,
-    ROUND(COALESCE(SUM((recipes_products.amount::NUMERIC / 100) * products.fats), 0)::NUMERIC, 1) AS fats,
-    ROUND(COALESCE(SUM((recipes_products.amount::NUMERIC / 100) * products.carbohydrates), 0)::NUMERIC, 1) AS carbohydrates,
-    ROUND(COALESCE(SUM((recipes_products.amount::NUMERIC / 100) * products.protein), 0)::NUMERIC, 1) AS proteins
-    FROM recipes
-    JOIN recipes_products ON recipes_products.recipe_id = recipes.id
-    JOIN products ON products.id = recipes_products.product_id
-    WHERE recipes.id = ${id};
-    `;
-    
-    //macros details || 0 if no data 
-
-    recipe.macros = {
-      calories: macros[0]?.calories || 0,
-      fats: macros[0]?.fats || 0,
-      carbohydrates: macros[0]?.carbohydrates || 0,
-      proteins: macros[0]?.proteins || 0,
-    };
-
     return recipe;
   });
 
@@ -222,7 +199,7 @@ exports.createRecipe = async (recipe) => {
 
     await sql`
     INSERT INTO recipes_products (recipe_id, product_id, amount)
-    VALUES ${sql(productIDs.map(p => [newRecipe.id, p.id, p.amount]))}
+    VALUES ${sql(productIDs.map((p) => [newRecipe.id, p.id, p.amount]))}
     `;
 
     return newRecipe;
@@ -273,7 +250,7 @@ exports.updateRecipe = async (id, data) => {
 
       await sql`
       INSERT INTO recipes_products (recipe_id, product_id, amount)
-      VALUES ${sql(productIDs.map(p => [id, p.id, p.amount]))}
+      VALUES ${sql(productIDs.map((p) => [id, p.id, p.amount]))}
       `;
     }
 
@@ -295,4 +272,22 @@ exports.deleteRecipe = async (id) => {
     WHERE id = ${id}
     `;
   });
+};
+
+exports.getAllMacros = async (id) => {
+  //macros recipe calculator
+
+  const macros = await sql`
+   SELECT 
+   ROUND(COALESCE(SUM((recipes_products.amount::NUMERIC / 100) * products.calories), 0)::NUMERIC, 0) AS calories,
+   ROUND(COALESCE(SUM((recipes_products.amount::NUMERIC / 100) * products.fats), 0)::NUMERIC, 1) AS fats,
+   ROUND(COALESCE(SUM((recipes_products.amount::NUMERIC / 100) * products.carbohydrates), 0)::NUMERIC, 1) AS carbohydrates,
+   ROUND(COALESCE(SUM((recipes_products.amount::NUMERIC / 100) * products.protein), 0)::NUMERIC, 1) AS proteins
+   FROM recipes
+   JOIN recipes_products ON recipes_products.recipe_id = recipes.id
+   JOIN products ON products.id = recipes_products.product_id
+   WHERE recipes.id = ${id};
+   `;
+
+  return macros;
 };
