@@ -18,11 +18,20 @@ const ReviewControls = ({ review, setReview, setRefresh }) => {
 
   const deleteReview = async () => {
     try {
-      await axios.delete(`${API_URL}/reviews/${review.id}`, {
-        withCredentials: true,
-      });
+      await axios.delete(
+        `${API_URL}/reviews/${review.recipe_id}/${review.id}`,
+        {
+          withCredentials: true,
+        }
+      );
 
-      navigate("/");
+      toast.success("Review deleted successfully!", {
+        duration: 3000,
+        id: "delete-review",
+      });
+      setOpenDelete(false);
+      setRefresh((prev) => !prev);
+      navigate("/reviews");
     } catch (error) {
       console.log(error);
     }
@@ -46,7 +55,7 @@ const ReviewControls = ({ review, setReview, setRefresh }) => {
         } successfully!`,
         {
           duration: 3000,
-          id: "approve-recipe",
+          id: "approve-review",
         }
       );
     } catch (error) {
@@ -127,9 +136,9 @@ const ReviewControls = ({ review, setReview, setRefresh }) => {
               Are you sure?
             </h2>
             <p className="text-sm text-[var(--color-recipe-third)] mb-4">
-              Are you sure you want to delete recipe for:{" "}
+              Are you sure you want to delete review by:{" "}
               <span className="font-bold block break-words">
-                {review?.title}?
+                {review?.username}?
               </span>
             </p>
             <div className="flex justify-end">

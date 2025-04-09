@@ -17,6 +17,7 @@ const ReviewsList = () => {
   const navigate = useNavigate();
 
   const [reviews, setReviews] = useState([]);
+  const [refresh, setRefresh] = useState(false);
   useEffect(() => {
     if (user?.role !== "admin") {
       navigate("/");
@@ -46,7 +47,7 @@ const ReviewsList = () => {
       }
     };
     fetchReviews();
-  }, [adminFilters, filter]);
+  }, [adminFilters, filter, refresh]);
 
   return (
     <section className="w-9/12 max-w-[1200px] mx-auto py-4">
@@ -54,7 +55,7 @@ const ReviewsList = () => {
       <ListPagination filter={filter} setFilter={setFilter} count={count} />
       <div className="reviews-list">
         {reviews.map((review) => (
-          <ReviewCard review={review} key={review.id} />
+          <ReviewCard review={review} key={review.id} setRefresh={setRefresh} />
         ))}
       </div>
       <ListPagination filter={filter} setFilter={setFilter} count={count} />
