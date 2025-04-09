@@ -26,14 +26,18 @@ const RecipePreviewCard = ({ recipe, showUser = false }) => {
         });
         setIsFavorite(false);
       } else {
-        await axios.post(
-          `${API_URL}/favorites`,
-          { recipeId: recipe.id },
-          { withCredentials: true }
-        );
+        const payload = { recipeId: String(recipe.id) };
+        await axios.post(`${API_URL}/favorites`, payload, {
+          withCredentials: true,
+          headers: { "Content-Type": "application/json" },
+        });
         setIsFavorite(true);
       }
     } catch (error) {
+      console.error("Axios Error:", {
+        status: error.response?.status,
+        data: error.response?.data,
+      });
       showBoundary(error);
     }
   };

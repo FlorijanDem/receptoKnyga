@@ -4,9 +4,8 @@ exports.checkAddFavorite = [
   body("recipeId")
     .exists()
     .withMessage("Recipe ID is required")
-    .isString()
-    .withMessage("Recipe ID must be a string")
-    .trim()
+    .isInt()
+    .withMessage("Recipe ID must be an integer")
     .notEmpty()
     .withMessage("Recipe ID cannot be empty"),
 ];

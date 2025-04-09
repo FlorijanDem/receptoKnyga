@@ -106,6 +106,15 @@ const createDBtables = async () => {
             product_id INTEGER REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE
         )
     `;
+
+    await sql`
+    CREATE TABLE IF NOT EXISTS favorite_recipes (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+        recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE ON UPDATE CASCADE,
+        UNIQUE (user_id, recipe_id)
+    );
+`;
   } catch (err) {
     console.error("Failed to create tables:", err);
   }

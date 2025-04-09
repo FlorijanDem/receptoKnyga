@@ -131,8 +131,8 @@ const FavList = ({ userId = null, showAll = false }) => {
             {showAll
               ? "No favorite recipes found for any user."
               : userId
-              ? "This user hasn’t favorited any recipes yet."
-              : "You haven’t favorited any recipes yet."}
+              ? "You haven’t favorited any recipes yet."
+              : "This user hasn’t favorited any recipes yet."}
           </p>
         ) : (
           <div className="flex flex-col gap-[32px] items-center md:grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
