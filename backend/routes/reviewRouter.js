@@ -29,12 +29,26 @@ reviewRouter
 reviewRouter
   .route("/:recipe_id")
   .get(protect, checkReviewsQuery, validate, getReviewsByRecipe)
-  .post(protect, checkIfReviewed, checkReviewsBody, validate, addReview);
+  .post(
+    protect,
+    allowAccessTo("user"),
+    checkIfReviewed,
+    checkReviewsBody,
+    validate,
+    addReview
+  );
 
 // "/:recipe_id/:review_id"
 reviewRouter
   .route("/:recipe_id/:review_id")
-  .patch(protect, checkReviewCreator, checkReviewsBody, validate, updateReview)
+  .patch(
+    protect,
+    allowAccessTo("user"),
+    checkReviewCreator,
+    checkReviewsBody,
+    validate,
+    updateReview
+  )
   .delete(protect, checkReviewCreator, validate, deleteReview);
 
 module.exports = reviewRouter;
