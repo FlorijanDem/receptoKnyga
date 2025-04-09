@@ -1,6 +1,5 @@
-import React from "react";
-import { FaHeart, FaClock, FaUsers } from "react-icons/fa";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { FaHeart } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router";
 import axios from "axios";
 import RecipePageControls from "./RecipePageControls";
@@ -9,13 +8,28 @@ import RecipeReviews from "./RecipeReviews";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
+// Style constants
+const TEXT_STYLES = {
+  macro: "text-[16px] 2xl:text-[24px] font-semibold text-recipe-eighth",
+  label: "text-[16px] 2xl:text-[24px] text-recipe-secondary",
+  title: "text-[32px] 2xl:text-[44px] text-jakarta font-bold mb-[8px]",
+  description:
+    "text-[16px] 2xl:text-[24px] text-jakarta text-recipe-eighth tracking-[0.02px] mb-[0.875rem] md:pb-[40px]",
+  calories:
+    "text-[24px] 2xl:text-[32px] text-jakarta font-bold md:pr-[0.625rem]",
+  method:
+    "text-jakarta text-[14px] 2xl:text-[24px] text-gray-800 bg-gray-100 p-2 rounded",
+  button: "bg-recipe-primary text-white px-4 py-1 rounded-lg",
+};
+
 const RecipePage = () => {
   const [recipe, setRecipe] = useState(null);
   const [error, setError] = useState(null);
-  const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [showMethod, setShowMethod] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -25,132 +39,99 @@ const RecipePage = () => {
         });
         setRecipe(response.data);
         setError(null);
-        setLoading(false);
       } catch (error) {
+        handleError(error);
+      } finally {
         setLoading(false);
-        if (axios.isAxiosError(error)) {
-          if (error.response) {
-            setError(error.response.data.message);
-          } else if (error.request) {
-            setError("Something went wrong. Please try again later.");
-          } else {
-            setError("Network error. Please check your internet connection.");
-          }
-        } else {
-          setError(error);
-        }
       }
     };
     fetchRecipe();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [id, refresh]);
-  const navigate = useNavigate();
 
-  const backToList = () => {
-    navigate(`/`);
+  const handleError = (error) => {
+    if (axios.isAxiosError(error)) {
+      if (error.response) return setError(error.response.data.message);
+      if (error.request)
+        return setError("Something went wrong. Please try again later.");
+      return setError("Network error. Please check your internet connection.");
+    }
+    setError(error);
   };
 
+  const backToList = () => navigate("/");
+
+  const NutritionGrid = () => (
+    <div className="grid grid-cols-2 gap-y-4 gap-x-11 max-w-xs mb-10 md:mb-[2.5rem] md:w-[330px]">
+      {[
+        { label: "Protein", value: "34g" },
+        { label: "Fat", value: "30g" },
+        { label: "Carbs", value: "104g" },
+        { label: "Serving", value: "3" },
+      ].map((item) => (
+        <div key={item.label} className="flex justify-between">
+          <span className={TEXT_STYLES.label}>{item.label}</span>
+          <span className={TEXT_STYLES.macro}>{item.value}</span>
+        </div>
+      ))}
+    </div>
+  );
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
+
   return (
-    <>
-      {loading ? (
-        <p>Loading...</p>
-      ) : error ? (
-        <p>{error}</p>
-      ) : (
-        <div className="px-[0.688rem] md:px-[1.25rem] pt-[1.25rem]">
-          {/* Recipe Card */}
-
-          <div className="lg:grid lg:grid-cols-12 lg:gap-x-[2.125rem]">
-            <img
-              src={recipe.data.photo || null}
-              alt={recipe.data.title}
-              className="w-full rounded-[10px] mb-[0.625rem] lg:col-span-8"
-            />
-            {/* recipe details */}
-            <div className="bg-recipe-fifth px-[1.25rem] pt-[1.25rem] rounded-[10px] lg:col-span-4">
-              <div className="relative flex justify-between items-center">
-                <div className="pb-[10px]">
-                  <h2 className="text-[32px] text-jakarta font-bold mb-[8px]">
-                    {recipe.data.title}
-                  </h2>
-                  <h2>440+ Reviewer</h2>
-                </div>
-                <FaHeart className="text-red-500 w-[1.25rem] absolute top-[0.5rem] lg:top-[0rem]  right-[0]" />
-              </div>
-              <p className="text-[16px] text-jakarta text-recipe-eighth tracking-[0.02px] mb-[0.875rem] md:pb-[40px]">
-                {recipe.data.description}
-              </p>
-
-              <div>
-                <div className="grid grid-flow-row grid-cols-2 gap-y-[1rem] gap-x-[2.75rem] max-w-xs mb-[2.188rem] md:mb-[2.5rem] md:w-[330px]">
-                  <div className="flex justify-between">
-                    <span className="text-[16px] text-recipe-secondary">
-                      Protein
-                    </span>
-                    <span className="text-[16px] font-semibold text-recipe-eighth">
-                      34g
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-[16px] text-recipe-secondary">
-                      Fat
-                    </span>
-                    <span className="text-[16px] font-semibold text-recipe-eighth">
-                      30g
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-[16px] text-recipe-secondary">
-                      Carbs
-                    </span>
-                    <span className="text-[16px] font-semibold text-recipe-eighth">
-                      104g
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-[16px] text-recipe-secondary">
-                      Serving
-                    </span>
-                    <span className="text-[16px] font-semibold text-recipe-eighth">
-                      3
-                    </span>
-                  </div>
-                </div>
-
-                <div className="pb-[1.25rem] flex justify-between items-center">
-                  <p className="text-[24px] text-jakarta font-bold md:pr-[0.625rem]">
-                    642 Cals
-                  </p>
-                  <button
-                    className="bg-recipe-primary text-white px-[1.469rem] py-[1rem] rounded-[4px]"
-                    onClick={() => setShowMethod(!showMethod)}
-                  >
-                    {showMethod ? "Hide Instructions" : "Instructions"}
-                  </button>
-                </div>
-              </div>
-            </div>
-            {showMethod && (
-              <p className="mt-2 text-sm text-gray-800 bg-gray-100 p-2 rounded">
-                {recipe.data.method}
-              </p>
-            )}
-          </div>
-          <button
-            className="bg-recipe-primary text-white px-4 py-1 rounded-lg my-2"
-            onClick={() => backToList()}
-          >
-            Back to recipe list
-          </button>
-          <RecipeReviews refresh={refresh} />
-          <WriteReview
-            recipe_id={id}
-            setRefresh={setRefresh}
-            isLoggedIn={true}
+    <div className="px-3 md:px-5 pt-5">
+      <div className="lg:flex lg:gap-x-8">
+        {/* Image Section */}
+        <div className="lg:flex-1">
+          <img
+            src={recipe.data.photo || null}
+            alt={recipe.data.title}
+            className="w-full h-full object-cover rounded-lg mb-2.5 lg:mb-0"
           />
         </div>
-      )}
-    </>
+
+        {/* Details Section */}
+        <div className="lg:flex-1 bg-recipe-fifth px-5 pt-5 rounded-lg flex flex-col">
+          <div className="relative flex justify-between items-center pb-2.5">
+            <div>
+              <h2 className={TEXT_STYLES.title}>{recipe.data.title}</h2>
+              {/* temp */}
+              <h2 className={TEXT_STYLES.calories}>440+ Reviewers</h2>
+            </div>
+            <FaHeart className="text-red-500 w-5 absolute top-2 lg:top-0 right-0" />
+          </div>
+          <p className={TEXT_STYLES.description}>{recipe.data.description}</p>
+
+          <div className="flex-1">
+            <NutritionGrid />
+            <div className="pb-5 flex justify-between items-center">
+              <p className={TEXT_STYLES.calories}>642 Cals</p>
+              <button
+                className={`${TEXT_STYLES.button} px-6 py-4 2xl:px-8 2xl:py-6 rounded`}
+                onClick={() => setShowMethod(!showMethod)}
+              >
+                {showMethod ? "Hide Instructions" : "Instructions"}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {showMethod && (
+          <div className="lg:col-span-2 mt-2">
+            <p className={TEXT_STYLES.method}>{recipe.data.method}</p>
+          </div>
+        )}
+      </div>
+
+      <button className={`${TEXT_STYLES.button} my-2`} onClick={backToList}>
+        Back to recipe list
+      </button>
+
+      <RecipeReviews refresh={refresh} />
+      <WriteReview recipe_id={id} setRefresh={setRefresh} isLoggedIn={true} />
+    </div>
   );
 };
 
