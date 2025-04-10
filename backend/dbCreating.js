@@ -45,6 +45,29 @@ const createDBtables = async () => {
       UNIQUE(user_id, date) -- Prevents duplicate entries for same user on same date
     )
   `;
+
+    // Create activity_levels table
+    await sql`
+  CREATE TABLE IF NOT EXISTS activity_levels (
+    id SERIAL PRIMARY KEY,
+    label VARCHAR(255) NOT NULL UNIQUE,
+    description TEXT NOT NULL,
+    multiplier FLOAT NOT NULL UNIQUE
+  )
+  `;
+
+    // Insert default activity levels
+    await sql`
+    INSERT INTO activity_levels (label, description, multiplier)
+    VALUES 
+      ('Sedentary', 'Little or no exercise', 1.2),
+      ('Light', 'Light exercise/sports 1-3 days/week', 1.375),  
+      ('Moderate', 'Moderate exercise/sports 3-5 days/week', 1.55),
+      ('Active', 'Hard exercise/sports 6-7 days a week', 1.725),
+      ('Very Active', 'Very hard exercise/sports & physical job or 2x training per day', 1.9)
+    ON CONFLICT (label) DO NOTHING
+  `;
+
     // Create recipes table
     // The "type" field represents the recipe category, such as "Vegetarian" or "Vegan".
     // If no category it remains NULL.
@@ -133,7 +156,7 @@ const createDBtables = async () => {
         )
         `;
 
-         // Consumed table
+    // Consumed table
     await sql`
     CREATE TABLE consumed (
       id SERIAL PRIMARY KEY,
@@ -141,7 +164,7 @@ const createDBtables = async () => {
       recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE,
       datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
     )
-    `;   
+    `;
   } catch (err) {
     console.error("Failed to create tables:", err);
   }
