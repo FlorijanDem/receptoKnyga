@@ -19,6 +19,8 @@ exports.checkUpdateCharacteristicsBody = [
     .isInt({ min: 5, max: 120 })
     .withMessage("Age must be a number between 5 and 120"),
 
+  body("date_of_birth").optional().trim(),
+
   body("gender")
     .optional()
     .trim()
