@@ -5,6 +5,7 @@ const {
   updateRecipe,
   deleteRecipe,
   searchRecipes,
+  getAllMacros,
 } = require("../models/recipeModel");
 const { getUserByid } = require("../models/userModel");
 
@@ -53,10 +54,20 @@ exports.getAllRecipesHandler = async (req, res, next) => {
       });
     }
 
+    const result = await Promise.all(
+      recipes.map(async (recipe) => {
+        const calories = await getAllMacros(recipe.id);
+        return {
+          ...recipe,
+          calories: calories[0]?.calories|| 0,
+        };
+      })
+    );
+
     res.status(200).json({
       status: "success",
       results: total,
-      data: recipes,
+      data: result,
     });
   } catch (error) {
     next(error);
@@ -65,11 +76,21 @@ exports.getAllRecipesHandler = async (req, res, next) => {
 
 exports.getRecipeByIdHandler = async (req, res, next) => {
   try {
-    const recipe = await getRecipeById(req.params.id);
+    const { id } = req.params;
+    const recipe = await getRecipeById(id);
+    const macros = await getAllMacros(id);  
+
+    const result = {
+      ...recipe,
+      calories: macros[0]?.calories || 0,
+      fats: macros[0]?.fats || 0,
+      carbohydrates: macros[0]?.carbohydrates || 0,
+      proteins: macros[0]?.proteins || 0,
+    };
 
     res.status(200).json({
       status: "success",
-      data: recipe,
+      data: result,
     });
   } catch (error) {
     next(error);

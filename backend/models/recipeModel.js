@@ -47,7 +47,7 @@ exports.searchRecipes = async (filters) => {
         product
           ? sql`
         AND EXISTS (
-          SELECT 1 
+          SELECT 1
           FROM recipes_products rp
           INNER JOIN products p ON rp.product_id = p.id
           WHERE rp.recipe_id = r.id
@@ -173,6 +173,7 @@ exports.getRecipeById = async (id) => {
           JOIN recipes_products
           ON products.id = recipes_products.product_id
           WHERE products.id = ${product_id}
+          AND recipes_products.recipe_id = ${recipe.id}
           `;
 
         return product;
@@ -282,4 +283,22 @@ exports.deleteRecipe = async (id) => {
     WHERE id = ${id}
     `;
   });
+};
+
+exports.getAllMacros = async (id) => {
+  //macros recipe calculator
+
+  const macros = await sql`
+   SELECT 
+   ROUND(COALESCE(SUM((recipes_products.amount::NUMERIC / 100) * products.calories), 0)::NUMERIC, 0) AS calories,
+   ROUND(COALESCE(SUM((recipes_products.amount::NUMERIC / 100) * products.fats), 0)::NUMERIC, 1) AS fats,
+   ROUND(COALESCE(SUM((recipes_products.amount::NUMERIC / 100) * products.carbohydrates), 0)::NUMERIC, 1) AS carbohydrates,
+   ROUND(COALESCE(SUM((recipes_products.amount::NUMERIC / 100) * products.protein), 0)::NUMERIC, 1) AS proteins
+   FROM recipes
+   JOIN recipes_products ON recipes_products.recipe_id = recipes.id
+   JOIN products ON products.id = recipes_products.product_id
+   WHERE recipes.id = ${id};
+   `;
+
+  return macros;
 };
