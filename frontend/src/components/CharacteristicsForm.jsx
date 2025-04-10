@@ -6,7 +6,9 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { differenceInYears } from "date-fns";
 import { ACTIVITY_LEVELS, calculateAllMetrics } from "../utils/calculator";
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 const CharacteristicsForm = () => {
@@ -86,6 +88,7 @@ const CharacteristicsForm = () => {
           height: parseInt(data.height),
           weight: parseFloat(data.weight),
           age: parseInt(data.age),
+          date_of_birth: data.date_of_birth,
           gender: data.gender,
           // activityLevel: data.activityLevel kai bus db
         },
@@ -144,17 +147,39 @@ const CharacteristicsForm = () => {
           />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Age</label>
-          <input
-            type="number"
-            name="age"
-            value={data.age}
-            onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            min="0"
-            max="150"
-          />
+        <div className="flex justify-between">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Date of Birth
+            </label>
+            <input
+              type="date"
+              name="date_of_birth"
+              value={data.date_of_birth?.split("T")[0] || ""}
+              onChange={handleChange}
+              className="mt-1 block  rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              max={new Date().toISOString().split("T")[0]}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Age
+            </label>
+            <input
+              type="number"
+              name="age"
+              value={
+                differenceInYears(new Date(), new Date(data.date_of_birth)) ||
+                ""
+              }
+              onChange={handleChange}
+              className="mt-1 block  rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              min="0"
+              max="150"
+              disabled
+            />
+          </div>
         </div>
 
         <div>
