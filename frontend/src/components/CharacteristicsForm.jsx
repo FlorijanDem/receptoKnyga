@@ -164,6 +164,11 @@ const CharacteristicsForm = () => {
               value={data.date_of_birth?.split("T")[0] || ""}
               onChange={handleChange}
               className="mt-1 block  rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              min={
+                new Date(new Date().setFullYear(new Date().getFullYear() - 120))
+                  .toISOString()
+                  .split("T")[0]
+              }
               max={new Date().toISOString().split("T")[0]}
             />
           </div>
