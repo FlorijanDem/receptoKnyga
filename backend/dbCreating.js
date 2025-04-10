@@ -131,6 +131,16 @@ const createDBtables = async () => {
         UNIQUE (recipe_id, user_id)
         )
         `;
+
+         // Consumed table
+    await sql`
+    CREATE TABLE consumed (
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+      recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE,
+      datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )
+    `;   
   } catch (err) {
     console.error("Failed to create tables:", err);
   }
