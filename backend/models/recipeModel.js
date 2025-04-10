@@ -83,6 +83,8 @@ ORDER BY ${
       order === 'title' ? sql`title ASC` :
       sql`similarity_score DESC`
     }
+    LIMIT ${limit}
+    OFFSET ${offset}
 `;
 
   const countQuery = sql`
