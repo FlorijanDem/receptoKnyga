@@ -12,9 +12,6 @@ exports.searchRecipes = async (filters) => {
     offset = 0,
   } = filters;
 
-  console.log('Received order:', order);
-  console.log('Search filters:', { q, type, product, order });
-
   const searchQuery = sql`
     WITH recipe_scores AS (
       SELECT 
