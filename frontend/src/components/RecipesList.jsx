@@ -23,11 +23,11 @@ const RecipesList = ({ filter, setFilter }) => {
       const params = new URLSearchParams();
       params.append('page', filter.page);
       params.append('limit', filter.limit);
-      
       if (query) params.append('q', query);
       if (filters.type) params.append('type', filters.type);
       if (filters.product) params.append('product', filters.product);
-      
+      if (filters.order) params.append('order', filters.order);
+
       const { data: response } = await axios.get(
         `${API_URL}/recipes?${params.toString()}`,
         {
@@ -64,6 +64,12 @@ const RecipesList = ({ filter, setFilter }) => {
       page: 1
     }));
   }, [filters, setFilter]);
+
+  useEffect(() => {
+    if (filters.order) {
+      setFilter(prev => ({ ...prev, page: 1 }));
+    }
+  }, [filters.order, setFilter]);
 
   useEffect(() => {
     fetchRecipes(currentQuery);

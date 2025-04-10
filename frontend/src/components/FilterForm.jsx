@@ -37,28 +37,8 @@ const FilterForm = ({ isOpen, onClose }) => {
 
   const applyFilters = (newFilters) => {
     setFilters(newFilters);
-    
-    // Construct new query with filters
-    let queryParams = new URLSearchParams();
-    
-    if (currentQuery) {
-      queryParams.append('q', currentQuery);
-    }
-    
-    if (newFilters.type) {
-      queryParams.append('type', newFilters.type);
-    }
-    
-    if (newFilters.product) {
-      queryParams.append('product', newFilters.product);
-    }
-    
-    if (newFilters.order) {
-      queryParams.append('order', newFilters.order);
-    }
-    // Update currentQuery to trigger useEffect in RecipesList component
-    setCurrentQuery(currentQuery);
-  };
+  setCurrentQuery(currentQuery); // Simple refresh trigger
+};
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -70,7 +50,7 @@ const FilterForm = ({ isOpen, onClose }) => {
     setLocalFilters(newLocalFilters);
     
     // If type is changed, apply filters immediately
-    if (name === 'type') {
+    if (name === 'type' || name === 'order') {
       applyFilters(newLocalFilters);
     }
     
@@ -171,7 +151,6 @@ const FilterForm = ({ isOpen, onClose }) => {
               <option value="">Sort By</option>
               <option value="new">Newest</option>
               <option value="old">Oldest</option>
-              <option value="rating">Rating</option>
               <option value="title">Title</option>
             </select>
           </div>
