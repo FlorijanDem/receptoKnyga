@@ -8,7 +8,7 @@ const {
 
 exports.getAllRecipesHandler = async (req, res, next) => {
   try {
-    const { q, type, product, page = "1", limit = "12" } = req.query;
+    const { q, type, product, page = "1", limit = "12", order } = req.query;
     // Užtikriname, kad offset bus 0 jei page/limit yra nevalidūs
     const pageNum = Math.max(1, parseInt(page) || 1);
     const limitNum = Math.min(50, Math.max(1, parseInt(limit) || 12));
@@ -20,8 +20,7 @@ exports.getAllRecipesHandler = async (req, res, next) => {
       product: product?.trim(),
       limit: limitNum,
       offset: offset,
-      sortBy: q ? "similarity_score" : "title",
-      order: q ? "DESC" : "ASC",
+      order: order?.toLowerCase(),
     });
 
     if (!recipes || recipes.length === 0) {
