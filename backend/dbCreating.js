@@ -30,11 +30,12 @@ const createDBtables = async () => {
             height FLOAT,
             weight FLOAT,
             age INTEGER,
+            date_of_birth DATE,
             gender VARCHAR(25)
         )
     `;
 
-    // Create characteristics_history_height table
+    // Create characteristics_history_weight table
     await sql`
     CREATE TABLE IF NOT EXISTS characteristics_history_weight (
       id SERIAL PRIMARY KEY,
