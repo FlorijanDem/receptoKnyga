@@ -11,11 +11,11 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 const RecipePage = () => {
   const [recipe, setRecipe] = useState(null);
+  const [refresh, setRefresh] = useState(false);
   const [error, setError] = useState(null);
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [showMethod, setShowMethod] = useState(false);
-  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -49,6 +49,7 @@ const RecipePage = () => {
   const backToList = () => {
     navigate(`/`);
   };
+  
   return (
     <>
       {loading ? (
@@ -75,12 +76,12 @@ const RecipePage = () => {
               Preparation time: {recipe.data.preparation_time} m.
             </p>
             <div className="flex justify-between text-sm mt-2">
-              <span>Protein: 34g</span>
-              <span>Fat: 30g</span>
-              <span>Carbs: 104g</span>
+              <span>Fats: {recipe.data.fats} g</span>
+              <span>Carbs: {recipe.data.carbohydrates} g</span>
+              <span>Proteins: {recipe.data.proteins} g</span>
             </div>
             <div className="mt-2 flex justify-between">
-              <p className="text-xl font-bold">642 Cals</p>
+              <p className="text-xl font-bold">{recipe.data.calories} Cals</p>
               <button
                 className="bg-blue-500 text-white px-4 py-1 rounded-lg"
                 onClick={() => setShowMethod(!showMethod)}
@@ -93,6 +94,11 @@ const RecipePage = () => {
                 {recipe.data.method}
               </p>
             )}
+            <RecipePageControls
+              recipe={recipe.data}
+              setRecipe={setRecipe}
+              setRefresh={setRefresh}
+            />
           </div>
           <button
             className="bg-blue-500 text-white px-4 py-1 rounded-lg my-2"
@@ -100,8 +106,12 @@ const RecipePage = () => {
           >
             Back to recipe list
           </button>
-          <RecipeReviews refresh={refresh}/>
-          <WriteReview recipe_id={id} setRefresh={setRefresh} isLoggedIn={true} />
+          <RecipeReviews refresh={refresh} />
+          <WriteReview
+            recipe_id={id}
+            setRefresh={setRefresh}
+            isLoggedIn={true}
+          />
         </div>
       )}
     </>

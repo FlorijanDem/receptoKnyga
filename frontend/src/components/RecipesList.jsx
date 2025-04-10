@@ -2,13 +2,17 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useErrorBoundary } from "react-error-boundary";
 import RecipePreviewCard from "./RecipePreviewCard";
-import RecipesListPagination from "./RecipesListPagination";
+import ListPagination from "./ListPagination";
 import SearchContext from "../contexts/SearchContext";
+import { AdminFilterContext } from "../contexts/AdminFilterContext";
+import UserContext from "../contexts/UserContext";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 const RecipesList = ({ filter, setFilter }) => {
   const { currentQuery, filters } = useContext(SearchContext);
+  const { adminFilters } = useContext(AdminFilterContext);
+  const { user } = useContext(UserContext);
   const [recipes, setRecipes] = useState([]);
   const [recipeCount, setRecipeCount] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -18,7 +22,7 @@ const RecipesList = ({ filter, setFilter }) => {
   const fetchRecipes = async (query = "") => {
     try {
       setLoading(true);
-      
+
       // Sukuriame URL parametrus iš filtro objekto ir konteksto filtrų
       const params = new URLSearchParams();
       params.append('page', filter.page);
@@ -27,6 +31,11 @@ const RecipesList = ({ filter, setFilter }) => {
       if (filters.type) params.append('type', filters.type);
       if (filters.product) params.append('product', filters.product);
       if (filters.order) params.append('order', filters.order);
+      if (adminFilters?.value !== "all" && user?.role === "admin") {
+        params.append(adminFilters.name, adminFilters.value);
+      } else if (user?.role !== "admin") {
+        params.append("approved", "true");
+      }
 
       const { data: response } = await axios.get(
         `${API_URL}/recipes?${params.toString()}`,
@@ -53,17 +62,18 @@ const RecipesList = ({ filter, setFilter }) => {
       } else {
         showBoundary(error);
       }
+      console.log(error);
     }
   };
 
   // Reaguojame į filtrų pasikeitimus
   useEffect(() => {
     // Kai pasikeičia filtrai, grįžtame į pirmą puslapį
-    setFilter(prev => ({
+    setFilter((prev) => ({
       ...prev,
-      page: 1
+      page: 1,
     }));
-  }, [filters, setFilter]);
+  }, [filters, setFilter, adminFilters]);
 
   useEffect(() => {
     if (filters.order) {
@@ -84,10 +94,10 @@ const RecipesList = ({ filter, setFilter }) => {
       ) : (
         <section className="recipes-list-container">
           <h1>Recipes List</h1>
-          <RecipesListPagination
+          <ListPagination
             filter={filter}
             setFilter={setFilter}
-            recipeCount={recipeCount}
+            count={recipeCount}
           />
           <div className="recipes-list">
             {recipes?.length === 0 && <p>No recipes found</p>}
@@ -95,10 +105,10 @@ const RecipesList = ({ filter, setFilter }) => {
               <RecipePreviewCard key={recipe.id} recipe={recipe} />
             ))}
           </div>
-          <RecipesListPagination
+          <ListPagination
             filter={filter}
             setFilter={setFilter}
-            recipeCount={recipeCount}
+            count={recipeCount}
           />
         </section>
       )}

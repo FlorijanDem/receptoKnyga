@@ -4,11 +4,13 @@ const {
   getUserByEmail,
   getUserByid,
   updateUser,
+  getAllUsers,
+  countUsers,
 } = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const argon2 = require("argon2");
 const { sql } = require("../dbConnection");
-const sendEmail = require('../utils/sendEmail');
+const sendEmail = require("../utils/sendEmail");
 
 const signToken = (id) => {
   const token = jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -39,7 +41,7 @@ exports.registerUser = async (req, res, next) => {
     const token = signToken(user.id);
     sendCookie(token, res);
 
-  //  user.id = undefined;
+    // user.id = undefined;
     user.password = undefined;
 
     res.status(201).json({
@@ -79,7 +81,7 @@ exports.loginUser = async (req, res, next) => {
     const token = signToken(user.id);
     sendCookie(token, res);
 
-  //  user.id = undefined;
+    // user.id = undefined;
     user.password = undefined;
 
     res.status(200).json({
@@ -116,8 +118,19 @@ exports.protect = async (req, res, next) => {
     req.user = user;
     next();
   } catch (err) {
-    next(new AppError(err.message, 401));
+    next(new AppError(err.message, 500));
   }
+};
+
+exports.allowAccessTo = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new AppError("You are not allowed to access this route", 403)
+      );
+    }
+    next();
+  };
 };
 
 exports.getMe = async (req, res, next) => {
@@ -149,9 +162,27 @@ exports.updateUser = async (req, res, next) => {
     const data = req.body;
     const id = req.params.id;
     const user = await updateUser(data, id);
+
+    user.password = undefined;
+
     res.status(200).json({ status: "success", data: user });
   } catch (err) {
-    next(new AppError(err.message, 401));
+    next(new AppError(err.message, 500));
+  }
+};
+
+exports.getAllUsers = async (req, res, next) => {
+  try {
+    const users = await getAllUsers(req.query);
+    const count = await countUsers(req.query);
+
+    users.forEach((user) => {
+      user.password = undefined;
+    });
+
+    res.status(200).json({ status: "success", count, data: users });
+  } catch (err) {
+    next(new AppError(err.message, 500));
   }
 };
 
@@ -161,11 +192,14 @@ exports.updatePassword = async (req, res, next) => {
   try {
     const user = await getUserByid(req.user.id);
 
-    const isPasswordCorrect = await argon2.verify(user.password, currentPassword);
+    const isPasswordCorrect = await argon2.verify(
+      user.password,
+      currentPassword
+    );
     if (!isPasswordCorrect) {
       return res.status(401).json({
-        status: 'fail',
-        message: 'Current password is incorrect'
+        status: "fail",
+        message: "Current password is incorrect",
       });
     }
 
@@ -178,8 +212,8 @@ exports.updatePassword = async (req, res, next) => {
     `;
 
     res.status(200).json({
-      status: 'success',
-      message: 'Password updated successfully'
+      status: "success",
+      message: "Password updated successfully",
     });
   } catch (err) {
     next(new AppError(err.message, 500));
@@ -192,25 +226,28 @@ exports.forgotPassword = async (req, res, next) => {
     const user = await getUserByEmail(email);
     if (!user) {
       return res.status(200).json({
-        message: "If an account exists with this email, a reset link has been sent."
+        message:
+          "If an account exists with this email, a reset link has been sent.",
       });
     }
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
     const resetLink = `${process.env.FRONTEND_URL}/reset-password/${token}`;
 
     await sendEmail({
       to: email,
-      subject: 'Password Reset',
+      subject: "Password Reset",
       text: `Click this link to reset your password: ${resetLink}`,
     });
-    res.status(200).json({ message: 'Reset link sent to your email' });
+    res.status(200).json({ message: "Reset link sent to your email" });
   } catch (err) {
-    next(new AppError(err.message, 500))
+    next(new AppError(err.message, 500));
   }
 };
 
 exports.resetPassword = async (req, res, next) => {
-  const { token } = req.params; 
+  const { token } = req.params;
   const { newPassword } = req.body;
 
   try {
@@ -225,7 +262,7 @@ exports.resetPassword = async (req, res, next) => {
             WHERE id = ${userId}
         `;
 
-    res.status(200).json({ message: 'Password updated successfully' });
+    res.status(200).json({ message: "Password updated successfully" });
   } catch (err) {
     next(new AppError(err.message, 500));
   }

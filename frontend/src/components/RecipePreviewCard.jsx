@@ -21,7 +21,7 @@ const RecipePreviewCard = ({ recipe }) => {
         />
       </div>
       <div className="recipe-preview-card__info">
-        <span>{recipe?.calories || 400} Cal</span>
+        <span>{recipe?.calories} Cal</span>
         <span>
           <LuClock4 /> {recipe?.preparation_time} Min
         </span>

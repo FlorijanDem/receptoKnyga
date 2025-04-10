@@ -34,6 +34,16 @@ const createDBtables = async () => {
         )
     `;
 
+    // Create characteristics_history_height table
+    await sql`
+    CREATE TABLE IF NOT EXISTS characteristics_history_weight (
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+      weight FLOAT NOT NULL,
+      date DATE NOT NULL DEFAULT CURRENT_DATE,
+      UNIQUE(user_id, date) -- Prevents duplicate entries for same user on same date
+    )
+  `;
     // Create recipes table
     // The "type" field represents the recipe category, such as "Vegetarian" or "Vegan".
     // If no category it remains NULL.
@@ -116,9 +126,21 @@ const createDBtables = async () => {
         user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
         rating INTEGER NOT NULL,
         review_text TEXT NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        approved BOOLEAN DEFAULT FALSE,
+        UNIQUE (recipe_id, user_id)
         )
         `;
+
+         // Consumed table
+    await sql`
+    CREATE TABLE IF NOT EXISTS consumed (
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+      recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE,
+      datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )
+    `;   
   } catch (err) {
     console.error("Failed to create tables:", err);
   }

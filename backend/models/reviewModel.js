@@ -37,17 +37,27 @@ exports.addReview = async (data) => {
 };
 
 exports.updateReview = async (user_id, data, review_id) => {
-  const rating = Number(data.rating);
+  // console.log(data);
+  data.approved =
+    data.approved === "true"
+      ? true
+      : data.approved === "false"
+        ? false
+        : data.approved;
+
+  // const rating = Number(data.rating);
   const [review] = await sql`
     UPDATE reviews
-    SET rating = ${rating}, 
-    review_text = ${data.review_text}, 
-    created_at = NOW()
+    SET 
+    ${sql(data, "rating", "review_text", "approved")}
+
+    ${Object.keys(data).includes("approved") ? sql`` : sql`created_at = now()`}
     WHERE id = ${review_id} 
-    AND user_id = ${user_id}
+    
     RETURNING *, 
     (SELECT username FROM users WHERE users.id = reviews.user_id) AS username;
   `;
+  // AND user_id = ${user_id}
 
   return review;
 };
@@ -60,4 +70,37 @@ exports.deleteReview = async (id, user_id = null) => {
     RETURNING *
     `;
   return deletedReview;
+};
+
+exports.getAllReviews = async (query) => {
+  const reviews = await sql`
+  SELECT reviews.id, 
+        reviews.recipe_id, 
+        reviews.user_id, 
+        reviews.rating, 
+        reviews.review_text, 
+        reviews.created_at,
+        reviews.approved,
+        users.username,
+        users.banned AS user_banned
+        FROM reviews
+        LEFT JOIN users
+        ON users.id = reviews.user_id
+        WHERE 1=1
+        ${query.approved === "true" ? sql`AND approved` : query.approved === "false" ? sql`AND NOT approved` : sql``}
+        ORDER BY created_at DESC
+        LIMIT ${query.limit}
+        OFFSET ${(query.page - 1) * query.limit}
+        `;
+  return reviews;
+};
+
+exports.countReviews = async (query) => {
+  const [{ count }] = await sql`
+  SELECT COUNT(reviews.id)
+  FROM reviews
+  WHERE 1=1
+  ${query.approved === "true" ? sql`AND approved` : query.approved === "false" ? sql`AND NOT approved` : sql``}
+  `;
+  return count;
 };
