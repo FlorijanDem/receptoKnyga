@@ -175,10 +175,10 @@ const CharacteristicsForm = () => {
             <input
               type="number"
               name="age"
-              value={differenceInYears(
-                new Date(),
-                new Date(data.date_of_birth)
-              )}
+              value={
+                differenceInYears(new Date(), new Date(data.date_of_birth)) ||
+                ""
+              }
               onChange={handleChange}
               className="mt-1 block  rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               min="0"
