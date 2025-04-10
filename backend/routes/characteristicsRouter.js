@@ -1,21 +1,24 @@
 const express = require("express");
 const characteristicsRouter = express.Router();
-//import controller
 const {
   updateCharacteristic,
   getUserCharacteristicsMy,
 } = require("../controllers/characteristicsController");
-//import body validator
+const {
+  getWeightHistory,
+  addWeight,
+  updateWeight,
+} = require("../controllers/characteristicsHistoryController");
 const {
   checkUpdateCharacteristicsBody,
 } = require("../validators/checkCharacteristicsBody");
-//import user protect controller
+const {
+  checkAddWeightBody,
+  checkUpdateWeightBody,
+} = require("../validators/checkCharacteristicsHistoryBody");
 const { protect } = require("../controllers/userController");
-// validator
 const validate = require("../validators/validate");
 
-
-//Get user characteristics by route /
 characteristicsRouter
   .route("/")
   .get(protect, getUserCharacteristicsMy)
@@ -24,6 +27,12 @@ characteristicsRouter
     checkUpdateCharacteristicsBody,
     validate,
     updateCharacteristic
-  )
+  );
+
+characteristicsRouter
+  .route("/history")
+  .get(protect, getWeightHistory)
+  .post(protect, checkAddWeightBody, validate, addWeight)
+  .patch(protect, checkUpdateWeightBody, validate, updateWeight);
 
 module.exports = characteristicsRouter;
