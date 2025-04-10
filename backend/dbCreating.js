@@ -134,7 +134,7 @@ const createDBtables = async () => {
 
          // Consumed table
     await sql`
-    CREATE TABLE consumed (
+    CREATE TABLE IF NOT EXISTS consumed (
       id SERIAL PRIMARY KEY,
       user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
       recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE,
