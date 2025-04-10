@@ -60,9 +60,9 @@ exports.checkRecipeQuery = [
   query("order")
     .optional()
     .trim()
-    .toUpperCase()
-    .isIn(["ASC", "DESC"])
-    .withMessage("Order must be either ASC or DESC"),
+    .toLowerCase()
+    .isIn(["asc", "desc", "new", "old", "title"])
+    .withMessage("Order must be either new, old, or title"),
 
   // Užtikriname, kad nėra papildomų nenumatytų parametrų
   checkExact([], {
