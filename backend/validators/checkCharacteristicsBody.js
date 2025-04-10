@@ -29,6 +29,12 @@ exports.checkUpdateCharacteristicsBody = [
     .isLength({ max: 25 })
     .withMessage("Gender must have a maximum length of 25 characters"),
 
+  body("activity_level_id")
+    .optional()
+    .trim()
+    .isInt({ min: 1 })
+    .withMessage("Activity level ID must be a positive integer"),
+
   checkExact([], {
     message: (fields) =>
       fields.map((field) => `Invalid field: ${field.path}`).join("; "),

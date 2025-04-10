@@ -19,9 +19,9 @@ const CharacteristicsForm = () => {
     age: "",
     date_of_birth: "",
     gender: "",
-    activityLevel: "SEDENTARY",
+    activity_level_id: "",
   });
-
+  const [activityLevels, setActivityLevels] = useState([]);
   const [results, setResults] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -36,12 +36,16 @@ const CharacteristicsForm = () => {
   useEffect(() => {
     if (data.height && data.weight && data.age && data.gender) {
       try {
+        console.log(activityLevels);
+        console.log(data.activity_level_id);
+
         const metrics = calculateAllMetrics(
           parseFloat(data.weight),
           parseFloat(data.height),
           parseInt(data.age),
           data.gender,
-          ACTIVITY_LEVELS[data.activityLevel].multiplier
+          activityLevels.find((level) => level.id === +data.activity_level_id)
+            .multiplier || 1
         );
         setResults(metrics);
       } catch (error) {
@@ -52,12 +56,26 @@ const CharacteristicsForm = () => {
   }, [data]);
 
   useEffect(() => {
+    const fetchActivityLevels = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/activity`, {
+          withCredentials: true,
+        });
+        setActivityLevels(response.data.data);
+      } catch (err) {
+        setError(
+          err.response?.data?.message || "Failed to fetch activity levels"
+        );
+      }
+    };
     const fetchCharacteristics = async () => {
       try {
         const response = await axios.get(`${API_URL}/characteristics`, {
           withCredentials: true,
         });
         const { user_id: _, ...filteredData } = response.data.data;
+        console.log(filteredData);
+
         setData({
           ...filteredData,
           age: differenceInYears(
@@ -65,7 +83,7 @@ const CharacteristicsForm = () => {
             new Date(filteredData.date_of_birth)
           ),
           weight: filteredData.weightHistory.at(0).weight,
-          activityLevel: "SEDENTARY", // Initialize with default activity level
+          // activityLevel: filteredData.activity_level_id, // Initialize with default activity level
         });
       } catch (err) {
         setError(
@@ -74,6 +92,7 @@ const CharacteristicsForm = () => {
       }
     };
 
+    fetchActivityLevels();
     fetchCharacteristics();
   }, []);
 
@@ -96,7 +115,7 @@ const CharacteristicsForm = () => {
           weight: parseFloat(data.weight),
           date_of_birth: data.date_of_birth,
           gender: data.gender,
-          // activityLevel: data.activityLevel kai bus db
+          activity_level_id: parseInt(data.activity_level_id),
         },
         {
           withCredentials: true,
@@ -213,14 +232,19 @@ const CharacteristicsForm = () => {
             Activity Level
           </label>
           <select
-            name="activityLevel"
-            value={data.activityLevel}
+            name="activity_level_id"
+            value={data.activity_level_id || ""}
             onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           >
-            {Object.entries(ACTIVITY_LEVELS).map(([key, level]) => (
+            {/* {Object.entries(ACTIVITY_LEVELS).map(([key, level]) => (
               <option key={key} value={key}>
                 {level.label}
+              </option>
+            ))} */}
+            {activityLevels.map((level) => (
+              <option key={level.id} value={level.id}>
+                {level.label} ({level.description})
               </option>
             ))}
           </select>

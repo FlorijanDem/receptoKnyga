@@ -31,7 +31,8 @@ const createDBtables = async () => {
             weight FLOAT,
             age INTEGER,
             date_of_birth DATE,
-            gender VARCHAR(25)
+            gender VARCHAR(25),
+            activity_level_id INTEGER REFERENCES activity_levels(id),
         )
     `;
 
@@ -51,7 +52,7 @@ const createDBtables = async () => {
   CREATE TABLE IF NOT EXISTS activity_levels (
     id SERIAL PRIMARY KEY,
     label VARCHAR(255) NOT NULL UNIQUE,
-    description TEXT NOT NULL,
+    description TEXT NOT NULL UNIQUE,
     multiplier FLOAT NOT NULL UNIQUE
   )
   `;
