@@ -17,9 +17,11 @@ const CharacteristicsForm = () => {
     height: "",
     weight: "",
     age: "",
+    date_of_birth: "",
     gender: "",
     activityLevel: "SEDENTARY",
   });
+
   const [results, setResults] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -58,6 +60,11 @@ const CharacteristicsForm = () => {
         const { user_id: _, ...filteredData } = response.data.data;
         setData({
           ...filteredData,
+          age: differenceInYears(
+            new Date(),
+            new Date(filteredData.date_of_birth)
+          ),
+          weight: filteredData.weightHistory.at(0).weight,
           activityLevel: "SEDENTARY", // Initialize with default activity level
         });
       } catch (err) {
@@ -73,7 +80,7 @@ const CharacteristicsForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!data.height || !data.weight || !data.age || !data.gender) {
+    if (!data.height || !data.weight || !data.date_of_birth || !data.gender) {
       setError("Please fill in all required fields");
       return;
     }
@@ -87,7 +94,6 @@ const CharacteristicsForm = () => {
         {
           height: parseInt(data.height),
           weight: parseFloat(data.weight),
-          age: parseInt(data.age),
           date_of_birth: data.date_of_birth,
           gender: data.gender,
           // activityLevel: data.activityLevel kai bus db
@@ -169,10 +175,10 @@ const CharacteristicsForm = () => {
             <input
               type="number"
               name="age"
-              value={
-                differenceInYears(new Date(), new Date(data.date_of_birth)) ||
-                ""
-              }
+              value={differenceInYears(
+                new Date(),
+                new Date(data.date_of_birth)
+              )}
               onChange={handleChange}
               className="mt-1 block  rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               min="0"
