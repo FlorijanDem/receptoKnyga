@@ -15,7 +15,6 @@ exports.searchRecipes = async (filters) => {
   console.log('Received order:', order);
   console.log('Search filters:', { q, type, product, order });
 
-  
   const searchQuery = sql`
     WITH recipe_scores AS (
       SELECT 
@@ -76,13 +75,13 @@ exports.searchRecipes = async (filters) => {
       : sql``
     }
     )
-    SELECT * FROM recipe_scores
-ORDER BY ${
-      order === 'new' ? sql`id DESC` :
-      order === 'old' ? sql`id ASC` :
-      order === 'title' ? sql`title ASC` :
-      sql`similarity_score DESC`
-    }
+    SELECT * FROM recipe_scores r
+    ${order === 'new' ? sql`ORDER BY r.id DESC` : 
+      order === 'old' ? sql`ORDER BY r.id ASC` : 
+      order === 'title' ? sql`ORDER BY r.title ASC` : 
+      order === 'asc' ? sql`ORDER BY r.id ASC` :
+      order === 'desc' ? sql`ORDER BY r.id DESC` :
+      sql`ORDER BY r.similarity_score DESC`}
     LIMIT ${limit}
     OFFSET ${offset}
 `;
