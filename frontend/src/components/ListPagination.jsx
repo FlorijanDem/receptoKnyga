@@ -14,10 +14,10 @@ const ListPagination = ({ filter, setFilter, count }) => {
   };
 
   useEffect(() => {
-    if (filter.page > Math.ceil(count / filter.limit)) {
+    if (filter.page > Math.floor(count / filter.limit) + 1) {
       setFilter((prev) => ({
         ...prev,
-        page: Math.ceil(count / filter.limit) || 1,
+        page: Math.floor(count / filter.limit) + 1,
       }));
     }
   }, [count]);
@@ -26,7 +26,7 @@ const ListPagination = ({ filter, setFilter, count }) => {
     <div className="pagination">
       <button onClick={prevPage}>{"<<"}</button>
       <p>
-        Page {filter.page} of {Math.ceil(count / filter.limit)}
+        Page {filter.page} of {Math.floor(count / filter.limit) + 1}
       </p>
       <button onClick={nextPage}>{">>"}</button>
     </div>
