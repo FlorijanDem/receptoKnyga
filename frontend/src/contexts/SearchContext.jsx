@@ -12,14 +12,14 @@ export const SearchProvider = ({ children }) => {
   });
 
   return (
-    <SearchContext.Provider 
-      value={{ 
-        currentQuery, 
+    <SearchContext.Provider
+      value={{
+        currentQuery,
         setCurrentQuery,
         draftQuery,
         setDraftQuery,
         filters,
-        setFilters
+        setFilters,
       }}
     >
       {children}

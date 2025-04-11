@@ -45,6 +45,7 @@ const RecipesList = ({ filter, setFilter }) => {
       );
 
       setRecipes(response.data);
+
       setRecipeCount(response.results);
       setError(null);
       setLoading(false);
@@ -83,7 +84,7 @@ const RecipesList = ({ filter, setFilter }) => {
 
   useEffect(() => {
     fetchRecipes(currentQuery);
-  }, [filter, currentQuery, filters]);
+  }, [currentQuery, filters, filter]);
 
   return (
     <>

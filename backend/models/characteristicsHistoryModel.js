@@ -14,7 +14,7 @@ exports.getWeightHistoryByUserId = async (id) => {
 exports.addWeightEntry = async (userId, weight, date) => {
   const [entry] = await sql`
     INSERT INTO characteristics_history_weight (user_id, weight, date)
-    VALUES (${userId}, ${weight}, ${date ?? "NOW()"})
+    VALUES (${userId}, ${weight}, ${date ?? sql`NOW()`})
     ON CONFLICT (user_id, date) 
     DO UPDATE SET weight = EXCLUDED.weight
     RETURNING *
