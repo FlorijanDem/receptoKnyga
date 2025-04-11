@@ -32,7 +32,7 @@ const createDBtables = async () => {
             age INTEGER,
             date_of_birth DATE,
             gender VARCHAR(25),
-            activity_level_id INTEGER REFERENCES activity_levels(id),
+            activity_level_id INTEGER REFERENCES activity_levels(id)
         )
     `;
 
