@@ -53,7 +53,8 @@ const RecipeReviews = ({ refresh }) => {
   }, [id, refresh]);
 
   const isZalgo = (value) => {
-    const zalgoRegex = /[\u0300-\u036F\u1AB0-\u1AFF\u1DC0-\u1DFF\uFE20-\uFE2F]/;
+    const zalgoRegex =
+      /[\u0300-\u0320\u0321-\u0330\u0331-\u0340\u0341-\u0350\u0351-\u036F\u1AB0\u1AC0\u1DC0\uFE20]/u;
     return !zalgoRegex.test(value) || "Special characters are not allowed!";
   };
 
