@@ -254,6 +254,18 @@ exports.resetPassword = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.id;
 
+    const user = await getUserByid(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const isPreviousPassword = await argon2.verify(user.password, newPassword);
+    if (isPreviousPassword) {
+      return res.status(400).json({ 
+        message: "New password cannot be the same as your current password" 
+      });
+    }
+
     const hashedPassword = await argon2.hash(newPassword);
 
     await sql`
