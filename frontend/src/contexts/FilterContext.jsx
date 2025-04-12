@@ -6,6 +6,7 @@ export const FilterProvider = ({ children }) => {
   const [filters, setFilters] = useState({
     type: "",
     product: "",
+    order: "",
   });
 
   return (

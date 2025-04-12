@@ -25,12 +25,12 @@ const RecipesList = ({ filter, setFilter }) => {
 
       // Sukuriame URL parametrus iš filtro objekto ir konteksto filtrų
       const params = new URLSearchParams();
-      params.append("page", filter.page);
-      params.append("limit", filter.limit);
-
-      if (query) params.append("q", query);
-      if (filters.type) params.append("type", filters.type);
-      if (filters.product) params.append("product", filters.product);
+      params.append('page', filter.page);
+      params.append('limit', filter.limit);
+      if (query) params.append('q', query);
+      if (filters.type) params.append('type', filters.type);
+      if (filters.product) params.append('product', filters.product);
+      if (filters.order) params.append('order', filters.order);
       if (adminFilters?.value !== "all" && user?.role === "admin") {
         params.append(adminFilters.name, adminFilters.value);
       } else if (user?.role !== "admin") {
@@ -75,6 +75,12 @@ const RecipesList = ({ filter, setFilter }) => {
       page: 1,
     }));
   }, [filters, setFilter, adminFilters]);
+
+  useEffect(() => {
+    if (filters.order) {
+      setFilter(prev => ({ ...prev, page: 1 }));
+    }
+  }, [filters.order, setFilter]);
 
   useEffect(() => {
     fetchRecipes(currentQuery);

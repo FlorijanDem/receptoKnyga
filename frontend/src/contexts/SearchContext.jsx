@@ -8,6 +8,7 @@ export const SearchProvider = ({ children }) => {
   const [filters, setFilters] = useState({
     type: "",
     product: "",
+    order: "",
   });
 
   return (

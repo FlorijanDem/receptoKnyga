@@ -7,6 +7,7 @@ exports.searchRecipes = async (filters) => {
     product,
     preparation_time,
     servings,
+    order,
     limit = 12,
     offset = 0,
     approved,
@@ -43,9 +44,8 @@ exports.searchRecipes = async (filters) => {
       ${type ? sql`AND r.type = ${type}` : sql``}
       ${preparation_time ? sql`AND r.preparation_time = ${preparation_time}` : sql``}
       ${servings ? sql`AND r.servings = ${servings}` : sql``}
-      ${
-        product
-          ? sql`
+      ${product
+      ? sql`
         AND EXISTS (
           SELECT 1
           FROM recipes_products rp
@@ -57,11 +57,10 @@ exports.searchRecipes = async (filters) => {
           )
         )
       `
-          : sql``
-      }
-      ${
-        q
-          ? sql`
+      : sql``
+    }
+      ${q
+      ? sql`
         AND (
           similarity(r.title, ${q}) > 0.2
           OR r.title ILIKE ${`%${q}%`}
@@ -79,16 +78,19 @@ exports.searchRecipes = async (filters) => {
           )
         )
       `
-          : sql``
-      }
+      : sql``
+    }
     )
-    SELECT * FROM recipe_scores
-    ORDER BY 
-      CASE WHEN ${!!q} THEN similarity_score ELSE 0 END DESC,
-      title ASC
+    SELECT * FROM recipe_scores r
+    ${order === 'new' ? sql`ORDER BY r.id DESC` : 
+      order === 'old' ? sql`ORDER BY r.id ASC` : 
+      order === 'title' ? sql`ORDER BY r.title ASC` : 
+      order === 'asc' ? sql`ORDER BY r.id ASC` :
+      order === 'desc' ? sql`ORDER BY r.id DESC` :
+      sql`ORDER BY r.similarity_score DESC`}
     LIMIT ${limit}
     OFFSET ${offset}
-  `;
+`;
 
   const countQuery = sql`
     SELECT COUNT(*) as total 
@@ -98,9 +100,8 @@ exports.searchRecipes = async (filters) => {
     ${type ? sql`AND r.type = ${type}` : sql``}
     ${preparation_time ? sql`AND r.preparation_time = ${preparation_time}` : sql``}
     ${servings ? sql`AND r.servings = ${servings}` : sql``}
-    ${
-      product
-        ? sql`
+    ${product
+      ? sql`
       AND EXISTS (
         SELECT 1 
         FROM recipes_products rp
@@ -112,11 +113,10 @@ exports.searchRecipes = async (filters) => {
         )
       )
     `
-        : sql``
+      : sql``
     }
-    ${
-      q
-        ? sql`
+    ${q
+      ? sql`
       AND (
         similarity(r.title, ${q}) > 0.2
         OR r.title ILIKE ${`%${q}%`}
@@ -134,7 +134,7 @@ exports.searchRecipes = async (filters) => {
         )
       )
     `
-        : sql``
+      : sql``
     }
   `;
   const [recipes, [{ total }]] = await Promise.all([searchQuery, countQuery]);
