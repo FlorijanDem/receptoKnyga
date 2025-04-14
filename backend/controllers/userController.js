@@ -149,7 +149,7 @@ exports.getMe = async (req, res, next) => {
       return res.status(200).json({ user: null });
     }
 
-    //  user.password = undefined;
+    user.password = undefined;
 
     res.status(200).json({ user });
   } catch (err) {
