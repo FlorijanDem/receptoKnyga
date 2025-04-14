@@ -2,14 +2,16 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useErrorBoundary } from "react-error-boundary";
 import RecipePreviewCard from "./RecipePreviewCard";
-import RecipesListPagination from "./RecipesListPagination";
+import ListPagination from "./ListPagination";
 import SearchContext from "../contexts/SearchContext";
+import { AdminFilterContext } from "../contexts/AdminFilterContext";
 import UserContext from "../contexts/UserContext";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 const RecipesList = ({ filter, setFilter }) => {
   const { currentQuery, filters } = useContext(SearchContext);
+  const { adminFilters } = useContext(AdminFilterContext);
   const { user } = useContext(UserContext);
   const [recipes, setRecipes] = useState([]);
   const [recipeCount, setRecipeCount] = useState(0);
@@ -42,6 +44,12 @@ const RecipesList = ({ filter, setFilter }) => {
       if (query) params.append("q", query);
       if (filters.type) params.append("type", filters.type);
       if (filters.product) params.append("product", filters.product);
+      if (filters.order) params.append("order", filters.order);
+      if (adminFilters?.value !== "all" && user?.role === "admin") {
+        params.append(adminFilters.name, adminFilters.value);
+      } else if (user?.role !== "admin") {
+        params.append("approved", "true");
+      }
 
       const { data: response } = await axios.get(
         `${API_URL}/recipes?${params.toString()}`,
@@ -78,6 +86,7 @@ const RecipesList = ({ filter, setFilter }) => {
           showBoundary(error);
         }
       }
+      console.log(error);
     }
   };
 
@@ -88,11 +97,17 @@ const RecipesList = ({ filter, setFilter }) => {
       ...prev,
       page: 1,
     }));
-  }, [filters, setFilter]);
+  }, [filters, setFilter, adminFilters]);
+
+  useEffect(() => {
+    if (filters.order) {
+      setFilter((prev) => ({ ...prev, page: 1 }));
+    }
+  }, [filters.order, setFilter]);
 
   useEffect(() => {
     fetchRecipes(currentQuery);
-  }, [filter, currentQuery, filters]);
+  }, [currentQuery, filters, filter]);
 
   return (
     <>
@@ -103,10 +118,10 @@ const RecipesList = ({ filter, setFilter }) => {
       ) : (
         <section className="recipes-list-container">
           <h1>Recipes List</h1>
-          <RecipesListPagination
+          <ListPagination
             filter={filter}
             setFilter={setFilter}
-            recipeCount={recipeCount}
+            count={recipeCount}
           />
           <div className="recipes-list">
             {recipes?.length === 0 && <p>No recipes found</p>}
@@ -114,10 +129,10 @@ const RecipesList = ({ filter, setFilter }) => {
               <RecipePreviewCard key={recipe.id} recipe={recipe} />
             ))}
           </div>
-          <RecipesListPagination
+          <ListPagination
             filter={filter}
             setFilter={setFilter}
-            recipeCount={recipeCount}
+            count={recipeCount}
           />
         </section>
       )}
