@@ -81,7 +81,6 @@ const Navigation = () => {
   // Function to handle filter form open/close
   const toggleFilterForm = () => {
     setIsFilterFormOpen(!isFilterFormOpen);
-    // Clear filters when closing the form
     if (isFilterFormOpen) {
       setFilters({
         type: "",

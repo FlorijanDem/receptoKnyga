@@ -9,6 +9,7 @@ const characteristicsRouter = require("./routes/characteristicsRouter");
 const userRouter = require("./routes/userRouter");
 const productRouter = require("./routes/productRoutes");
 const reviewRouter = require("./routes/reviewRouter");
+const favoriteRouter = require("./routes/favoriteRoutes");
 const consumedRouter = require("./routes/consumedRouter");
 const activityLevelRouter = require("./routes/activityLevelRouter");
 
@@ -28,6 +29,7 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/recipes", recipeRouter);
 app.use("/api/v1/characteristics", characteristicsRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/favorites", favoriteRouter);
 app.use("/api/v1/products", productRouter);
 app.use("/api/v1/reviews", reviewRouter);
 app.use("/api/v1/consumed", consumedRouter);

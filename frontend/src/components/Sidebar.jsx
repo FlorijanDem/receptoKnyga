@@ -66,7 +66,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
   return (
     <div
-      className="fixed inset-0 bg-recipe-fifth w-[17.875rem] h-[100vh] flex flex-col justify-between"
+      className="fixed inset-0 bg-recipe-fifth w-[17.875rem] h-[100vh] flex flex-col justify-between z-50"
       onClick={handleSidebarClick}
     >
       <div className="pt-[2.25rem] pr-[2rem] space-y-[1.75rem]">

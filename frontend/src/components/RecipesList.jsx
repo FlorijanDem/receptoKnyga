@@ -24,7 +24,21 @@ const RecipesList = ({ filter, setFilter }) => {
     try {
       setLoading(true);
 
-      // Sukuriame URL parametrus iš filtro objekto ir konteksto filtrų
+      if (!user) {
+        throw new Error("Please log in to view recipes.");
+      }
+      const userId = user.id;
+
+      // Fetch user's favorites
+      const favoritesResponse = await axios.get(
+        `${API_URL}/favorites/${userId}`,
+        {
+          withCredentials: true,
+        }
+      );
+      const favoriteIds = new Set(favoritesResponse.data.data);
+
+      // Create URL parameters from filter object and context filters
       const params = new URLSearchParams();
       params.append("page", filter.page);
       params.append("limit", filter.limit);
@@ -45,8 +59,12 @@ const RecipesList = ({ filter, setFilter }) => {
         }
       );
 
-      setRecipes(response.data);
+      const recipesWithFavorites = response.data.map((recipe) => ({
+        ...recipe,
+        isFavorite: favoriteIds.has(recipe.id),
+      }));
 
+      setRecipes(recipesWithFavorites);
       setRecipeCount(response.results);
       setError(null);
       setLoading(false);
@@ -54,7 +72,9 @@ const RecipesList = ({ filter, setFilter }) => {
     } catch (error) {
       setLoading(false);
       if (axios.isAxiosError(error)) {
-        if (error.response) {
+        if (error.response?.status === 401) {
+          setError("Please log in to view recipes.");
+        } else if (error.response) {
           setError(error.response.data.message);
         } else if (error.request) {
           setError("Something went wrong. Please try again later.");
@@ -62,15 +82,18 @@ const RecipesList = ({ filter, setFilter }) => {
           setError("Network error. Please check your internet connection.");
         }
       } else {
-        showBoundary(error);
+        setError(error.message); // Handle the case where user is null
+        if (!(error instanceof Error)) {
+          showBoundary(error);
+        }
       }
       console.log(error);
     }
   };
 
-  // Reaguojame į filtrų pasikeitimus
+  // React to filter changes
   useEffect(() => {
-    // Kai pasikeičia filtrai, grįžtame į pirmą puslapį
+    // When filters change, return to first page
     setFilter((prev) => ({
       ...prev,
       page: 1,

@@ -42,7 +42,7 @@ exports.registerUser = async (req, res, next) => {
     const token = signToken(user.id);
     sendCookie(token, res);
 
-    // user.id = undefined;
+    //  user.id = undefined;
     user.password = undefined;
 
     res.status(201).json({
@@ -262,8 +262,8 @@ exports.resetPassword = async (req, res, next) => {
 
     const isPreviousPassword = await argon2.verify(user.password, newPassword);
     if (isPreviousPassword) {
-      return res.status(400).json({ 
-        message: "New password cannot be the same as your current password" 
+      return res.status(400).json({
+        message: "New password cannot be the same as your current password",
       });
     }
 
