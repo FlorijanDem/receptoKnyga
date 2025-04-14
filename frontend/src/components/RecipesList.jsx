@@ -100,8 +100,6 @@ const RecipesList = ({ filter, setFilter }) => {
     fetchStats();
   }, [currentQuery, filters, filter]);
 
-  console.log(stats);
-
   return (
     <>
       {loading ? (

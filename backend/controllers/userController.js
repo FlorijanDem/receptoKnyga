@@ -6,6 +6,7 @@ const {
   updateUser,
   getAllUsers,
   countUsers,
+  getUsersStats,
 } = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const argon2 = require("argon2");
@@ -265,5 +266,18 @@ exports.resetPassword = async (req, res, next) => {
     res.status(200).json({ message: "Password updated successfully" });
   } catch (err) {
     next(new AppError(err.message, 500));
+  }
+};
+
+exports.getUsersStats = async (req, res, next) => {
+  try {
+    const stats = await getUsersStats();
+
+    res.status(200).json({
+      status: "success",
+      data: stats,
+    });
+  } catch (error) {
+    next(error);
   }
 };
