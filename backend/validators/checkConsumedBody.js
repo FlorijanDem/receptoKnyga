@@ -1,10 +1,7 @@
 const { body } = require("express-validator");
 
 exports.checkConsumedBody = [
-  body("recipeTitle")
-    .trim()
-    .notEmpty()
-    .withMessage("Recipe title is required"),
+  body("recipeTitle").trim().notEmpty().withMessage("Recipe title is required"),
 
   body("datetime")
     .notEmpty()
@@ -33,10 +30,9 @@ exports.checkConsumedBody = [
         minute > 59 ||
         second > 59
       ) {
-        throw new Error("Datetime components out of valid range");
+        throw new Error("Can't add recipes to future date");
       }
 
       return true;
     }),
-    
 ];
