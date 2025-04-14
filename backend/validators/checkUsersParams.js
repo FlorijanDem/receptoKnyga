@@ -18,3 +18,23 @@ exports.checkUserParams = [
       }
     }),
 ];
+
+exports.checkBanUserParams = [
+  param("id").custom(async (id, { req }) => {
+    if (!req.body.banned) return true;
+    try {
+      if (id === req.user?.id) {
+        throw new Error("You can't ban yourself");
+      }
+
+      const user = await getUserByid(id);
+      if (user?.role === "admin") {
+        throw new Error("You can't ban an admin");
+      }
+
+      return true;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }),
+];

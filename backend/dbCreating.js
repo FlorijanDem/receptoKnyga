@@ -30,9 +30,44 @@ const createDBtables = async () => {
             height FLOAT,
             weight FLOAT,
             age INTEGER,
-            gender VARCHAR(25)
+            date_of_birth DATE,
+            gender VARCHAR(25),
+            activity_level_id INTEGER REFERENCES activity_levels(id)
         )
     `;
+
+    // Create characteristics_history_weight table
+    await sql`
+    CREATE TABLE IF NOT EXISTS characteristics_history_weight (
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+      weight FLOAT NOT NULL,
+      date DATE NOT NULL DEFAULT CURRENT_DATE,
+      UNIQUE(user_id, date) -- Prevents duplicate entries for same user on same date
+    )
+  `;
+
+    // Create activity_levels table
+    await sql`
+  CREATE TABLE IF NOT EXISTS activity_levels (
+    id SERIAL PRIMARY KEY,
+    label VARCHAR(255) NOT NULL UNIQUE,
+    description TEXT NOT NULL UNIQUE,
+    multiplier FLOAT NOT NULL UNIQUE
+  )
+  `;
+
+    // Insert default activity levels
+    await sql`
+    INSERT INTO activity_levels (label, description, multiplier)
+    VALUES 
+      ('Sedentary', 'Little or no exercise', 1.2),
+      ('Light', 'Light exercise/sports 1-3 days/week', 1.375),  
+      ('Moderate', 'Moderate exercise/sports 3-5 days/week', 1.55),
+      ('Active', 'Hard exercise/sports 6-7 days a week', 1.725),
+      ('Very Active', 'Very hard exercise/sports & physical job or 2x training per day', 1.9)
+    ON CONFLICT (label) DO NOTHING
+  `;
 
     // Create recipes table
     // The "type" field represents the recipe category, such as "Vegetarian" or "Vegan".
@@ -111,9 +146,33 @@ const createDBtables = async () => {
     CREATE TABLE IF NOT EXISTS favorite_recipes (
         id SERIAL PRIMARY KEY,
         user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
-        recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE ON UPDATE CASCADE,
-        UNIQUE (user_id, recipe_id)
-    );
+recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE ON UPDATE CASCADE,
+UNIQUE (user_id, recipe_id)
+)
+`;
+
+// Create reviews table
+await sql`
+CREATE TABLE IF NOT EXISTS reviews (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    rating INTEGER NOT NULL,
+    review_text TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    approved BOOLEAN DEFAULT FALSE,
+    UNIQUE (user_id, recipe_id)
+)
+`;
+
+// Consumed table
+await sql`
+CREATE TABLE IF NOT EXISTS consumed (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+)
 `;
   } catch (err) {
     console.error("Failed to create tables:", err);

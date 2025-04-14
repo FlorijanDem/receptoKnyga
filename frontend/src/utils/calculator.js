@@ -1,31 +1,32 @@
 export const ACTIVITY_LEVELS = {
   SEDENTARY: {
     label: "Sedentary (little or no exercise)",
-    multiplier: 1.2
+    multiplier: 1.2,
   },
   LIGHT: {
     label: "Light activity (light exercise/sports 1-3 days/week)",
-    multiplier: 1.375
+    multiplier: 1.375,
   },
   MODERATE: {
     label: "Moderate activity (moderate exercise/sports 3-5 days/week)",
-    multiplier: 1.55
+    multiplier: 1.55,
   },
   ACTIVE: {
     label: "Active (hard exercise/sports 6-7 days a week)",
-    multiplier: 1.725
+    multiplier: 1.725,
   },
   VERY_ACTIVE: {
-    label: "Very active (very hard exercise, physical job, or training twice a day)",
-    multiplier: 1.9
-  }
+    label:
+      "Very active (very hard exercise, physical job, or training twice a day)",
+    multiplier: 1.9,
+  },
 };
 
 export const BMI_CATEGORIES = {
   UNDERWEIGHT: { min: 0, max: 18.4, label: "Underweight" },
   NORMAL: { min: 18.5, max: 24.9, label: "Normal weight" },
   OVERWEIGHT: { min: 25, max: 29.9, label: "Overweight" },
-  OBESE: { min: 30, max: Infinity, label: "Obese" }
+  OBESE: { min: 30, max: Infinity, label: "Obese" },
 };
 
 export const calculateBMR = (weight, height, age, gender) => {
@@ -52,7 +53,13 @@ export const getBMICategory = (bmi) => {
   return BMI_CATEGORIES.OBESE;
 };
 
-export const calculateAllMetrics = (weight, height, age, gender, activityLevel) => {
+export const calculateAllMetrics = (
+  weight,
+  height,
+  age,
+  gender,
+  activityLevel
+) => {
   const bmr = calculateBMR(weight, height, age, gender);
   const dailyCalories = calculateDailyCalories(bmr, activityLevel);
   const bmi = calculateBMI(weight, height);
@@ -62,6 +69,6 @@ export const calculateAllMetrics = (weight, height, age, gender, activityLevel) 
     bmr,
     dailyCalories,
     bmi,
-    bmiCategory
+    bmiCategory,
   };
 };

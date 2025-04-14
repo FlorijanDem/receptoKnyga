@@ -92,8 +92,10 @@ function WriteReview({ recipe_id, isLoggedIn, setRefresh }) {
         <div className="flex flex-col items-center">
           <button
             onClick={() => setShowForm(true)}
-            className="bg-[var(--color-recipe-primary)] text-white px-4 py-2 rounded-md mt-4 cursor-pointer"
+            className="bg-[var(--color-recipe-primary)] text-white px-4 py-2 rounded-md mt-4 cursor-pointer disabled:bg-[var(--color-recipe-secondary)] disabled:cursor-not-allowed"
+            disabled={hasReviewed || user.role === "admin"}
           >
+            {" "}
             Leave a Review
           </button>
         </div>
@@ -144,7 +146,8 @@ function WriteReview({ recipe_id, isLoggedIn, setRefresh }) {
               required: "Review text is required",
               maxLength: {
                 value: 500,
-                message: "Review cannot exceed 500 characters and cannot contain special characters",
+                message:
+                  "Review cannot exceed 500 characters and cannot contain special characters",
               },
             })}
             placeholder="Write your review here..."
@@ -160,22 +163,22 @@ function WriteReview({ recipe_id, isLoggedIn, setRefresh }) {
           {error && (
             <p className="text-[var(--color-recipe-fourth)] mt-2">{error}</p>
           )}
-  <div className="flex justify-center mt-4 gap-2"> 
-          <button
-            type="submit"
-            className="bg-[var(--color-recipe-primary)] text-white px-4 py-2 rounded-md cursor-pointer"
-          >
-            Submit Review
-          </button>
-          <button
-                className="bg-[var(--color-recipe-secondary)] text-[var(--color-recipe-fifth)] px-4 py-2 rounded-md cursor-pointer"
-                onClick={() => {
-                  setShowForm(false);
-                }}
-              >
-                Cancel
-              </button>
-              </div>
+          <div className="flex justify-center mt-4 gap-2">
+            <button
+              type="submit"
+              className="bg-[var(--color-recipe-primary)] text-white px-4 py-2 rounded-md cursor-pointer"
+            >
+              Submit Review
+            </button>
+            <button
+              className="bg-[var(--color-recipe-secondary)] text-[var(--color-recipe-fifth)] px-4 py-2 rounded-md cursor-pointer"
+              onClick={() => {
+                setShowForm(false);
+              }}
+            >
+              Cancel
+            </button>
+          </div>
         </form>
       )}
     </>

@@ -46,3 +46,27 @@ exports.updateUser = async (data, id) => {
     `;
   return user;
 };
+
+exports.getAllUsers = async (query) => {
+  // console.log(query);
+
+  const users = await sql`
+        SELECT *
+        FROM users
+        WHERE 1=1
+        ${query.banned === "true" ? sql`AND banned` : query.banned === "false" ? sql`AND NOT banned` : sql``}
+        LIMIT ${query.limit}
+        OFFSET ${(query.page - 1) * query.limit}
+    `;
+  return users;
+};
+
+exports.countUsers = async (query) => {
+  const [{ count }] = await sql`
+        SELECT COUNT(users.id)
+        FROM users
+        WHERE 1=1
+        ${query.banned === "true" ? sql`AND banned` : query.banned === "false" ? sql`AND NOT banned` : sql``}
+    `;
+  return count;
+};

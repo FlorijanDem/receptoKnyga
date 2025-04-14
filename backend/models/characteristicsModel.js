@@ -21,10 +21,11 @@ exports.updateCharacteristic = async (data, id) => {
     // Insert new characteristics if no existing record is found
 
     const [characteristics] = await sql`
-        INSERT INTO characteristics (user_id, height, weight, age, gender)
-        VALUES (${id}, ${data.height ?? null}, ${data.weight ?? null}, ${data.age ?? null}, ${data.gender ?? null})
+        INSERT INTO characteristics (user_id, height, weight, age, date_of_birth, gender, activity_level_id)
+        VALUES (${id}, ${data.height ?? null}, ${data.weight ?? null}, ${data.age ?? null}, ${data.date_of_birth ?? null}, ${data.gender ?? null}, ${data.activity_level_id ?? null})
         RETURNING characteristics.*
     `;
+
     return characteristics;
   } else {
     const user = existingUser[0];
@@ -35,7 +36,10 @@ exports.updateCharacteristic = async (data, id) => {
             height = ${data.height ?? user.height ?? null},
             weight = ${data.weight ?? user.weight ?? null},
             age = ${data.age ?? user.age ?? null},
-            gender = ${data.gender ?? user.gender ?? null}
+            date_of_birth = ${data.date_of_birth ?? user.date_of_birth ?? null},
+            gender = ${data.gender ?? user.gender ?? null},
+            activity_level_id = ${data.activity_level_id ?? user.activity_level_id ?? null}
+
           WHERE user_id=${id}
           RETURNING *
     `;
