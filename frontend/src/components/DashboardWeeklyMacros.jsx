@@ -12,7 +12,6 @@ import {
   Legend,
 } from "recharts";
 
-
 const API_URL = import.meta.env.VITE_API_URL;
 
 const CustomTooltip = ({ active, payload, label }) => {
@@ -27,7 +26,6 @@ const CustomTooltip = ({ active, payload, label }) => {
       Sa: "Sunday",
     };
     const fullDay = dayMap[label] || label;
- 
 
     return (
       <div className="custom-tooltip">
@@ -42,8 +40,7 @@ const CustomTooltip = ({ active, payload, label }) => {
               {entry.name}:
             </span>
             <span>
-              {Math.round(entry.value)}{" "}
-              {entry.name === "Calories" ? "" : "g"}
+              {Math.round(entry.value)} {entry.name === "Calories" ? "" : "g"}
             </span>
           </div>
         ))}
@@ -53,7 +50,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
-const DashboardWeeklyMacros = ({ selectedDate }) => {
+const DashboardWeeklyMacros = ({ selectedDate, refreshKey }) => {
   const [weeklyMacros, setWeeklyMacros] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -83,9 +80,8 @@ const DashboardWeeklyMacros = ({ selectedDate }) => {
 
   useEffect(() => {
     fetchWeeklyMacros();
-  }, [selectedDate]);
+  }, [selectedDate, refreshKey]);
 
-  // Calculate totals for display
   const totals = weeklyMacros.reduce(
     (acc, day) => ({
       calories: acc.calories + (parseFloat(day.calories) || 0),
@@ -96,9 +92,8 @@ const DashboardWeeklyMacros = ({ selectedDate }) => {
     { calories: 0, fats: 0, carbs: 0, proteins: 0 }
   );
 
-  // Prepare data for Recharts
   const chartData = days.map((day, index) => ({
-    day: format(day, "E").charAt(0).toUpperCase(), // e.g., "Monday" instead of "M"
+    day: format(day, "E").charAt(0).toUpperCase(),
     Calories: parseFloat(weeklyMacros[index]?.calories) || 0,
     Fats: parseFloat(weeklyMacros[index]?.fats) || 0,
     Carbs: parseFloat(weeklyMacros[index]?.carbohydrates) || 0,
@@ -117,7 +112,6 @@ const DashboardWeeklyMacros = ({ selectedDate }) => {
         <p className="dashboard-weekly__error">Error: {error}</p>
       ) : (
         <div className="dashboard-weekly__graph-group">
-          {/* Recharts Stacked BarChart with Custom Tooltip */}
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
@@ -125,52 +119,54 @@ const DashboardWeeklyMacros = ({ selectedDate }) => {
                 margin={{ top: 20, right: 30, left: 20, bottom: 15 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="day" angle={-45} textAnchor="end" interval={0} />
+                <XAxis
+                  dataKey="day"
+                  angle={-45}
+                  textAnchor="end"
+                  interval={0}
+                />
                 <YAxis />
                 <Tooltip content={<CustomTooltip />} />
                 <Legend />
                 <Bar
                   dataKey="Calories"
                   stackId="a"
-                  fill="#729CF1" 
+                  fill="#729CF1"
                   radius={[0, 0, 0, 0]}
                 />
                 <Bar
                   dataKey="Fats"
                   stackId="a"
-                  fill="#ED8B67" 
+                  fill="#ED8B67"
                   radius={[0, 0, 0, 0]}
                 />
                 <Bar
                   dataKey="Carbs"
                   stackId="a"
-                  fill="#F6D170" 
+                  fill="#F6D170"
                   radius={[0, 0, 0, 0]}
                 />
                 <Bar
                   dataKey="Proteins"
                   stackId="a"
-                  fill="#74B78A" // Green
-                  radius={[2, 2, 0, 0]} // Round top of the last bar
+                  fill="#74B78A"
+                  radius={[2, 2, 0, 0]}
                 />
               </BarChart>
             </ResponsiveContainer>
           </div>
 
-          {/* Totals Row */}
-          <div className="dashboard-weekly__totals">
-            Week totals         </div>
+          <div className="dashboard-weekly__totals">Week totals</div>
           <div className="dashboard-weekly__totals-row">
             <span>Calories: {Math.round(totals.calories)}</span>
             <span>Fats: {Math.round(totals.fats)}</span>
             <span>Carbs: {Math.round(totals.carbs)}</span>
             <span>Proteins: {Math.round(totals.proteins)}</span>
-
           </div>
         </div>
       )}
     </div>
   );
-}
+};
 
 export default DashboardWeeklyMacros;

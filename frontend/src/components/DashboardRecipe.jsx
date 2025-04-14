@@ -8,6 +8,7 @@ const DashboardRecipe = ({
   selectedDate,
   onAddRecipeClick,
   refreshKey,
+  onDeleteRecipe,
 }) => {
   const [consumedList, setConsumedList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -38,6 +39,7 @@ const DashboardRecipe = ({
         withCredentials: true,
       });
       fetchConsumed();
+      onDeleteRecipe();
     } catch (error) {
       console.error("Delete failed", error);
     }
@@ -81,6 +83,6 @@ const DashboardRecipe = ({
       )}
     </div>
   );
-}
+};
 
-export default DashboardRecipe
+export default DashboardRecipe;

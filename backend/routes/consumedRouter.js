@@ -4,6 +4,7 @@ const {
   deleteConsumed,
   userMacros,
   userWeeklyMacros,
+  searchRecipesHandler,
 } = require("../controllers/consumedController");
 const { protect } = require("../controllers/userController");
 const {
@@ -11,10 +12,19 @@ const {
   checkDeleteParams,
   checkWeeklyDateParam,
 } = require("../validators/checkConsumedParams");
+const { checkProductSearchQuery } = require("../validators/productValidation");
 const { checkConsumedBody } = require("../validators/checkConsumedBody");
 const validate = require("../validators/validate");
 
 const consumedRouter = require("express").Router();
+
+consumedRouter.get(
+  "/search",
+  protect,
+  checkProductSearchQuery,
+  validate,
+  searchRecipesHandler
+);
 
 consumedRouter
   .route("/:date?")

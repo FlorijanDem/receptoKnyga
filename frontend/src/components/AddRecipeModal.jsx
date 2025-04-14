@@ -1,124 +1,198 @@
 import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
 import axios from "axios";
-import { format } from "date-fns";
+import { format, isAfter, parse } from "date-fns";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 const AddRecipeModal = ({ isOpen, onClose, onSubmit, defaultDate }) => {
-  if (!isOpen) return null;
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      date: format(defaultDate, "yyyy-MM-dd"),
+      hour: format(new Date(), "HH"),
+      minute: format(new Date(), "mm"),
+      recipeTitle: "",
+    },
+  });
 
-  const [date, setDate] = useState(defaultDate);
-  const [hour, setHour] = useState(format(new Date(), "HH"));
-  const [minute, setMinute] = useState(format(new Date(), "mm"));
-  const [recipeTitle, setRecipeTitle] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const [isFocused, setIsFocused] = useState(false);
+  const [datetimeError, setDatetimeError] = useState("");
+  const [recipeError, setRecipeError] = useState("");
+  const recipeTitle = watch("recipeTitle");
 
   useEffect(() => {
     if (recipeTitle) {
       const fetchSuggestions = async () => {
         try {
-          const res = await axios.get(`${API_URL}/recipes/search?q=${recipeTitle}`, {
-            withCredentials: true,
-          });
-          setSuggestions(res.data?.data || []);
+          const res = await axios.get(
+            `${API_URL}/consumed/search?q=${recipeTitle}`,
+            {
+              withCredentials: true,
+            }
+          );
+          const data = res.data?.data || [];
+          setSuggestions(data);
+          if (data.length === 0) {
+            setRecipeError("No recipes found. Please try a different name.");
+          } else {
+            setRecipeError("");
+          }
         } catch (error) {
-          console.error("Failed to fetch suggestions:", error);
+          console.error(error);
           setSuggestions([]);
         }
       };
       fetchSuggestions();
     } else {
       setSuggestions([]);
+      setRecipeError("");
     }
   }, [recipeTitle]);
 
-  const handleSubmit = () => {
-    const datetime = `${format(date, "yyyy-MM-dd")} ${hour}:${minute}:00`;
-    onSubmit({ recipeTitle, datetime });
-    setRecipeTitle("");
+  const onFormSubmit = (data) => {
+    const datetimeString = `${data.date} ${data.hour}:${data.minute}:00`;
+    const parsedDate = parse(datetimeString, "yyyy-MM-dd HH:mm:ss", new Date());
+
+    if (isAfter(parsedDate, new Date())) {
+      setDatetimeError("You can't add a recipe to a future time.");
+      return;
+    }
+
+    setDatetimeError("");
+
+    if (!data.recipeTitle || suggestions.length === 0) {
+      setRecipeError("Please select a valid recipe.");
+      return;
+    }
+
+    onSubmit({
+      recipeTitle: data.recipeTitle,
+      datetime: datetimeString,
+    });
+
+    setValue("recipeTitle", "");
     setSuggestions([]);
   };
 
+  if (!isOpen) return null;
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h3 className="text-lg font-bold mb-4">Add Consumed Recipe</h3>
+    <div className="add-recipe-modal">
+      <div className="add-recipe-modal__content">
+        <h3 className="add-recipe-modal__title">Add Consumed Recipe</h3>
 
-        <div className="mb-4">
-          <label className="block mb-1 font-medium">Date</label>
-          <input
-            type="date"
-            value={format(date, "yyyy-MM-dd")}
-            onChange={(e) => setDate(new Date(e.target.value))}
-            className="border rounded px-3 py-2 w-full"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="block mb-1 font-medium">Time</label>
-          <div className="flex gap-2">
-            <select
-              value={hour}
-              onChange={(e) => setHour(e.target.value)}
-              className="border rounded px-3 py-2 w-1/2"
-            >
-              {Array.from({ length: 24 }, (_, i) => (
-                <option key={i} value={String(i).padStart(2, "0")}>
-                  {String(i).padStart(2, "0")}
-                </option>
-              ))}
-            </select>
-            <select
-              value={minute}
-              onChange={(e) => setMinute(e.target.value)}
-              className="border rounded px-3 py-2 w-1/2"
-            >
-              {Array.from({ length: 60 }, (_, i) => (
-                <option key={i} value={String(i).padStart(2, "0")}>
-                  {String(i).padStart(2, "0")}
-                </option>
-              ))}
-            </select>
+        <form onSubmit={handleSubmit(onFormSubmit)}>
+          <div className="add-recipe-modal__section">
+            <label className="add-recipe-modal__label">Date</label>
+            <input
+              type="date"
+              max={format(new Date(), "yyyy-MM-dd")}
+              {...register("date", { required: true })}
+              className="add-recipe-modal__input"
+            />
+            {errors.date && (
+              <p className="add-recipe-modal__error">Date is required.</p>
+            )}
           </div>
-        </div>
 
-        <div className="mb-4">
-          <label className="block mb-1 font-medium">Recipe Title</label>
-          <input
-            type="text"
-            value={recipeTitle}
-            onChange={(e) => setRecipeTitle(e.target.value)}
-            className="border rounded px-3 py-2 w-full"
-          />
-          {suggestions.length > 0 && (
-            <ul className="mt-2 border rounded bg-white max-h-40 overflow-y-auto">
-              {suggestions.map((suggestion) => (
-                <li
-                  key={suggestion.id}
-                  className="p-2 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => setRecipeTitle(suggestion.title)}
-                >
-                  {suggestion.title}
-                </li>
-              ))}
-            </ul>
+          <div className="add-recipe-modal__section">
+            <label className="add-recipe-modal__label">Time</label>
+            <div className="add-recipe-modal__time-container">
+              <select
+                {...register("hour", { required: true })}
+                className="add-recipe-modal__select"
+              >
+                {Array.from({ length: 24 }, (_, i) => {
+                  const val = String(i).padStart(2, "0");
+                  return (
+                    <option key={val} value={val}>
+                      {val}
+                    </option>
+                  );
+                })}
+              </select>
+              <select
+                {...register("minute", { required: true })}
+                className="add-recipe-modal__select"
+              >
+                {Array.from({ length: 60 }, (_, i) => {
+                  const val = String(i).padStart(2, "0");
+                  return (
+                    <option key={val} value={val}>
+                      {val}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+          </div>
+
+          <div className="add-recipe-modal__section">
+            <label className="add-recipe-modal__label">Recipe Title</label>
+            <div
+              className="add-recipe-modal__recipe-container"
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setTimeout(() => setIsFocused(false), 100)}
+              tabIndex={0}
+            >
+              <input
+                type="text"
+                {...register("recipeTitle", { required: true })}
+                className="add-recipe-modal__input"
+              />
+              {errors.recipeTitle && (
+                <p className="add-recipe-modal__error">
+                  Recipe title is required.
+                </p>
+              )}
+              {isFocused && suggestions.length > 0 && (
+                <ul className="add-recipe-modal__suggestions">
+                  {suggestions.map((suggestion) => (
+                    <li
+                      key={suggestion.id}
+                      className="add-recipe-modal__suggestion"
+                      onMouseDown={() => {
+                        setValue("recipeTitle", suggestion.title);
+                        setSuggestions([]);
+                        setIsFocused(false);
+                      }}
+                    >
+                      {suggestion.title}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+
+          {recipeError && (
+            <p className="add-recipe-modal__error">{recipeError}</p>
           )}
-        </div>
 
-        <div className="flex justify-end gap-2">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSubmit}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            Add
-          </button>
-        </div>
+          {datetimeError && (
+            <p className="add-recipe-modal__error">{datetimeError}</p>
+          )}
+
+          <div className="add-recipe-modal__buttons">
+            <button
+              type="button"
+              onClick={onClose}
+              className="add-recipe-modal__cancel"
+            >
+              Cancel
+            </button>
+            <button type="submit" className="add-recipe-modal__submit">
+              Add
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

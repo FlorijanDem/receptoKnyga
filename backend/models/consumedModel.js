@@ -4,9 +4,8 @@ exports.addConsumed = async (userId, recipeTitle, datetime) => {
   const [recipe] = await sql`
     SELECT id
     FROM recipes
-    WHERE similarity(title, ${recipeTitle}) > 0.3
-       OR title ILIKE ${"%" + recipeTitle + "%"}
-    ORDER BY similarity(title, ${recipeTitle}) DESC
+    WHERE title = ${recipeTitle}
+    ORDER BY title DESC
     LIMIT 1
   `;
   if (!recipe) throw new Error("Recipe not found");
@@ -66,9 +65,8 @@ exports.userMacros = async (userId, date) => {
 };
 
 exports.userWeeklyMacros = async (userId, startDate) => {
-
   const endDate = new Date(startDate);
-  endDate.setDate(endDate.getDate() + 6); 
+  endDate.setDate(endDate.getDate() + 6);
 
   const macros = await sql`
     SELECT 
@@ -91,8 +89,10 @@ exports.userWeeklyMacros = async (userId, startDate) => {
   const result = [];
   const currentDate = new Date(startDate);
   for (let i = 0; i < 7; i++) {
-    const dateStr = currentDate.toISOString().split('T')[0];
-    const dayData = macros.find(row => row.date.toISOString().split('T')[0] === dateStr) || {
+    const dateStr = currentDate.toISOString().split("T")[0];
+    const dayData = macros.find(
+      (row) => row.date.toISOString().split("T")[0] === dateStr
+    ) || {
       calories: 0,
       fats: 0,
       carbohydrates: 0,
@@ -109,4 +109,25 @@ exports.userWeeklyMacros = async (userId, startDate) => {
   }
 
   return result;
+};
+
+exports.searchRecipes = async (q) => {
+  try {
+    // Ensure q is a string
+    const searchQuery = String(q || "");
+
+    // Using pg_trgm for fuzzy matching with similarity function
+    const recipes = await sql`
+      SELECT id, title
+      FROM recipes
+      WHERE similarity(title, ${searchQuery}) > 0.3 OR title ILIKE ${`%${searchQuery}%`}
+      ORDER BY similarity(title, ${searchQuery}) DESC
+      LIMIT 5
+    `;
+
+    return recipes;
+  } catch (error) {
+    console.error("Error searching products:", error);
+    throw error;
+  }
 };

@@ -26,6 +26,10 @@ const Dashboard = () => {
     }
   };
 
+  const handleDeleteRecipe = () => {
+    setRefreshKey((prev) => prev + 1);
+  };
+
   return (
     <div className="dashboard-container">
       <div className="dashboard-header">
@@ -36,20 +40,12 @@ const Dashboard = () => {
           >
             &lt;&lt;
           </button>
-          {/* <div className="center-controls">
-        <button
-          onClick={() => setSelectedDate(new Date())}
-          className="nav-btn primary"
-        >
-          Today
-        </button> */}
           <input
             type="date"
             value={format(selectedDate, "yyyy-MM-dd")}
             onChange={(e) => setSelectedDate(new Date(e.target.value))}
             className="date-input"
           />
-          {/* </div> */}
           <button
             onClick={() => setSelectedDate(addDays(selectedDate, 1))}
             className="nav-btn light"
@@ -80,13 +76,20 @@ const Dashboard = () => {
           <DashboardRecipe
             selectedDate={selectedDate}
             onAddRecipeClick={() => setIsAddRecipeOpen(true)}
+            onDeleteRecipe={handleDeleteRecipe}
             refreshKey={refreshKey}
           />
         </div>
 
         <div className="macros-column">
-          <DashboardDailyMacros selectedDate={selectedDate} />
-          <DashboardWeeklyMacros selectedDate={selectedDate} />
+          <DashboardDailyMacros
+            selectedDate={selectedDate}
+            refreshKey={refreshKey}
+          />
+          <DashboardWeeklyMacros
+            selectedDate={selectedDate}
+            refreshKey={refreshKey}
+          />
         </div>
       </div>
 

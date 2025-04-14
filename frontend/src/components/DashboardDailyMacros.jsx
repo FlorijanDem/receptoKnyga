@@ -5,7 +5,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-const DashboardDailyMacros = ({ selectedDate }) => {
+const DashboardDailyMacros = ({ selectedDate, refreshKey }) => {
   const [userMacros, setUserMacros] = useState({
     protein: 0,
     carbs: 0,
@@ -46,7 +46,7 @@ const DashboardDailyMacros = ({ selectedDate }) => {
 
   useEffect(() => {
     fetchDailyMacros();
-  }, [selectedDate]);
+  }, [selectedDate, refreshKey]);
 
   const pieData = [
     { name: "Fats", value: userMacros.fat, color: "#0D3559" },
@@ -56,13 +56,13 @@ const DashboardDailyMacros = ({ selectedDate }) => {
 
   return (
     <div className="daily-macros">
-      <h3 className="daily-macros__title">Daily Macros</h3>
       {isLoading ? (
         <p className="daily-macros__loading">Loading...</p>
       ) : error ? (
         <p className="daily-macros__error">Error: {error}</p>
       ) : (
         <div className="daily-macros__content">
+          <h3 className="daily-macros__title">Daily Nutrition</h3>
           <div className="daily-macros__chart">
             <ResponsiveContainer width={200} height={200}>
               <PieChart>
@@ -117,7 +117,6 @@ const DashboardDailyMacros = ({ selectedDate }) => {
               ></span>
               Carbs: {Math.round(userMacros.carbs)}g
             </p>
-
             <p>
               <span
                 className="daily-macros__color-box"
@@ -130,6 +129,6 @@ const DashboardDailyMacros = ({ selectedDate }) => {
       )}
     </div>
   );
-}
+};
 
 export default DashboardDailyMacros;

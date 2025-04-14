@@ -236,7 +236,7 @@ main {
 }
 
 .daily-macros__title {
-  @apply text-lg font-semibold mb-4;
+  @apply text-lg font-semibold mb-4 md:col-span-full;
 }
 
 .daily-macros__loading {
@@ -248,7 +248,7 @@ main {
 }
 
 .daily-macros__content {
-  @apply bg-[var(--color-recipe-fifth)] rounded-lg mb-4 shadow-md p-4 flex flex-col items-center md:flex-row md:gap-2;
+  @apply bg-[var(--color-recipe-fifth)] rounded-lg mb-4 shadow-md p-4 flex flex-col items-center md:grid md:grid-cols-2 md:gap-2;
 }
 
 .daily-macros__chart {
@@ -316,7 +316,6 @@ main {
   shape-rendering: crispEdges;
 }
 
-/* Custom tooltip styling */
 .custom-tooltip {
   @apply bg-[var(--color-recipe-secondary)] text-[var(--color-recipe-fifth)] p-3 rounded-lg shadow-md border border-[var(--color-recipe-sixth)];
 }
@@ -336,7 +335,7 @@ main {
 /* AddRecipeModal.jsx styles */
 
 .add-recipe-modal {
-  @apply fixed inset-0 bg-black flex items-center justify-center z-50;
+  @apply fixed inset-0 bg-black/50 flex items-center justify-center z-50;
 }
 
 .add-recipe-modal__content {
@@ -347,7 +346,7 @@ main {
   @apply text-lg font-bold mb-4;
 }
 
-.add-recipe-modal__group {
+.add-recipe-modal__section {
   @apply mb-4;
 }
 
@@ -367,22 +366,30 @@ main {
   @apply border rounded px-3 py-2 w-1/2;
 }
 
-.add-recipe-modal__suggestions {
-  @apply mt-2 border rounded bg-[var(--color-recipe-fifth)] max-h-40 overflow-y-auto;
+.add-recipe-modal__recipe-container {
+  @apply relative;
 }
 
-.add-recipe-modal__suggestion-item {
+.add-recipe-modal__suggestions {
+  @apply absolute z-10 mt-2 border rounded bg-[var(--color-recipe-fifth)] max-h-40 overflow-y-auto w-full;
+}
+
+.add-recipe-modal__suggestion {
   @apply p-2 hover:bg-[var(--color-recipe-sixth)] cursor-pointer;
 }
 
-.add-recipe-modal__button-group {
+.add-recipe-modal__error {
+  @apply text-[var(--color-recipe-fourth)] text-sm mt-1;
+}
+
+.add-recipe-modal__buttons {
   @apply flex justify-end gap-2;
 }
 
-.add-recipe-modal__cancel-btn {
+.add-recipe-modal__cancel {
   @apply px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 cursor-pointer;
 }
 
-.add-recipe-modal__add-btn {
+.add-recipe-modal__submit {
   @apply px-4 py-2 bg-[var(--color-recipe-primary)] text-[var(--color-recipe-fifth)] rounded hover:bg-[var(--color-recipe-secondary)] cursor-pointer;
 }
