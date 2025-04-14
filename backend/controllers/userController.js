@@ -40,7 +40,7 @@ exports.registerUser = async (req, res, next) => {
     sendCookie(token, res);
 
     //  user.id = undefined;
-    user.password = undefined;
+    // user.password = undefined;
 
     res.status(201).json({
       message: "User created",
