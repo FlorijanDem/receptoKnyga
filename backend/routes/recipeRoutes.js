@@ -5,8 +5,9 @@ const {
   createRecipeHandler,
   updateRecipeHandler,
   deleteRecipeHandler,
+  getRecipeStats,
 } = require("../controllers/recipeController");
-const { protect } = require("../controllers/userController");
+const { protect, allowAccessTo } = require("../controllers/userController");
 const {
   checkCreateRecipesBody,
   checkUpdateRecipesBody,
@@ -22,6 +23,10 @@ recipeRouter
   .route("/")
   .get(checkRecipeQuery, validate, getAllRecipesHandler)
   .post(protect, checkCreateRecipesBody, validate, createRecipeHandler);
+
+recipeRouter
+  .route("/stats")
+  .get(protect, allowAccessTo("admin"), getRecipeStats);
 
 recipeRouter
   .route("/:id")

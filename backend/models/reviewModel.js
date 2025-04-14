@@ -104,3 +104,12 @@ exports.countReviews = async (query) => {
   `;
   return count;
 };
+
+exports.getReviewsStats = async () => {
+  const stats = await sql`
+  SELECT approved, COUNT(*) AS count
+  FROM reviews
+  GROUP BY approved
+  `;
+  return stats;
+};

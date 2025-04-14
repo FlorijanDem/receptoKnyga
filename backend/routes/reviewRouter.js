@@ -4,6 +4,7 @@ const {
   addReview,
   updateReview,
   getAllReviews,
+  getReviewsStats,
 } = require("../controllers/reviewController");
 const { protect, allowAccessTo } = require("../controllers/userController");
 const {
@@ -25,6 +26,10 @@ reviewRouter
     validate,
     getAllReviews
   );
+
+reviewRouter
+  .route("/stats")
+  .get(protect, allowAccessTo("admin"), getReviewsStats);
 
 reviewRouter
   .route("/:recipe_id")

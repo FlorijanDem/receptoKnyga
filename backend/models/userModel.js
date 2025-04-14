@@ -70,3 +70,12 @@ exports.countUsers = async (query) => {
     `;
   return count;
 };
+
+exports.getUsersStats = async () => {
+  const stats = await sql`
+        SELECT banned, COUNT(*) AS count
+        FROM users
+        GROUP BY banned
+    `;
+  return stats;
+};

@@ -1,4 +1,8 @@
-const { protect, allowAccessTo } = require("../controllers/userController");
+const {
+  protect,
+  allowAccessTo,
+  getUsersStats,
+} = require("../controllers/userController");
 const { updateUser, getAllUsers } = require("../controllers/userController");
 const { checkUpdateUserBody } = require("../validators/checkUsersBody");
 const {
@@ -12,6 +16,8 @@ const userRouter = require("express").Router();
 userRouter
   .route("/")
   .get(protect, allowAccessTo("admin"), validate, getAllUsers);
+
+userRouter.route("/stats").get(protect, allowAccessTo("admin"), getUsersStats);
 
 userRouter
   .route("/:id")

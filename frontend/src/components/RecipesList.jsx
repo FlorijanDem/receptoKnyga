@@ -15,6 +15,7 @@ const RecipesList = ({ filter, setFilter }) => {
   const { user } = useContext(UserContext);
   const [recipes, setRecipes] = useState([]);
   const [recipeCount, setRecipeCount] = useState(0);
+  const [stats, setStats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { showBoundary } = useErrorBoundary();
@@ -25,12 +26,12 @@ const RecipesList = ({ filter, setFilter }) => {
 
       // Sukuriame URL parametrus iš filtro objekto ir konteksto filtrų
       const params = new URLSearchParams();
-      params.append('page', filter.page);
-      params.append('limit', filter.limit);
-      if (query) params.append('q', query);
-      if (filters.type) params.append('type', filters.type);
-      if (filters.product) params.append('product', filters.product);
-      if (filters.order) params.append('order', filters.order);
+      params.append("page", filter.page);
+      params.append("limit", filter.limit);
+      if (query) params.append("q", query);
+      if (filters.type) params.append("type", filters.type);
+      if (filters.product) params.append("product", filters.product);
+      if (filters.order) params.append("order", filters.order);
       if (adminFilters?.value !== "all" && user?.role === "admin") {
         params.append(adminFilters.name, adminFilters.value);
       } else if (user?.role !== "admin") {
@@ -78,12 +79,25 @@ const RecipesList = ({ filter, setFilter }) => {
 
   useEffect(() => {
     if (filters.order) {
-      setFilter(prev => ({ ...prev, page: 1 }));
+      setFilter((prev) => ({ ...prev, page: 1 }));
     }
   }, [filters.order, setFilter]);
 
   useEffect(() => {
     fetchRecipes(currentQuery);
+
+    const fetchStats = async () => {
+      try {
+        const { data: response } = await axios.get(`${API_URL}/recipes/stats`, {
+          withCredentials: true,
+        });
+        setStats(response.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchStats();
   }, [currentQuery, filters, filter]);
 
   return (
@@ -95,6 +109,11 @@ const RecipesList = ({ filter, setFilter }) => {
       ) : (
         <section className="recipes-list-container">
           <h1>Recipes List</h1>
+          <div>
+            <p>Total recipes: {stats.reduce((acc, s) => acc + +s.count, 0)}</p>
+            <p>Approved recipes: {stats.find((s) => s.approved).count}</p>
+            <p>Unapproved recipes: {stats.find((s) => !s.approved).count}</p>
+          </div>
           <ListPagination
             filter={filter}
             setFilter={setFilter}

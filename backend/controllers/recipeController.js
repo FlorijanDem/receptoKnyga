@@ -6,12 +6,21 @@ const {
   deleteRecipe,
   searchRecipes,
   getAllMacros,
+  getRecipesStats,
 } = require("../models/recipeModel");
 const { getUserByid } = require("../models/userModel");
 
 exports.getAllRecipesHandler = async (req, res, next) => {
   try {
-    const { q, type, product, approved, page = "1", limit = "12", order } = req.query;
+    const {
+      q,
+      type,
+      product,
+      approved,
+      page = "1",
+      limit = "12",
+      order,
+    } = req.query;
 
     // Užtikriname, kad offset bus 0 jei page/limit yra nevalidūs
     const pageNum = Math.max(1, parseInt(page) || 1);
@@ -26,7 +35,7 @@ exports.getAllRecipesHandler = async (req, res, next) => {
       offset: offset,
       order: order?.toLowerCase(),
     };
-    
+
     if (req.cookies?.jwt) {
       const { id: userId } = jwt.verify(
         req.cookies?.jwt,
@@ -58,7 +67,7 @@ exports.getAllRecipesHandler = async (req, res, next) => {
         const calories = await getAllMacros(recipe.id);
         return {
           ...recipe,
-          calories: calories[0]?.calories|| 0,
+          calories: calories[0]?.calories || 0,
         };
       })
     );
@@ -77,7 +86,7 @@ exports.getRecipeByIdHandler = async (req, res, next) => {
   try {
     const { id } = req.params;
     const recipe = await getRecipeById(id);
-    const macros = await getAllMacros(id);  
+    const macros = await getAllMacros(id);
 
     const result = {
       ...recipe,
@@ -140,6 +149,18 @@ exports.deleteRecipeHandler = async (req, res, next) => {
     res.status(200).json({
       status: "success",
       data: deletedRecipe,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getRecipeStats = async (req, res, next) => {
+  try {
+    const stats = await getRecipesStats();
+    res.status(200).json({
+      status: "success",
+      data: stats,
     });
   } catch (error) {
     next(error);

@@ -13,6 +13,7 @@ const UsersList = () => {
   const { adminFilters } = useContext(AdminFilterContext);
   const [filter, setFilter] = useState({ page: 1, limit: 12 });
   const [count, setCount] = useState(0);
+  const [stats, setStats] = useState([]);
   const navigate = useNavigate();
 
   const [users, setUsers] = useState([]);
@@ -45,11 +46,28 @@ const UsersList = () => {
       }
     };
     fetchUsers();
+
+    const fetchStats = async () => {
+      try {
+        const { data: response } = await axios.get(`${API_URL}/users/stats`, {
+          withCredentials: true,
+        });
+
+        setStats(response.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchStats();
   }, [adminFilters, filter]);
 
   return (
     <section className="w-9/12 max-w-[1200px] mx-auto py-4">
       <h1 className="text-center text-3xl">Users List</h1>
+      <div>
+        <p>Total users: {stats.reduce((acc, s) => acc + +s?.count, 0)}</p>
+        <p>Banned users: {stats.find((s) => s.banned)?.count || 0}</p>
+      </div>
       <ListPagination filter={filter} setFilter={setFilter} count={count} />
       <div className="users-list">
         {users.map((user) => (

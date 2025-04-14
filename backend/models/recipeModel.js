@@ -302,3 +302,12 @@ exports.getAllMacros = async (id) => {
 
   return macros;
 };
+
+exports.getRecipesStats = async () => {
+  const stats = await sql`
+  SELECT approved, COUNT(*) AS count
+  FROM recipes
+  GROUP BY approved
+  `;
+  return stats;
+};
