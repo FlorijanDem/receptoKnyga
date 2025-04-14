@@ -132,11 +132,15 @@ const RecipesList = ({ filter, setFilter }) => {
       ) : (
         <section className="recipes-list-container">
           <h1>Recipes List</h1>
-          <div>
-            <p>Total recipes: {stats.reduce((acc, s) => acc + +s.count, 0)}</p>
-            <p>Approved recipes: {stats.find((s) => s.approved)?.count}</p>
-            <p>Unapproved recipes: {stats.find((s) => !s.approved)?.count}</p>
-          </div>
+          {user?.role === "admin" && (
+            <div>
+              <p>
+                Total recipes: {stats.reduce((acc, s) => acc + +s.count, 0)}
+              </p>
+              <p>Approved recipes: {stats.find((s) => s.approved)?.count}</p>
+              <p>Unapproved recipes: {stats.find((s) => !s.approved)?.count}</p>
+            </div>
+          )}
           <ListPagination
             filter={filter}
             setFilter={setFilter}
