@@ -67,7 +67,6 @@ const UsersList = () => {
       <div>
         <p>Total users: {stats.reduce((acc, s) => acc + +s?.count, 0)}</p>
         <p>Banned users: {stats.find((s) => s.banned)?.count || 0}</p>
-        {/* <p>Unapproved recipes: {stats.find((s) => !s.approved).count}</p> */}
       </div>
       <ListPagination filter={filter} setFilter={setFilter} count={count} />
       <div className="users-list">

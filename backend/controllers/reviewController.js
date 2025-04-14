@@ -5,6 +5,7 @@ const {
   updateReview,
   getAllReviews,
   countReviews,
+  getReviewsStats,
 } = require("../models/reviewModel");
 
 exports.getReviewsByRecipe = async (req, res, next) => {
@@ -86,6 +87,18 @@ exports.getAllReviews = async (req, res, next) => {
       status: "success",
       count,
       data: reviews,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getReviewsStats = async (req, res, next) => {
+  try {
+    const stats = await getReviewsStats();
+    return res.status(200).json({
+      status: "success",
+      data: stats,
     });
   } catch (error) {
     next(error);
