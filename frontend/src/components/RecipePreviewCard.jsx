@@ -54,13 +54,13 @@ const RecipePreviewCard = ({ recipe, showUser = false }) => {
           alt={recipe.title}
         />
         <button
-          className="absolute top-[26px] right-[26px] hover:scale-110 transition-transform duration-200"
+          className="absolute top-[26px] right-[26px] hover:scale-110 transition-transform duration-200 bg-[var(--color-bookmark-bg)]  rounded-full p-2"
           onClick={handleFavoriteClick}
         >
           {isFavorite ? (
-            <FaHeart className="text-red-500 text-2xl" />
+            <FaHeart className="text-red-500 text-2xl " />
           ) : (
-            <FaRegHeart className="text-gray-500 text-2xl" />
+            <FaRegHeart className="text-gray-100 text-2xl " />
           )}
         </button>
       </div>
