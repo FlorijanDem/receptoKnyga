@@ -6,7 +6,7 @@ const AdminFilterContext = createContext();
 const AdminFilterContextProvider = ({ children }) => {
   const { user } = useContext(UserContext);
 
-  const [adminPage, setAdminPage] = useState("recipes");
+  const [adminPage, setAdminPage] = useState("");
   const [adminFilters, setAdminFilters] = useState({
     name: "approved",
     value: "true",

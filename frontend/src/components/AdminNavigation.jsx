@@ -5,7 +5,7 @@ import UserContext from "../contexts/UserContext";
 import { useForm } from "react-hook-form";
 
 const AdminNavigation = () => {
-  const { setAdminFilters } = useContext(AdminFilterContext);
+  const { adminFilters, setAdminFilters } = useContext(AdminFilterContext);
   const { user } = useContext(UserContext);
   const { adminPage, setAdminPage } = useContext(AdminFilterContext);
   const { register, reset } = useForm();
@@ -20,11 +20,10 @@ const AdminNavigation = () => {
   };
 
   useEffect(() => {
-    reset();
     if (user?.role !== "admin") {
-      navigate("/");
       return;
     }
+    reset();
     if (user?.role === "admin") {
       setAdminFilters((prev) => {
         return {
@@ -36,7 +35,7 @@ const AdminNavigation = () => {
     }
   }, [adminPage]);
 
-  //   console.log("adminFilter", adminFilters);
+  console.log("adminFilter", adminFilters, adminPage);
 
   return (
     <>
