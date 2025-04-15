@@ -15,7 +15,6 @@ const RecipePageControls = ({ recipe, setRecipe, setRefresh }) => {
 
   const editRecipe = async () => {
     navigate(`/editRecipe`, { state: { recipe } });
-    console.log("Edit recipe");
   };
 
   const deleteRecipe = async () => {

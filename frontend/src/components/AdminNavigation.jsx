@@ -5,7 +5,7 @@ import UserContext from "../contexts/UserContext";
 import { useForm } from "react-hook-form";
 
 const AdminNavigation = () => {
-  const { adminFilters, setAdminFilters } = useContext(AdminFilterContext);
+  const { setAdminFilters } = useContext(AdminFilterContext);
   const { user } = useContext(UserContext);
   const { adminPage, setAdminPage } = useContext(AdminFilterContext);
   const { register, reset } = useForm();
@@ -34,8 +34,6 @@ const AdminNavigation = () => {
       navigate(`${adminPage === "recipes" ? "/" : `/${adminPage}`}`);
     }
   }, [adminPage]);
-
-  console.log("adminFilter", adminFilters, adminPage);
 
   return (
     <>

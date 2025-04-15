@@ -36,9 +36,6 @@ const CharacteristicsForm = () => {
   useEffect(() => {
     if (data.height && data.weight && data.age && data.gender) {
       try {
-        console.log(activityLevels);
-        console.log(data.activity_level_id);
-
         const metrics = calculateAllMetrics(
           parseFloat(data.weight),
           parseFloat(data.height),
@@ -74,7 +71,6 @@ const CharacteristicsForm = () => {
           withCredentials: true,
         });
         const { user_id: _, ...filteredData } = response.data.data;
-        console.log(filteredData);
 
         setData({
           ...filteredData,
