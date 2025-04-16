@@ -20,11 +20,10 @@ const AdminNavigation = () => {
   };
 
   useEffect(() => {
-    reset();
     if (user?.role !== "admin") {
-      navigate("/");
       return;
     }
+    reset();
     if (user?.role === "admin") {
       setAdminFilters((prev) => {
         return {
@@ -35,8 +34,6 @@ const AdminNavigation = () => {
       navigate(`${adminPage === "recipes" ? "/" : `/${adminPage}`}`);
     }
   }, [adminPage]);
-
-  //   console.log("adminFilter", adminFilters);
 
   return (
     <>
