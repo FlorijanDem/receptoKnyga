@@ -120,7 +120,7 @@ const RecipesList = ({ filter, setFilter }) => {
       }
     };
 
-    fetchStats();
+    if (user?.role === "admin") fetchStats();
   }, [currentQuery, filters, filter]);
 
   return (
