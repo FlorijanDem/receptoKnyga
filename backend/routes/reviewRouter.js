@@ -14,6 +14,7 @@ const {
 const { checkReviewsBody } = require("../validators/checkReviewBody");
 const { checkReviewsQuery } = require("../validators/checkReviewQuery");
 const validate = require("../validators/validate");
+const checkBanned = require("../middleware/checkBanned"); // Importuojame checkBanned middleware
 
 const reviewRouter = require("express").Router();
 
@@ -37,6 +38,7 @@ reviewRouter
   .post(
     protect,
     allowAccessTo("user"),
+    checkBanned,  // Pridedame checkBanned middleware
     checkIfReviewed,
     checkReviewsBody,
     validate,
@@ -46,7 +48,22 @@ reviewRouter
 // "/:recipe_id/:review_id"
 reviewRouter
   .route("/:recipe_id/:review_id")
-  .patch(protect, checkReviewCreator, checkReviewsBody, validate, updateReview)
-  .delete(protect, checkReviewCreator, validate, deleteReview);
+  .patch(
+    protect,
+    checkBanned,  // Pridedame checkBanned middleware
+    checkReviewCreator,
+    checkReviewsBody,
+    validate,
+    updateReview
+  )
+  .delete(
+    protect,
+    checkBanned,  // Pridedame checkBanned middleware
+    checkReviewCreator,
+    validate,
+    deleteReview
+  );
 
 module.exports = reviewRouter;
+
+

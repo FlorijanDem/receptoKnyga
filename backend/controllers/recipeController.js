@@ -166,3 +166,14 @@ exports.getRecipeStats = async (req, res, next) => {
     next(error);
   }
 };
+exports.addRecipe = (req, res) => {
+  const { title, description } = req.body;
+
+  if (!title || !description) {
+    return res.status(400).json({ message: 'Pavadinimas ir aprašymas yra privalomi.' });
+  }
+
+  const newRecipe = { title, description, createdAt: new Date() };
+
+  res.status(201).json(newRecipe);
+};

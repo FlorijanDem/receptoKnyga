@@ -267,5 +267,85 @@ function AddRecipe({ action }) {
     />
   );
 }
+import React, { useState } from 'react';
+
+const AddRecipe = ({ user }) => {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+
+  // Tikrinimas ar naudotojas užblokuotas
+  if (user?.isBanned) {
+    return (
+      <div style={{ color: 'red', fontWeight: 'bold' }}>
+        Jūs esate užblokuotas ir negalite pridėti receptų.
+      </div>
+    );
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErrorMessage(''); // Išvalyti ankstesnes klaidas
+    setSuccessMessage(''); // Išvalyti ankstesnius sėkmės pranešimus
+
+    try {
+      const res = await fetch('http://localhost:3001/api/recipes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`, // jei naudojat JWT
+        },
+        body: JSON.stringify({ title, description }),
+      });
+
+      if (res.status === 403) {
+        setErrorMessage('Tu esi užblokuotas ir negali pridėti receptų.');
+        return;
+      }
+
+      if (!res.ok) {
+        throw new Error('Klaida pridedant receptą');
+      }
+
+      const data = await res.json();
+      setSuccessMessage('Receptas pridėtas sėkmingai!');
+      console.log('Receptas pridėtas:', data);
+    } catch (error) {
+      setErrorMessage(error.message || 'Įvyko klaida. Bandykite vėl.');
+      console.error('Klaida:', error.message);
+    }
+  };
+
+  return (
+    <div>
+      <h2>Pridėti receptą</h2>
+
+      {/* Parodys klaidos pranešimą, jei yra */}
+      {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
+
+      {/* Parodys sėkmės pranešimą, jei yra */}
+      {successMessage && <div style={{ color: 'green' }}>{successMessage}</div>}
+
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Pavadinimas"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
+        <textarea
+          placeholder="Aprašymas"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+        ></textarea>
+        <button type="submit">Pridėti</button>
+      </form>
+    </div>
+  );
+};
 
 export default AddRecipe;
+
