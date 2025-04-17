@@ -14,6 +14,9 @@ const DashboardDailyMacros = ({ selectedDate, refreshKey }) => {
     calories: 0,
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingCharacteristics, setIsLoadingCharacteristics] =
+    useState(true);
+  const [isLoadingActivityLevels, setIsLoadingActivityLevels] = useState(true);
   const [error, setError] = useState(null);
   const [result, setResult] = useState(null);
   const [activityLevels, setActivityLevels] = useState();
@@ -34,7 +37,9 @@ const DashboardDailyMacros = ({ selectedDate, refreshKey }) => {
       });
       setActivityLevels(response.data.data);
     } catch (err) {
-      console.log(err);
+      console.error("Failed to fetch activity levels", err);
+    } finally {
+      setIsLoadingActivityLevels(false);
     }
   };
 
@@ -52,23 +57,11 @@ const DashboardDailyMacros = ({ selectedDate, refreshKey }) => {
           new Date(filteredData.date_of_birth)
         ),
         weight: filteredData.weightHistory[0].weight,
-        // activityLevel: filteredData.activity_level_id, // Initialize with default activity level
       });
-      console.log(characteristicsData);
-      const metrics = calculateAllMetrics(
-        parseFloat(characteristicsData.weight),
-        parseFloat(characteristicsData.height),
-        parseInt(characteristicsData.age),
-        characteristicsData.gender,
-        activityLevels.find(
-          (level) => level.id === +characteristicsData.activity_level_id
-        ).multiplier || 1,
-        String(characteristicsData.my_goals)
-      );
-
-      setResult(metrics);
     } catch (err) {
-      console.log(err);
+      console.error("Failed to fetch characteristics", err);
+    } finally {
+      setIsLoadingCharacteristics(false);
     }
   };
 
@@ -106,14 +99,26 @@ const DashboardDailyMacros = ({ selectedDate, refreshKey }) => {
   }, [selectedDate, refreshKey]);
 
   useEffect(() => {
-    fetchActivityLevels();
-    fetchCharacteristics();
-  }, [userMacros]);
+    if (characteristicsData && activityLevels && activityLevels.length > 0) {
+      const metrics = calculateAllMetrics(
+        parseFloat(characteristicsData.weight),
+        parseFloat(characteristicsData.height),
+        parseInt(characteristicsData.age),
+        characteristicsData.gender,
+        activityLevels.find(
+          (level) => level.id === +characteristicsData.activity_level_id
+        )?.multiplier || 1,
+        String(characteristicsData.my_goals)
+      );
+
+      setResult(metrics);
+    }
+  }, [characteristicsData, activityLevels]);
 
   useEffect(() => {
     fetchActivityLevels();
     fetchCharacteristics();
-  }, []);
+  }, [userMacros]);
 
   const pieData = [
     { name: "Fats", value: userMacros.fat, color: "#0D3559" },
@@ -123,7 +128,7 @@ const DashboardDailyMacros = ({ selectedDate, refreshKey }) => {
 
   return (
     <div className="daily-macros">
-      {isLoading ? (
+      {isLoading || isLoadingCharacteristics || isLoadingActivityLevels ? (
         <p className="daily-macros__loading">Loading...</p>
       ) : error ? (
         <p className="daily-macros__error">Error: {error}</p>
