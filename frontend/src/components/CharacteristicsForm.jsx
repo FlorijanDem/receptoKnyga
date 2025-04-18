@@ -141,10 +141,14 @@ const CharacteristicsForm = () => {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-[var(--color-recipe-secondary)]">
+          <label
+            htmlFor="height"
+            className="block text-sm font-medium text-[var(--color-recipe-secondary)]"
+          >
             Height (cm)
           </label>
           <input
+            id="height"
             type="number"
             name="height"
             value={data.height}
@@ -155,10 +159,14 @@ const CharacteristicsForm = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[var(--color-recipe-secondary)]">
+          <label
+            htmlFor="weight"
+            className="block text-sm font-medium text-[var(--color-recipe-secondary)]"
+          >
             Weight (kg)
           </label>
           <input
+            id="weight"
             type="number"
             name="weight"
             value={data.weight}
@@ -171,10 +179,14 @@ const CharacteristicsForm = () => {
 
         <div className="flex justify-between">
           <div>
-            <label className="block text-sm font-medium text-[var(--color-recipe-secondary)]">
+            <label
+              htmlFor="date_of_birth"
+              className="block text-sm font-medium text-[var(--color-recipe-secondary)]"
+            >
               Date of Birth
             </label>
             <input
+              id="date_of_birth"
               type="date"
               name="date_of_birth"
               value={data.date_of_birth?.split("T")[0] || ""}
@@ -190,10 +202,14 @@ const CharacteristicsForm = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-[var(--color-recipe-secondary)]">
+            <label
+              htmlFor="age"
+              className="block text-sm font-medium text-[var(--color-recipe-secondary)]"
+            >
               Age
             </label>
             <input
+              id="age"
               type="number"
               name="age"
               value={
@@ -210,10 +226,14 @@ const CharacteristicsForm = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[var(--color-recipe-secondary)]">
+          <label
+            htmlFor="gender"
+            className="block text-sm font-medium text-[var(--color-recipe-secondary)]"
+          >
             Gender
           </label>
           <select
+            id="gender"
             name="gender"
             value={data.gender}
             onChange={handleChange}
@@ -225,10 +245,14 @@ const CharacteristicsForm = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[var(--color-recipe-secondary)]">
+          <label
+            htmlFor="activity_level_id"
+            className="block text-sm font-medium text-[var(--color-recipe-secondary)]"
+          >
             Activity Level
           </label>
           <select
+            id="activity_level_id"
             name="activity_level_id"
             value={data.activity_level_id || ""}
             onChange={handleChange}
