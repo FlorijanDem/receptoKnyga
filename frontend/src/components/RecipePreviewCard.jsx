@@ -56,6 +56,8 @@ const RecipePreviewCard = ({ recipe, showUser = false }) => {
         <button
           className="absolute top-[26px] right-[26px] hover:scale-110 transition-transform duration-200 bg-[var(--color-bookmark-bg)]  rounded-full p-2"
           onClick={handleFavoriteClick}
+          title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+          aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
         >
           {isFavorite ? (
             <FaHeart className="text-red-500 text-2xl " />
