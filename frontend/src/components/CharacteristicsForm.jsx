@@ -149,13 +149,13 @@ const CharacteristicsForm = () => {
             name="height"
             value={data.height}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            className="mt-1 block w-full rounded-md border-[var(--color-recipe-secondary)] shadow-sm focus:border-[var(--color-recipe-primary)] focus:ring-[var(--color-recipe-primary)]"
             min="0"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-[var(--color-recipe-secondary)]">
             Weight (kg)
           </label>
           <input
@@ -163,7 +163,7 @@ const CharacteristicsForm = () => {
             name="weight"
             value={data.weight}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            className="mt-1 block w-full rounded-md  border-[var(--color-recipe-secondary)] shadow-sm focus:border-[var(--color-recipe-primary)] focus:ring-[var(--color-recipe-primary)]"
             min="0"
             step="0.1"
           />
@@ -171,7 +171,7 @@ const CharacteristicsForm = () => {
 
         <div className="flex justify-between">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-[var(--color-recipe-secondary)]">
               Date of Birth
             </label>
             <input
@@ -179,7 +179,7 @@ const CharacteristicsForm = () => {
               name="date_of_birth"
               value={data.date_of_birth?.split("T")[0] || ""}
               onChange={handleChange}
-              className="mt-1 block  rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              className="mt-1 block  rounded-md  border-[var(--color-recipe-secondary)] shadow-sm focus:border-[var(--color-recipe-primary)] focus:ring-[var(--color-recipe-primary)]"
               min={
                 new Date(new Date().setFullYear(new Date().getFullYear() - 120))
                   .toISOString()
@@ -190,7 +190,7 @@ const CharacteristicsForm = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-[var(--color-recipe-secondary)]">
               Age
             </label>
             <input
@@ -201,7 +201,7 @@ const CharacteristicsForm = () => {
                 ""
               }
               onChange={handleChange}
-              className="mt-1 block  rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              className="mt-1 block  rounded-md  border-[var(--color-recipe-secondary)] shadow-sm focus:border-[var(--color-recipe-primary)] focus:ring-[var(--color-recipe-primary)]"
               min="0"
               max="150"
               disabled
@@ -210,14 +210,14 @@ const CharacteristicsForm = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-[var(--color-recipe-secondary)]">
             Gender
           </label>
           <select
             name="gender"
             value={data.gender}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            className="mt-1 block w-full rounded-md  border-[var(--color-recipe-secondary)] shadow-sm focus:border-[var(--color-recipe-primary)] focus:ring-[var(--color-recipe-primary)]"
           >
             <option value="male">Male</option>
             <option value="female">Female</option>
@@ -225,14 +225,14 @@ const CharacteristicsForm = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-[var(--color-recipe-secondary)]">
             Activity Level
           </label>
           <select
             name="activity_level_id"
             value={data.activity_level_id || ""}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            className="mt-1 block w-full rounded-md  border-[var(--color-recipe-secondary)] shadow-sm focus:border-[var(--color-recipe-primary)] focus:ring-[var(--color-recipe-primary)]"
           >
             {/* {Object.entries(ACTIVITY_LEVELS).map(([key, level]) => (
               <option key={key} value={key}>
@@ -249,12 +249,12 @@ const CharacteristicsForm = () => {
 
         <button
           type="submit"
-          className="w-full bg-[var(--color-recipe-primary)] text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+          className="w-full bg-[var(--color-recipe-primary)] text-[var(--color-recipe-fifth)] py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
           disabled={isLoading}
         >
           {isLoading ? (
             <div className="flex items-center justify-center">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[var(--color-recipe-fifth)] mr-2"></div>
               Saving...
             </div>
           ) : (
@@ -264,7 +264,7 @@ const CharacteristicsForm = () => {
       </form>
 
       {results && (
-        <div className="mt-8 p-4 bg-gray-50 rounded-lg">
+        <div className="mt-8 p-4 bg-[var(--color-recipe-sixth)] rounded-lg">
           <h3 className="text-lg font-semibold mb-4">
             Calorie Calculator Results
           </h3>
@@ -294,7 +294,7 @@ const CharacteristicsForm = () => {
       )}
 
       {error && (
-        <div className="mt-4 p-4 bg-red-50 text-red-700 rounded-md">
+        <div className="mt-4 p-4 bg-[var(--color-recipe-sixth)] text-[var(--color-recipe-fourth)] rounded-md">
           {error}
         </div>
       )}
