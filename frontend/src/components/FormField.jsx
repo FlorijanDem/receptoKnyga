@@ -37,7 +37,7 @@ const FormField = ({
   return (
     <div>
       {label && (
-        <label htmlFor={name} className="text-gray-600">
+        <label htmlFor={name} className="text-[var(--color-recipe-secondary)]">
           {label}
         </label>
       )}
@@ -45,7 +45,7 @@ const FormField = ({
         <textarea
           id={name}
           className={`w-full p-2 border rounded ${
-            errors[name] ? "border-red-500" : ""
+            errors[name] ? "border-[var(--color-recipe-fourth)]" : ""
           }`}
           rows={rows || 3}
           placeholder={placeholder}
@@ -58,7 +58,7 @@ const FormField = ({
         <select
           id={name}
           className={`w-full p-2 border rounded ${
-            errors[name] ? "border-red-500" : ""
+            errors[name] ? "border-[var(--color-recipe-fourth)]" : ""
           }`}
           {...register(name, validation)}
           onChange={onChange}
@@ -71,7 +71,7 @@ const FormField = ({
           id={name}
           type={type}
           className={`w-full p-2 border rounded ${
-            errors[name] ? "border-red-500" : ""
+            errors[name] ? "border-[var(--color-recipe-fourth)]" : ""
           }`}
           placeholder={placeholder}
           {...register(name, validation)}
@@ -81,7 +81,9 @@ const FormField = ({
         />
       )}
       {errors[name] && (
-        <p className="text-red-500 text-sm mt-1">{errors[name].message}</p>
+        <p className="text-[var(--color-recipe-fourth)] text-sm mt-1">
+          {errors[name].message}
+        </p>
       )}
     </div>
   );
