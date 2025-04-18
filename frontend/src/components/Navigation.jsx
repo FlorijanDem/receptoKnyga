@@ -107,7 +107,7 @@ const Navigation = () => {
   };
 
   const iconStyle =
-    "mx-[0.625rem] transition-transform duration-300 hover:scale-110 active:scale-90";
+    "mx-[0.625rem] transition-transform duration-300 text-2xl hover:scale-110 active:scale-90";
 
   return (
     <nav className="relative">
@@ -141,12 +141,12 @@ const Navigation = () => {
           </div>
         </div>
 
-        <div className="hidden md:flex md:ml-auto md:justify-end md:mr-[3.75rem] desktop-icons flex-shrink-0">
+        <div className="hidden md:flex  md:ml-auto md:justify-end md:mr-[1rem] desktop-icons flex-shrink-0">
           {icons.map((icon, index) => (
-            <Link to={icon.path} key={index}>
-              <button className={iconStyle}>
-                <img src={icon.src} alt={icon.alt} width="44" height="44" />
-              </button>
+            <Link to={icon.path} key={index} className={iconStyle}>
+              {/* <button className={iconStyle}> */}
+              <img src={icon.src} alt={icon.alt} width="44" height="44" />
+              {/* </button> */}
             </Link>
           ))}
         </div>
