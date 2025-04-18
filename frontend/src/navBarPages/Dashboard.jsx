@@ -45,6 +45,7 @@ const Dashboard = () => {
             value={format(selectedDate, "yyyy-MM-dd")}
             onChange={(e) => setSelectedDate(new Date(e.target.value))}
             className="date-input"
+            aria-label="Select date"
           />
           <button
             onClick={() => setSelectedDate(addDays(selectedDate, 1))}

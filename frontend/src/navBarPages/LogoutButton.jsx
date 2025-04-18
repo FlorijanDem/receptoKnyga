@@ -6,7 +6,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 const LogoutButtonStyles =
   "flex items-center justify-start text-jakarta text-recipe-secondary text-[16px] font-medium " +
-  "hover:bg-recipe-primary hover:text-white rounded-md transition-colors duration-200 " +
+  "hover:bg-recipe-primary hover:text-recipe-fifth rounded-md transition-colors duration-200 " +
   "w-full h-[56px] px-[1rem] group";
 const LogoutIconStyles =
   "mr-[0.75rem] group-hover:filter group-hover:brightness-0 group-hover:invert";

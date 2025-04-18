@@ -16,7 +16,7 @@ const ReviewCard = ({ review, setRefresh }) => {
   return (
     <div
       key={currentReview.id}
-      className="border-b-[var(--color-recipe-third)] bg-white pb-3 mb-3 shadow-md rounded-lg p-4"
+      className="border-b-[var(--color-recipe-third)] bg-[var(--color-recipe-fifth)] pb-3 mb-3 shadow-md rounded-lg p-4"
     >
       <div className="flex justify-between">
         <p className="font-bold pl-1 text-[var(--color-recipe-third)]">

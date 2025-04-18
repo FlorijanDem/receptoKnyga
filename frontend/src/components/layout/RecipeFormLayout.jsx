@@ -139,7 +139,7 @@ const RecipeFormLayout = ({
 
               <button
                 type="button"
-                className="text-blue-500 text-sm"
+                className="text-[var(--color-recipe-primary)] text-sm"
                 onClick={addProductField}
               >
                 + Add Ingredient
@@ -149,7 +149,7 @@ const RecipeFormLayout = ({
 
           <button
             type="submit"
-            className="w-full bg-[#54A6FF] text-white p-2 rounded"
+            className="w-full bg-[var(--color-recipe-primary)] text-white p-2 rounded"
           >
             {action === "edit" ? "Edit" : "Add"} Recipe
           </button>

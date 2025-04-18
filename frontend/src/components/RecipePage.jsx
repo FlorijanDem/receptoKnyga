@@ -49,7 +49,7 @@ const RecipePage = () => {
   const backToList = () => {
     navigate(`/`);
   };
-  
+
   return (
     <>
       {loading ? (
@@ -60,7 +60,7 @@ const RecipePage = () => {
         <div className="p-4 max-w-md mx-auto">
           {/* Recipe Card */}
 
-          <div className="bg-white shadow-md rounded-lg p-4">
+          <div className="bg-[var(--color-recipe-fifth)] shadow-md rounded-lg p-4">
             <img
               src={recipe.data.photo || null}
               alt={recipe.data.title}
@@ -70,9 +70,13 @@ const RecipePage = () => {
               <h2 className="text-lg font-bold">{recipe.data.title}</h2>
               {/* <FaHeart className="text-red-500" /> */}
             </div>
-            <p className="text-sm text-gray-600">{recipe.data.description}</p>
-            <p className="text-sm text-gray-600">Type: {recipe.data.type}</p>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-[var(--color-recipe-third)]">
+              {recipe.data.description}
+            </p>
+            <p className="text-sm text-[var(--color-recipe-third)]">
+              Type: {recipe.data.type}
+            </p>
+            <p className="text-sm text-[var(--color-recipe-third)]">
               Preparation time: {recipe.data.preparation_time} m.
             </p>
             <div className="flex justify-between text-sm mt-2">
@@ -83,14 +87,14 @@ const RecipePage = () => {
             <div className="mt-2 flex justify-between">
               <p className="text-xl font-bold">{recipe.data.calories} Cals</p>
               <button
-                className="bg-blue-500 text-white px-4 py-1 rounded-lg"
+                className="bg-[var(--color-recipe-primary)] text-[var(--color-recipe-fifth)] px-4 py-1 rounded-lg"
                 onClick={() => setShowMethod(!showMethod)}
               >
                 {showMethod ? "Hide Instructions" : "Instructions"}
               </button>
             </div>
             {showMethod && (
-              <p className="mt-2 text-sm text-gray-800 bg-gray-100 p-2 rounded">
+              <p className="mt-2 text-sm text-[var(--color-recipe-third)] bg-[var(--color-recipe-sixth)] p-2 rounded">
                 {recipe.data.method}
               </p>
             )}
@@ -101,7 +105,7 @@ const RecipePage = () => {
             />
           </div>
           <button
-            className="bg-blue-500 text-white px-4 py-1 rounded-lg my-2"
+            className="bg-[var(--color-recipe-primary)] text-[var(--color-recipe-fifth)] px-4 py-1 rounded-lg my-2"
             onClick={() => backToList()}
           >
             Back to recipe list

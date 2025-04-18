@@ -1,10 +1,10 @@
 /**
  * WeightChart komponentas
- * 
+ *
  * Šis komponentas atvaizduoja vartotojo svorio istorijos grafiką naudojant Recharts biblioteką.
  * Duomenys gaunami iš backend'o API ir atvaizduojami linijiniame grafike.
- * 
- * 
+ *
+ *
  * - Gauname svorio istorijos duomenis iš API
  * - Formatuojame duomenis tinkamu formatu grafikui
  * - Nustatome Y ašies ribas (-20 kg nuo min svorio iki +20 kg nuo max svorio)
@@ -124,7 +124,8 @@ const WeightChart = () => {
         }} // Grafiko paraštės
       >
         <CartesianGrid strokeDasharray="3 3" /> {/* Tinklelis */}
-        <XAxis dataKey="name" /> {/* X ašis, naudojant 'name' lauką iš duomenų */}
+        <XAxis dataKey="name" />{" "}
+        {/* X ašis, naudojant 'name' lauką iš duomenų */}
         <YAxis
           type="number" // Y ašies tipas - skaičiai
           domain={yAxisDomain} // Y ašies ribos
@@ -135,7 +136,8 @@ const WeightChart = () => {
         <Line
           type="monotone" // Linijos tipas
           dataKey="weight" // Duomenų laukas, naudojamas Y reikšmėms
-          stroke="#8979FF" // Linijos spalva
+          stroke="var(--color-recipe-primary)" // Linijos spalva
+          // stroke="#8979FF" // Linijos spalva
           activeDot={{ r: 8 }} // Aktyvaus taško dydis
         />
       </LineChart>
