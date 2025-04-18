@@ -8,6 +8,7 @@ exports.getReviewsByRecipe = async (recipe_id) => {
         reviews.rating, 
         reviews.review_text, 
         reviews.created_at,
+        reviews.approved,
         users.username
         FROM reviews
         LEFT JOIN users

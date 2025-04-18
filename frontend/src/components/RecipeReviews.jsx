@@ -111,6 +111,10 @@ const RecipeReviews = ({ refresh }) => {
     setVisibleReviews(2);
   };
 
+  const filteredReviews = reviews.filter(
+    (review) => user?.role === "admin" || review.approved
+  );
+
   if (loading) return <p>Loading reviews...</p>;
   if (error)
     return <p className="text-[var(--color-recipe-fourth)]">{error}</p>;
@@ -124,7 +128,7 @@ const RecipeReviews = ({ refresh }) => {
             No reviews yet.
           </p>
         ) : null}
-        {reviews.slice(0, visibleReviews).map((review) => (
+        {filteredReviews.slice(0, visibleReviews).map((review) => (
           <div
             key={review.id}
             className="border-b-[var(--color-recipe-third)] bg-white pb-3 mb-3 shadow-md rounded-lg p-4"
