@@ -229,7 +229,7 @@ button {
 }
 
 .dashboard-recipe__date {
-  @apply text-sm text-[var(--color-recipe-seventh)];
+  @apply text-sm text-[var(--color-recipe-secondary)];
 }
 
 .dashboard-recipe__delete {
