@@ -17,12 +17,19 @@ const {
   checkRecipeCreator,
 } = require("../validators/checkRecipesParams");
 const { checkRecipeQuery } = require("../validators/checkRecipesQuery");
+const { checkUserBanned } = require("../validators/checkUserBanned");
 const validate = require("../validators/validate");
 
 recipeRouter
   .route("/")
   .get(checkRecipeQuery, validate, getAllRecipesHandler)
-  .post(protect, checkCreateRecipesBody, validate, createRecipeHandler);
+  .post(
+    protect,
+    checkUserBanned,
+    checkCreateRecipesBody,
+    validate,
+    createRecipeHandler
+  );
 
 recipeRouter
   .route("/stats")
@@ -33,6 +40,7 @@ recipeRouter
   .all(protect, checkRecipeParams, validate)
   .get(getRecipeByIdHandler)
   .patch(
+    checkUserBanned,
     checkRecipeCreator,
     checkUpdateRecipesBody,
     validate,

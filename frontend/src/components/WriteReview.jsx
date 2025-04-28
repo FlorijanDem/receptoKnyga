@@ -93,7 +93,7 @@ function WriteReview({ recipe_id, isLoggedIn, setRefresh }) {
           <button
             onClick={() => setShowForm(true)}
             className="bg-[var(--color-recipe-primary)] text-white px-4 py-2 rounded-md mt-4 cursor-pointer disabled:bg-[var(--color-recipe-secondary)] disabled:cursor-not-allowed"
-            disabled={hasReviewed || user.role === "admin"}
+            disabled={hasReviewed || user.role === "admin" || user?.banned}
           >
             {" "}
             Leave a Review

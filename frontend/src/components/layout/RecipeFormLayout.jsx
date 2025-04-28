@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FormProvider } from "react-hook-form";
 import FormField from "../FormField";
 import IngredientField from "../IngredientField";
@@ -7,6 +7,7 @@ import {
   RECIPE_TYPES,
   RECIPE_VALIDATION,
 } from "../../utils/validation/recipeValidation";
+import UserContext from "../../contexts/UserContext";
 
 /**
  * Komponentas, atsakingas už receptų formos dizainą ir struktūrą
@@ -42,6 +43,7 @@ const RecipeFormLayout = ({
   fields,
   action,
 }) => {
+  const { user } = useContext(UserContext);
   return (
     <div className="max-w-lg mx-auto bg-white p-6 shadow-md rounded-lg">
       <h2 className="text-xl font-semibold text-center text-gray-700 mb-4">
@@ -150,6 +152,7 @@ const RecipeFormLayout = ({
           <button
             type="submit"
             className="w-full bg-[var(--color-recipe-primary)] text-white p-2 rounded"
+            disabled={user?.banned}
           >
             {action === "edit" ? "Edit" : "Add"} Recipe
           </button>

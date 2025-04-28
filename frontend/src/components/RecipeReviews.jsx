@@ -226,6 +226,7 @@ const RecipeReviews = ({ refresh }) => {
                     <button
                       onClick={() => handleEditClick(review)}
                       className="bg-[var(--color-recipe-primary)] text-[var(--color-recipe-fifth)] px-4 py-1 rounded-lg"
+                      disabled={user?.banned}
                     >
                       Edit
                     </button>
