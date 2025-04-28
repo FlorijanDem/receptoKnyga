@@ -1,3 +1,9 @@
+// Lose Fat: Subtract 500 calories from TDEE for a moderate deficit.
+
+// Gain Fat: Add 500 calories to TDEE for a moderate surplus.
+
+// Balanced Diet: Use TDEE as the calorie target.
+
 // activityLevel nera saugomas ir dabar skirtas pasizaisti reiki tvarkyti DB
 // activityLevel yra tik fronte
 // reikia iskelti error apdorojima
@@ -20,6 +26,7 @@ const CharacteristicsForm = () => {
     date_of_birth: "",
     gender: "",
     activity_level_id: "",
+    my_goals: "lose_fat",
   });
   const [activityLevels, setActivityLevels] = useState([]);
   const [results, setResults] = useState(null);
@@ -42,8 +49,10 @@ const CharacteristicsForm = () => {
           parseInt(data.age),
           data.gender,
           activityLevels.find((level) => level.id === +data.activity_level_id)
-            .multiplier || 1
+            .multiplier || 1,
+          String(data.my_goals)
         );
+
         setResults(metrics);
       } catch (error) {
         console.error("Failed to calculate metrics:", error);
@@ -95,7 +104,13 @@ const CharacteristicsForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!data.height || !data.weight || !data.date_of_birth || !data.gender) {
+    if (
+      !data.height ||
+      !data.weight ||
+      !data.date_of_birth ||
+      !data.gender ||
+      !data.my_goals
+    ) {
       setError("Please fill in all required fields");
       return;
     }
@@ -112,6 +127,7 @@ const CharacteristicsForm = () => {
           date_of_birth: data.date_of_birth,
           gender: data.gender,
           activity_level_id: parseInt(data.activity_level_id),
+          my_goals: String(data.my_goals || ""),
         },
         {
           withCredentials: true,
@@ -268,6 +284,22 @@ const CharacteristicsForm = () => {
                 {level.label} ({level.description})
               </option>
             ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            My goals
+          </label>
+          <select
+            name="my_goals"
+            value={data.my_goals}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          >
+            <option value="lose_fat">Lose fat</option>
+            <option value="gain_fat">Gain fat</option>
+            <option value="balance">Balance</option>
           </select>
         </div>
 

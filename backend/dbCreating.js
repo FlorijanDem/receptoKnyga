@@ -32,7 +32,8 @@ const createDBtables = async () => {
             age INTEGER,
             date_of_birth DATE,
             gender VARCHAR(25),
-            activity_level_id INTEGER REFERENCES activity_levels(id)
+            activity_level_id INTEGER REFERENCES activity_levels(id),
+            my_goals VARCHAR(30)
         )
     `;
 
@@ -151,8 +152,8 @@ UNIQUE (user_id, recipe_id)
 )
 `;
 
-// Create reviews table
-await sql`
+    // Create reviews table
+    await sql`
 CREATE TABLE IF NOT EXISTS reviews (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -165,8 +166,8 @@ CREATE TABLE IF NOT EXISTS reviews (
 )
 `;
 
-// Consumed table
-await sql`
+    // Consumed table
+    await sql`
 CREATE TABLE IF NOT EXISTS consumed (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
