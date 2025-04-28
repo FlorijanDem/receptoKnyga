@@ -14,6 +14,7 @@ const {
 const { checkReviewsBody } = require("../validators/checkReviewBody");
 const { checkReviewsQuery } = require("../validators/checkReviewQuery");
 const validate = require("../validators/validate");
+const { checkUserBanned } = require("../validators/checkUserBanned");
 
 const reviewRouter = require("express").Router();
 
@@ -37,6 +38,7 @@ reviewRouter
   .post(
     protect,
     allowAccessTo("user"),
+    checkUserBanned,
     checkIfReviewed,
     checkReviewsBody,
     validate,
@@ -46,7 +48,14 @@ reviewRouter
 // "/:recipe_id/:review_id"
 reviewRouter
   .route("/:recipe_id/:review_id")
-  .patch(protect, checkReviewCreator, checkReviewsBody, validate, updateReview)
+  .patch(
+    protect,
+    checkUserBanned,
+    checkReviewCreator,
+    checkReviewsBody,
+    validate,
+    updateReview
+  )
   .delete(protect, checkReviewCreator, validate, deleteReview);
 
 module.exports = reviewRouter;
