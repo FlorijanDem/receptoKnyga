@@ -7,6 +7,7 @@ const {
   searchRecipes,
   getAllMacros,
   getRecipesStats,
+  getRecipesByUserId,
 } = require("../models/recipeModel");
 const { getUserByid } = require("../models/userModel");
 
@@ -107,6 +108,20 @@ exports.getRecipeByIdHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.getRecipesByUserIdHandler = async (req, res, next) => {
+  try {
+    const userId = req.user?.id;
+    const recipes = await getRecipesByUserId(userId);
+
+    res.status(200).json({
+      status: "success",
+      data: recipes,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
 
 exports.createRecipeHandler = async (req, res, next) => {
   // Add default image (in the future can be change)

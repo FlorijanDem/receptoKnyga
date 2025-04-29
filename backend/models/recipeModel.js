@@ -156,6 +156,16 @@ exports.searchRecipes = async (filters) => {
   };
 };
 
+exports.getRecipesByUserId = async (userId) => {
+  const recipes = await sql`
+    SELECT *
+    FROM recipes
+    WHERE user_id = ${userId}
+  `;
+
+  return recipes;
+};
+
 exports.getRecipeById = async (id) => {
   const recipe = await sql.begin(async () => {
     const [recipe] = await sql`
