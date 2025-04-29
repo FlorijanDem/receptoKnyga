@@ -68,6 +68,10 @@ button {
   .recipe-preview-card__type {
     @apply mb-3 px-4;
   }
+
+  .recipe-preview-card__approved {
+    @apply text-right pr-4 mb-4 text-[var(--color-recipe-fourth)];
+  }
 }
 
 .pagination {
