@@ -12,6 +12,7 @@ import AddRecipe from "../AddRecipe";
 import Dashboard from "../../navBarPages/Dashboard";
 import UsersList from "../UsersList";
 import ReviewsList from "../ReviewsList";
+import AdminLog from "../AdminLogs"; 
 
 function Layout() {
   return (
@@ -33,6 +34,7 @@ function Layout() {
             <Route path="/editRecipe" element={<AddRecipe action="edit" />} />
 
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/adminLogs" element={<AdminLog />} />
           </Routes>
         </main>
       </SearchProvider>
