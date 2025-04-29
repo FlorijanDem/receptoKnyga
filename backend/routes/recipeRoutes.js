@@ -6,6 +6,7 @@ const {
   updateRecipeHandler,
   deleteRecipeHandler,
   getRecipeStats,
+  getRecipesByUserIdHandler,
 } = require("../controllers/recipeController");
 const { protect, allowAccessTo } = require("../controllers/userController");
 const {
@@ -34,6 +35,8 @@ recipeRouter
 recipeRouter
   .route("/stats")
   .get(protect, allowAccessTo("admin"), getRecipeStats);
+
+recipeRouter.route("/myrecipes").get(protect, getRecipesByUserIdHandler);
 
 recipeRouter
   .route("/:id")
