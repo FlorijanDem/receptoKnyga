@@ -175,6 +175,28 @@ CREATE TABLE IF NOT EXISTS consumed (
   datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 )
 `;
+   // Create shopping_lists table
+await sql`
+CREATE TABLE IF NOT EXISTS shopping_lists (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  title VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+`;
+
+// Create shopping_list_items table
+await sql`
+CREATE TABLE IF NOT EXISTS shopping_list_items (
+  id SERIAL PRIMARY KEY,
+  list_id INTEGER REFERENCES shopping_lists(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  is_checked BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+`;
   } catch (err) {
     console.error("Failed to create tables:", err);
   }
