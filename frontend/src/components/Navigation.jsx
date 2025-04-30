@@ -6,7 +6,8 @@ import NavCartIcon from "../assets/icons/Cart.svg";
 import NavProfileIcon from "../assets/icons/Profil.svg";
 import NavMenuIcon from "../assets/icons/Menu.svg";
 import NavFilterIcon from "../assets/icons/Filter.svg";
-import NavAddRecipeIcon from "../assets/icons/AddRecipe.svg";
+import NavAddRecipeIcon from "../assets/icons/addRecipeSideBar.svg";
+import NavMyRecipesIcon from "../assets/icons/addRecipe.svg";
 
 import SearchBar from "./SearchBar";
 import Sidebar from "./Sidebar";
@@ -24,6 +25,12 @@ const icons = [
     path: "/addRecipe",
   },
   { src: NavLikeIcon, alt: "like Icon", pagename: "Like", path: "/favourite" },
+  {
+    src: NavMyRecipesIcon,
+    alt: "my recipes Icon",
+    pagename: "My Recipes",
+    path: "/myrecipes",
+  },
   {
     src: NavSettingIcon,
     alt: "setting Icon",

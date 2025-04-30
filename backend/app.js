@@ -13,6 +13,8 @@ const favoriteRouter = require("./routes/favoriteRoutes");
 const consumedRouter = require("./routes/consumedRouter");
 const activityLevelRouter = require("./routes/activityLevelRouter");
 const logRoutes = require("./routes/activityLogRoutes");
+const shoppingListRouter = require("./routes/shoppingListRouter");
+
 
 const app = express();
 
@@ -36,6 +38,8 @@ app.use("/api/v1/reviews", reviewRouter);
 app.use("/api/v1/consumed", consumedRouter);
 app.use("/api/v1/activity", activityLevelRouter);
 app.use("/api/v1/logs", logRoutes);
+app.use("/api/v1/shoppingList", shoppingListRouter);
+
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

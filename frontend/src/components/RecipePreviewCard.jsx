@@ -83,6 +83,9 @@ const RecipePreviewCard = ({ recipe, showUser = false }) => {
       )}
       <hr className="recipe-preview-card__line" />
       <p className="recipe-preview-card__type">{recipe?.type}</p>
+      {!recipe.approved && (
+        <p className="recipe-preview-card__approved">Not approved</p>
+      )}
     </article>
   );
 };

@@ -2,7 +2,8 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import SearchContext from "../contexts/SearchContext";
 
 const FilterForm = ({ isOpen, onClose }) => {
-  const { filters, setFilters, currentQuery, setCurrentQuery } = useContext(SearchContext);
+  const { filters, setFilters, currentQuery, setCurrentQuery } =
+    useContext(SearchContext);
   const [localFilters, setLocalFilters] = useState({
     type: "",
     product: "",
@@ -37,8 +38,8 @@ const FilterForm = ({ isOpen, onClose }) => {
 
   const applyFilters = (newFilters) => {
     setFilters(newFilters);
-  setCurrentQuery(currentQuery); // Simple refresh trigger
-};
+    setCurrentQuery(currentQuery); // Simple refresh trigger
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,22 +47,22 @@ const FilterForm = ({ isOpen, onClose }) => {
       ...localFilters,
       [name]: value,
     };
-    
+
     setLocalFilters(newLocalFilters);
-    
+
     // If type is changed, apply filters immediately
-    if (name === 'type' || name === 'order') {
+    if (name === "type" || name === "order") {
       applyFilters(newLocalFilters);
     }
-    
+
     // If product is changed, apply filters only if there are 3 or more characters
     // or if the field is empty (filter is cleared)
-    if (name === 'product') {
+    if (name === "product") {
       // Clear previous timeout
       if (productTimeoutRef.current) {
         clearTimeout(productTimeoutRef.current);
       }
-      
+
       // If 3 or more characters are entered or the field is empty, apply filters after 300ms
       if (value.length >= 3 || value.length === 0) {
         productTimeoutRef.current = setTimeout(() => {
@@ -70,7 +71,7 @@ const FilterForm = ({ isOpen, onClose }) => {
       }
     }
 
-    if (name === 'order') {
+    if (name === "order") {
       applyFilters(newLocalFilters);
     }
   };
@@ -87,7 +88,7 @@ const FilterForm = ({ isOpen, onClose }) => {
       product: "",
       order: "",
     };
-    
+
     setLocalFilters(emptyFilters);
     applyFilters(emptyFilters);
   };
@@ -95,7 +96,7 @@ const FilterForm = ({ isOpen, onClose }) => {
   const handleClearProduct = () => {
     const newFilters = {
       ...localFilters,
-      product: ""
+      product: "",
     };
     setLocalFilters(newFilters);
     applyFilters(newFilters);
@@ -122,7 +123,7 @@ const FilterForm = ({ isOpen, onClose }) => {
                 backgroundPosition: `right 0.5rem center`,
                 backgroundRepeat: `no-repeat`,
                 backgroundSize: `1.5em 1.5em`,
-                paddingRight: `2.5rem`
+                paddingRight: `2.5rem`,
               }}
             >
               <option value="">All types</option>
@@ -145,7 +146,7 @@ const FilterForm = ({ isOpen, onClose }) => {
                 backgroundPosition: `right 0.5rem center`,
                 backgroundRepeat: `no-repeat`,
                 backgroundSize: `1.5em 1.5em`,
-                paddingRight: `2.5rem`
+                paddingRight: `2.5rem`,
               }}
             >
               <option value="">Sort By</option>
