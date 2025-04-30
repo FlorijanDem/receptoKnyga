@@ -1,5 +1,7 @@
+import ShoppingLists from "../components/ShoppingList";
+
 const ShoppingList = () => {
-  return <h1>ShoppingList</h1>;
+  return <ShoppingLists />;
 };
 
 export default ShoppingList;
