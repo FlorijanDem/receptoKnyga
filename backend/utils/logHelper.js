@@ -6,7 +6,6 @@ const logUserActivity = async (req, action, details = "") => {
   const userIp = req.ip || req.headers["x-forwarded-for"] || "unknown";
   try {
     await saveLogToDb(userId, userIp, action, details);
-
   } catch (error) {
     logger.error("[logHelper] Failed to log user action", {
       error: error.message,
@@ -14,7 +13,7 @@ const logUserActivity = async (req, action, details = "") => {
       userIp,
       action,
       details,
-      url: req.originalUrl
+      url: req.originalUrl,
     });
     throw error;
   }

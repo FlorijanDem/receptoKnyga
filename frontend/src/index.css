@@ -236,7 +236,7 @@ button {
   @apply text-[var(--color-recipe-fourth)] hover:underline cursor-pointer;
 }
 
-// DashboarDailyMacros
+/* DashboarDailyMacros */
 
 .daily-macros {
   @apply bg-[var(--color-recipe-fifth)] rounded-lg mb-4 shadow-md p-4;
@@ -399,4 +399,71 @@ button {
 
 .add-recipe-modal__submit {
   @apply px-4 py-2 bg-[var(--color-recipe-primary)] text-[var(--color-recipe-fifth)] rounded hover:bg-[var(--color-recipe-secondary)] cursor-pointer;
+}
+
+/* AdminLogs Styles */
+
+.admin-logs__container {
+  @apply max-w-7xl mx-auto px-2 py-8 bg-[var(--color-recipe-fifth)] rounded-lg shadow-md;
+}
+
+.admin-logs__header {
+  @apply text-3xl  text-[var(--color-recipe-third)] mb-6 text-center;
+}
+
+.admin-logs__error {
+  @apply bg-[var(--color-recipe-fifth)] border-l-4 border-[var(--color-recipe-fourth)] text-[var(--color-recipe-fourth)] p-4 mb-6 rounded-lg shadow-md;
+}
+
+.admin-logs__filters {
+  @apply flex flex-col sm:flex-row gap-4 mb-6;
+}
+
+.admin-logs__filter-input,
+.admin-logs__filter-select {
+  @apply bg-[var(--color-recipe-fifth)] border border-[var(--color-recipe-secondary)] rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--color-recipe-primary)] w-full sm:w-auto;
+}
+
+.admin-logs__table-container {
+  @apply overflow-x-auto;
+}
+
+.admin-logs__table {
+  @apply min-w-full bg-[var(--color-recipe-fifth)] border border-[var(--color-recipe-secondary)] rounded-lg shadow-md;
+}
+
+.admin-logs__table thead {
+  @apply bg-[var(--color-recipe-sixth)] sticky top-0;
+}
+
+.admin-logs__table th {
+  @apply px-6 py-3 text-left text-sm font-semibold text-[var(--color-recipe-third)];
+}
+
+.admin-logs__table tbody tr {
+  @apply border-t border-[var(--color-recipe-secondary)] hover:bg-[var(--color-recipe-sixth)];
+}
+
+.admin-logs__table td {
+  @apply px-6 py-4 text-sm text-[var(--color-recipe-secondary)];
+}
+
+.admin-logs__table-empty {
+  @apply px-6 py-4 text-center text-[var(--color-recipe-secondary)];
+}
+
+.admin-logs__loading {
+  @apply text-center text-[var(--color-recipe-third)] py-4;
+}
+
+.admin-logs__pagination {
+  @apply mt-6 flex items-center justify-between;
+}
+
+.admin-logs__pagination-button {
+  @apply px-6 py-2 bg-[var(--color-recipe-primary)] text-[var(--color-recipe-fifth)] rounded-lg  disabled:bg-[var(--color-recipe-seventh)] disabled:cursor-not-allowed;
+}
+
+.admin-logs__pagination-info {
+  @apply text-[var(--color-recipe-secondary)];
 }

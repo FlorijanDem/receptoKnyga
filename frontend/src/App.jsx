@@ -9,7 +9,7 @@ import { Toaster } from "react-hot-toast";
 import { ErrorBoundary } from "react-error-boundary";
 import { SearchProvider } from "./contexts/SearchContext";
 import { Routes, Route, useLocation } from "react-router";
-import { logPageView } from "./logging";
+import { logPageView } from "./contexts/LoggingContext";
 import { AdminFilterContextProvider } from "./contexts/AdminFilterContext";
 
 function AppContent() {
@@ -21,17 +21,12 @@ function AppContent() {
       logPageView(location.pathname);
     }
   }, [location, user]);
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Routes>
-        <Route
-          path="/reset-password/:token"
-          element={<ResetPassword />}
-        />
-        <Route
-          path="/*"
-          element={user ? <Layout /> : <GuestLayout />}
-        />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/*" element={user ? <Layout /> : <GuestLayout />} />
       </Routes>
     </Suspense>
   );

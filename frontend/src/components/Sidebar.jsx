@@ -28,7 +28,6 @@ const MENU_ITEMS = {
     { to: "/favourite", icon: favouriteIcon, text: "Favorite" },
     { to: "/shoppingList", icon: shoppingIcon, text: "Shopping List" },
     { to: "/addRecipe", icon: addRecipeIcon, text: "Add recipe" },
-    { to: "/adminLogs" , icon: addRecipeIcon, text: "Admin Logs" },
   ],
   preferences: [
     { to: "/settings", icon: settingsIcon, text: "Settings" },

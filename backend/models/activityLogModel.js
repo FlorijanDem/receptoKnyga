@@ -1,71 +1,99 @@
+const fs = require("fs").promises;
+const path = require("path");
 const { sql } = require("../dbConnection");
-const logger = require("../logger").logger;
+
+const LOGS_FILE = path.join(__dirname, "../logs/logs.txt");
+
+let nextId = 1;
 
 exports.saveLogToDb = async (userId, userIp, action, details) => {
-  try {
-    const [savedLog] = await sql`
-      INSERT INTO activity_logs (user_id, user_ip, action, details)
-      VALUES (${userId}, ${userIp}, ${action}, ${details})
-      RETURNING *
+  let username = null;
+  if (userId) {
+    const [user] = await sql`
+      SELECT username
+      FROM users
+      WHERE id = ${userId}
     `;
-
-    return savedLog;
-  } catch (error) {
-    logger.error("[activityLogModel] Failed to save log to DB", {
-      error: error.message,
-      userId,
-      action,
-      details,
-    });
-    throw error;
+    username = user?.username || null;
   }
+
+  const logsContent = await fs.readFile(LOGS_FILE, "utf8");
+  const logs = logsContent
+    .split("\n")
+    .filter((line) => line.trim())
+    .map((line) => {
+      try {
+        return JSON.parse(line);
+      } catch {
+        return null;
+      }
+    })
+    .filter((log) => log && log.id);
+  const maxId = logs.length
+    ? Math.max(...logs.map((log) => parseInt(log.id, 10)))
+    : 0;
+  nextId = maxId + 1;
+
+  const logEntry = {
+    id: (nextId++).toString(),
+    user_id: userId || null,
+    username: username || null,
+    user_ip: userIp || null,
+    action: action || "Unknown",
+    details: typeof details === "object" ? details : details,
+    timestamp: new Date().toISOString(),
+  };
+
+  const logLine = JSON.stringify(logEntry) + "\n";
+  await fs.appendFile(LOGS_FILE, logLine, "utf8");
+
+
+  return logEntry;
 };
 
-exports.getLogs = async ({ userId, action, startDate, endDate, page = 1, limit = 10 }) => {
-  try {
-    const offset = (page - 1) * limit;
-    let query = sql`SELECT * FROM activity_logs`;
-    const conditions = [];
+exports.getLogs = async ({
+  username,
+  action,
+  startDate,
+  endDate,
+  page = 1,
+  limit = 10,
+}) => {
+  const offset = (page - 1) * limit;
 
-    if (userId) {
-      conditions.push(sql`user_id = ${userId}`);
-    }
-    if (action) {
-      conditions.push(sql`action = ${action}`);
-    }
-    if (startDate) {
-      conditions.push(sql`timestamp >= ${startDate}`);
-    }
-    if (endDate) {
-      conditions.push(sql`timestamp <= ${endDate}`);
-    }
+  const logsContent = await fs.readFile(LOGS_FILE, "utf8");
 
+  const logs = logsContent
+    .split("\n")
+    .filter((line) => line.trim())
+    .map((line) => JSON.parse(line));
 
-    if (conditions.length > 0) {
-      const whereClause = conditions.reduce((acc, condition, index) => {
-        return index === 0
-          ? sql`${acc} WHERE ${condition}`
-          : sql`${acc} AND ${condition}`;
-      }, sql``);
-      query = sql`${query} ${whereClause}`;
-    }
+  logs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
-  
-    query = sql`${query} ORDER BY timestamp DESC LIMIT ${limit} OFFSET ${offset}`;
-    const logs = await query;
-    const [{ count }] = await sql`SELECT COUNT(*) FROM activity_logs`;
-
-    return { logs, total: parseInt(count), page, limit };
-  } catch (error) {
-    logger.error("[activityLogModel] Failed to fetch logs", {
-      error: error.message,
-      userId,
-      action,
-      startDate,
-      endDate,
-      page,
-      limit,
-    });
-    throw error;
+  let filteredLogs = logs;
+  if (username && username.length >= 1) {
+    filteredLogs = filteredLogs.filter(
+      (log) => log.username && log.username.toLowerCase().startsWith(username.toLowerCase())
+    );
   }
+  if (action) {
+    filteredLogs = filteredLogs.filter((log) => log.action === action);
+  }
+  if (startDate) {
+    filteredLogs = filteredLogs.filter(
+      (log) => new Date(log.timestamp) >= new Date(startDate)
+    );
+  }
+  if (endDate) {
+    const endDateTime = new Date(endDate);
+    endDateTime.setHours(23, 59, 59, 999);
+    filteredLogs = filteredLogs.filter(
+      (log) => new Date(log.timestamp) <= endDateTime
+    );
+  }
+
+  const total = filteredLogs.length;
+  const paginatedLogs = filteredLogs.slice(offset, offset + limit);
+
+  return { logs: paginatedLogs, total, page, limit };
 };

@@ -5,12 +5,12 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export default function AdminLog() {
+const AdminLogPage = () => {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
   const [logs, setLogs] = useState([]);
   const [filters, setFilters] = useState({
-    userId: "",
+    username: "",
     action: "",
     startDate: "",
     endDate: "",
@@ -23,7 +23,7 @@ export default function AdminLog() {
 
   useEffect(() => {
     if (!user || user.role !== "admin") {
-      navigate("/login");
+      navigate("/");
     }
   }, [user, navigate]);
 
@@ -35,7 +35,6 @@ export default function AdminLog() {
     setIsLoading(true);
     setError(null);
     try {
-      // Validate date range
       if (filters.startDate && filters.endDate && filters.startDate > filters.endDate) {
         throw new Error("End date cannot be earlier than start date");
       }
@@ -51,11 +50,10 @@ export default function AdminLog() {
       setLogs(response.data.logs);
       setTotal(response.data.total);
     } catch (err) {
-      setError(
-        err.response?.data?.message
-          ? `Failed to fetch logs: ${err.response.data.message}`
-          : err.message || "Failed to fetch logs. Please try again."
-      );
+      const errorMessage = err.response?.data?.message
+        ? `Failed to fetch logs: ${err.response.data.message}`
+        : err.message || "Failed to fetch logs. Please try again.";
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -71,102 +69,98 @@ export default function AdminLog() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">User Activity Logs</h1>
+    <div className="admin-logs__container">
+      <h1 className="admin-logs__header">User Activity Logs</h1>
 
-      {error && (
-        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6">
-          {error}
-        </div>
-      )}
+      {error && <div className="admin-logs__error">{error}</div>}
 
-      <div className="mb-6 flex flex-col sm:flex-row gap-4">
+      <div className="admin-logs__filters">
         <input
           type="text"
-          name="userId"
-          placeholder="Filter by User ID"
-          value={filters.userId}
+          name="username"
+          placeholder="Filter by Username"
+          value={filters.username}
           onChange={handleFilterChange}
-          className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <input
-          type="text"
-          name="action"
-          placeholder="Filter by Action"
-          value={filters.action}
-          onChange={handleFilterChange}
-          className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="admin-logs__filter-input"
         />
         <input
           type="date"
           name="startDate"
           value={filters.startDate}
           onChange={handleFilterChange}
-          className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="admin-logs__filter-input"
         />
         <input
           type="date"
           name="endDate"
           value={filters.endDate}
           onChange={handleFilterChange}
-          className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="admin-logs__filter-input"
         />
       </div>
 
       {isLoading ? (
-        <div className="text-center text-gray-600">Loading...</div>
+        <div className="admin-logs__loading">Loading...</div>
       ) : (
         <>
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border rounded-lg">
+          <div className="admin-logs__table-container">
+            <table className="admin-logs__table">
               <thead>
-                <tr className="bg-gray-100">
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Time</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">User</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">IP</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Action</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Details</th>
+                <tr>
+                  <th>Time</th>
+                  <th>User</th>
+                  <th>IP Address</th>
+                  <th>Action</th>
+                  <th>Details</th>
                 </tr>
               </thead>
               <tbody>
                 {logs.length === 0 ? (
                   <tr>
-                    <td colSpan="5" className="px-6 py-4 text-center text-gray-500">
+                    <td colSpan="5" className="admin-logs__table-empty">
                       No logs found.
                     </td>
                   </tr>
                 ) : (
-                  logs.map((log) => (
-                    <tr key={log.id} className="border-t">
-                      <td className="px-6 py-4 text-sm text-gray-700">
-                        {new Date(log.timestamp).toLocaleString()}
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-700">{log.user_id || "N/A"}</td>
-                      <td className="px-6 py-4 text-sm text-gray-700">{log.user_ip}</td>
-                      <td className="px-6 py-4 text-sm text-gray-700">{log.action}</td>
-                      <td className="px-6 py-4 text-sm text-gray-700">{log.details}</td>
-                    </tr>
-                  ))
+                  logs.map((log) => {
+                    let formattedDetails = log.details;
+                    try {
+                      formattedDetails = log.details.recipeId
+                        ? `Recipe: ${log.details.title || "Unknown"} (ID: ${log.details.recipeId})`
+                        : JSON.stringify(log.details);
+                    } catch (e) {
+
+                    }
+                    return (
+                      <tr key={log.id}>
+                        <td>{new Date(log.timestamp).toLocaleString()}</td>
+                        <td>{log.username || log.user_id || "N/A"}</td>
+                        <td>{log.user_ip}</td>
+                        <td>{log.action}</td>
+                        <td>{formattedDetails}</td>
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
             </table>
           </div>
 
-          <div className="mt-6 flex items-center justify-between">
+          <div className="admin-logs__pagination">
             <button
               disabled={filters.page === 1 || isLoading}
               onClick={() => handlePageChange(filters.page - 1)}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg disabled:bg-gray-300 hover:bg-blue-600"
+              className="admin-logs__pagination-button"
             >
               Previous
             </button>
-            <span className="text-gray-600">
+            <span className="admin-logs__pagination-info">
               Page {filters.page} of {Math.ceil(total / filters.limit)}
             </span>
             <button
               disabled={filters.page * filters.limit >= total || isLoading}
               onClick={() => handlePageChange(filters.page + 1)}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg disabled:bg-gray-300 hover:bg-blue-600"
+              className="admin-logs__pagination-button"
             >
               Next
             </button>
@@ -176,3 +170,5 @@ export default function AdminLog() {
     </div>
   );
 }
+
+export default AdminLogPage

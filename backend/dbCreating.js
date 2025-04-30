@@ -175,21 +175,6 @@ CREATE TABLE IF NOT EXISTS consumed (
   datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 )
 `;
-
-    // activity logs table
-    await sql` 
-    CREATE TABLE IF NOT EXISTS activity_logs (
-  id SERIAL PRIMARY KEY,
-  user_id VARCHAR(50),
-  user_ip VARCHAR(45),
-  action VARCHAR(50),
-  details TEXT,
-  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-CREATE INDEX idx_activity_logs_timestamp ON activity_logs(timestamp);
-CREATE INDEX idx_activity_logs_user_id ON activity_logs(user_id);
-CREATE INDEX idx_activity_logs_action ON activity_logs(action);
-`;
   } catch (err) {
     console.error("Failed to create tables:", err);
   }
