@@ -19,6 +19,8 @@ exports.checkUpdateCharacteristicsBody = [
     .isInt({ min: 5, max: 120 })
     .withMessage("Age must be a number between 5 and 120"),
 
+  body("date_of_birth").optional().trim(),
+
   body("gender")
     .optional()
     .trim()
@@ -26,6 +28,18 @@ exports.checkUpdateCharacteristicsBody = [
     .withMessage("Gender is required")
     .isLength({ max: 25 })
     .withMessage("Gender must have a maximum length of 25 characters"),
+
+  body("activity_level_id")
+    .optional()
+    .trim()
+    .isInt({ min: 1 })
+    .withMessage("Activity level ID must be a positive integer"),
+
+    body("my_goals")
+    .optional()
+    .trim()
+    .isString()
+    .withMessage("My goals"),
 
   checkExact([], {
     message: (fields) =>

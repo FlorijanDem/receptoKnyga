@@ -64,6 +64,9 @@ DB_SSL =
 JWT_SECRET =
 JWT_EXPIRES_IN = 90d
 JWT_COOKIE_EXPIRES_IN = 90
+
+# Disable every backend starts checking the env file
+# DISABLE_CHECKING = true
 ```
 
 ### 4️⃣ Run
@@ -94,6 +97,12 @@ node server.js
 | POST   | `/api/v1/recipes`           | Create a new recipe       | ✅ Yes        |
 | PUT    | `/api/v1/recipes/:id`       | Update a recipe           | ✅ Yes        |
 | DELETE | `/api/v1/recipes/:id`       | Delete a recipe           | ✅ Yes        |
+
+### 🥕 Products
+
+| Method | Endpoint              | Description        | Auth Required |
+| ------ | --------------------- | ------------------ | ------------- |
+| GET    | `/api/v1/products/?q=` | Search products    | ✅ Yes        |
 
 ### ✏️ Characteristics
 

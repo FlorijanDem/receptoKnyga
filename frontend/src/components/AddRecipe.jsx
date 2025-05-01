@@ -1,13 +1,50 @@
-import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useContext, useEffect, useState, useRef, useCallback } from "react";
+import { useNavigate, useLocation } from "react-router";
 import UserContext from "../contexts/UserContext";
 import axios from "axios";
+import { useForm, useFieldArray } from "react-hook-form";
+import RecipeFormLayout from "./layout/RecipeFormLayout";
+import {
+  NON_VEGETARIAN_CATEGORIES,
+  NON_VEGETARIAN_KEYWORDS,
+} from "../utils/validation/recipeValidation";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-function AddRecipe() {
+function AddRecipe({ action }) {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
+  const location = useLocation();
+  const [searchResults, setSearchResults] = useState({ data: [], index: -1 });
+  const [isSearching, setIsSearching] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const dropdownRef = useRef(null);
+  const [error, setError] = useState(null);
+
+  const recipe = location.state?.recipe || null;
+
+  const methods = useForm({
+    // defaultValues: {
+    //   title: "",
+    //   description: "",
+    //   method: "",
+    //   preparation_time: "",
+    //   servings: "",
+    //   type: "non-veg",
+    //   photo: "",
+    //   products: [{ title: "", amount: "" }],
+    // },
+    mode: "onBlur",
+  });
+
+  const { control, watch, setValue, trigger, reset } = methods;
+
+  const recipeType = watch("type");
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "products",
+  });
 
   useEffect(() => {
     if (!user) {
@@ -15,215 +52,217 @@ function AddRecipe() {
     }
   }, [user, navigate]);
 
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    method: "",
-    preparation_time: "",
-    servings: "",
-    type: "veg",
-    photo: "",
-    products: [{ title: "", amount: "", units_of_meassurement: "" }],
-  });
+  const filterProductsByType = useCallback((products, type) => {
+    if (!products || products.length === 0) return [];
 
-  const [error, setError] = useState(null);
+    if (type === "veg") {
+      return products.filter((product) => {
+        if (!product.category) return true;
 
-  const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
+        const isNonVeg = NON_VEGETARIAN_CATEGORIES.some((category) =>
+          product.category.toLowerCase().includes(category.toLowerCase())
+        );
 
-  const handleProductChange = (index, field, value) => {
-    setFormData((prev) => {
-      const updatedProducts = [...prev.products];
-      updatedProducts[index] = {
-        ...updatedProducts[index],
-        [field]: value || "",
-      };
-      return { ...prev, products: updatedProducts };
-    });
-  };
+        const containsNonVegKeyword = NON_VEGETARIAN_KEYWORDS.some((keyword) =>
+          product.title.toLowerCase().includes(keyword.toLowerCase())
+        );
 
-  const addProductField = () => {
-    setFormData((prev) => ({
-      ...prev,
-      products: [...prev.products, { title: "", amount: "", units_of_meassurement: "" }],
-    }));
-  };
+        return !isNonVeg && !containsNonVegKeyword;
+      });
+    }
 
-  const removeProductField = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      products: prev.products.filter((_, i) => i !== index),
-    }));
-  };
+    return products;
+  }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(null);
+  const searchProducts = useCallback(
+    async (query, index, recipeType) => {
+      if (!query || query.length < 2) {
+        setSearchResults({ data: [], index });
+        return;
+      }
 
-    const finalFormData = {
-      ...formData,
-      products: formData.products.map((product) => ({
-        title: product.title || "",
-        amount: product.amount || "",
-        units_of_meassurement: product.units_of_meassurement || "",
-      })),
+      setIsSearching(true);
+      try {
+        const response = await axios.get(`${API_URL}/products`, {
+          params: { q: query },
+          withCredentials: true,
+        });
+
+        let products = response.data.data || [];
+
+        const filteredProducts = filterProductsByType(products, recipeType);
+
+        setSearchResults({ data: filteredProducts, index });
+        setActiveIndex(-1);
+      } catch (error) {
+        console.error("Error searching products:", error);
+        setSearchResults({ data: [], index });
+      } finally {
+        setIsSearching(false);
+      }
+    },
+    [filterProductsByType]
+  );
+
+  const handleProductSearch = useCallback(
+    (e, index) => {
+      const value = e.target.value;
+      setValue(`products.${index}.title`, value);
+
+      if (window.searchTimeout) {
+        clearTimeout(window.searchTimeout);
+      }
+
+      if (value.length >= 2) {
+        window.searchTimeout = setTimeout(() => {
+          searchProducts(value, index, recipeType);
+        }, 300);
+      } else {
+        setSearchResults({ data: [], index: -1 });
+        setIsSearching(false);
+        setActiveIndex(-1);
+      }
+    },
+    [setValue, searchProducts, recipeType]
+  );
+
+  const selectProduct = useCallback(
+    (product, index) => {
+      setValue(`products.${index}.title`, product.title);
+      setSearchResults({ data: [], index: -1 });
+
+      trigger(`products.${index}.title`);
+    },
+    [setValue, trigger]
+  );
+
+  const handleKeyDown = useCallback(
+    (e, index) => {
+      if (!searchResults.data || searchResults.data.length === 0) return;
+
+      if (searchResults.index !== index) return;
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setActiveIndex((prev) =>
+          prev < searchResults.data.length - 1 ? prev + 1 : prev
+        );
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setActiveIndex((prev) => (prev > 0 ? prev - 1 : 0));
+      } else if (e.key === "Enter" && activeIndex >= 0) {
+        e.preventDefault();
+        selectProduct(searchResults.data[activeIndex], index);
+        setActiveIndex(-1);
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        setSearchResults({ data: [], index: -1 });
+        setActiveIndex(-1);
+      }
+    },
+    [searchResults, activeIndex, selectProduct]
+  );
+
+  const addProductField = useCallback(async () => {
+    const isValid = await trigger("products");
+    if (!isValid) return;
+
+    append({ title: "", amount: "" });
+  }, [trigger, append]);
+
+  const onSubmit = useCallback(
+    async (data) => {
+      setError(null);
+
+      try {
+        const response =
+          action === "edit"
+            ? await axios.patch(`${API_URL}/recipes/${recipe.id}`, data, {
+                withCredentials: true,
+              })
+            : await axios.post(`${API_URL}/recipes`, data, {
+                withCredentials: true,
+              });
+        navigate(`/recipe/${response.data.data.id}`);
+      } catch (err) {
+        setError(
+          err.response?.data?.message
+            ? `Failed to add recipe: ${err.response.data.message}`
+            : "Failed to add recipe. Please try again."
+        );
+      }
+    },
+    [navigate]
+  );
+  useEffect(() => {
+    if (action === "edit") {
+      reset({
+        title: recipe?.title,
+        description: recipe?.description,
+        method: recipe?.method,
+        preparation_time: recipe?.preparation_time,
+        servings: recipe?.servings,
+        type: recipe?.type,
+        photo: recipe?.photo,
+        products: recipe?.products,
+      });
+    } else {
+      reset({
+        title: "",
+        description: "",
+        method: "",
+        preparation_time: "",
+        servings: "",
+        type: "non-veg",
+        photo: "",
+        products: [{ title: "", amount: "" }],
+      });
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [action]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setSearchResults({ data: [], index: -1 });
+        setActiveIndex(-1);
+      }
     };
 
-    try {
-      const response = await axios.post(`${API_URL}/recipes`, finalFormData, {
-        withCredentials: true,
-      });
-      navigate(`/recipe/${response.data.data.id}`);
-    } catch (error) {
-      setError(error.response?.data?.message && "Failed to add recipe.");
-    }
-  };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (window.searchTimeout) {
+        clearTimeout(window.searchTimeout);
+      }
+    };
+  }, []);
 
   return (
-    <div className="max-w-lg mx-auto bg-white p-6 shadow-md rounded-lg">
-      <h2 className="text-xl font-semibold text-center text-gray-700 mb-4">
-        Add Recipe
-      </h2>
-      {error && <p className="text-red-500 text-center">{error}</p>}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <p className="text-gray-600">Recipe Title</p>
-          <input
-            type="text"
-            name="title"
-            className="w-full p-2 border rounded"
-            required
-            value={formData.title}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <p className="text-gray-600">Description</p>
-          <textarea
-            name="description"
-            className="w-full p-2 border rounded"
-            rows="3"
-            required
-            value={formData.description}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <p className="text-gray-600">Preparation Method</p>
-          <textarea
-            name="method"
-            className="w-full p-2 border rounded"
-            rows="4"
-            required
-            value={formData.method}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="flex space-x-4">
-          <div className="w-1/2">
-            <p className="text-gray-600">Preparation Time (min)</p>
-            <input
-              type="number"
-              name="preparation_time"
-              className="w-full p-2 border rounded"
-              required
-              value={formData.preparation_time}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="w-1/2">
-            <p className="text-gray-600">Number of Servings</p>
-            <input
-              type="number"
-              name="servings"
-              className="w-full p-2 border rounded"
-              required
-              value={formData.servings}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-        <div>
-          <p className="text-gray-600">Recipe Type</p>
-          <select
-            name="type"
-            className="w-full p-2 border rounded"
-            value={formData.type}
-            onChange={handleChange}
-          >
-            <option value="veg">Vegetarian</option>
-            <option value="non-veg">Non-Vegetarian</option>
-          </select>
-        </div>
-        <div>
-          <p className="text-gray-600">Photo URL</p>
-          <input
-            type="text"
-            name="photo"
-            className="w-full p-2 border rounded"
-            value={formData.photo}
-            onChange={handleChange}
-          />
-        </div>
-        <fieldset className="border p-4 rounded">
-          <legend className="text-gray-700 font-semibold">Ingredients</legend>
-          {formData.products.map((product, index) => (
-            <div key={index} className="flex space-x-2 mb-2">
-              <input
-                type="text"
-                placeholder="Ingredient Name"
-                className="w-1/3 p-2 border rounded"
-                required
-                value={product.title}
-                onChange={(e) => handleProductChange(index, "title", e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="Amount"
-                className="w-1/3 p-2 border rounded"
-                required
-                value={product.amount}
-                onChange={(e) => handleProductChange(index, "amount", e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="Units (e.g., g, ml)"
-                className="w-1/3 p-2 border rounded"
-                required
-                value={product.units_of_meassurement}
-                onChange={(e) =>
-                  handleProductChange(index, "units_of_meassurement", e.target.value)
-                }
-              />
-              <button
-                type="button"
-                className="text-red-500 text-sm"
-                onClick={() => removeProductField(index)}
-              >
-                ✕
-              </button>
-            </div>
-          ))}
-          <button
-            type="button"
-            className="text-blue-500 text-sm"
-            onClick={addProductField}
-          >
-            + Add Ingredient
-          </button>
-        </fieldset>
-        <button
-          type="submit"
-          className="w-full bg-[#54A6FF] text-white p-2 rounded"
-        >
-          Add Recipe
-        </button>
-      </form>
-    </div>
+    <RecipeFormLayout
+      methods={methods}
+      onSubmit={onSubmit}
+      error={error}
+      searchResults={searchResults}
+      activeIndex={activeIndex}
+      handleProductSearch={handleProductSearch}
+      handleKeyDown={handleKeyDown}
+      isSearching={isSearching}
+      selectProduct={selectProduct}
+      setActiveIndex={setActiveIndex}
+      addProductField={addProductField}
+      remove={remove}
+      fields={fields}
+      recipeType={recipeType}
+      action={action}
+      reset={reset}
+    />
   );
 }
 

@@ -2,6 +2,9 @@ require("dotenv").config();
 const server = require("./app");
 const { sql, testDBConnection } = require("./dbConnection");
 const { createDBtables, dbSettings } = require("./dbCreating");
+const { validateEnv } = require("./envChecker");
+
+validateEnv();
 
 (async () => {
   try {

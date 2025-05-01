@@ -1,19 +1,36 @@
-import React, { useState, useContext } from "react";
-import { Link } from "react-router";
+import React, { useState, useContext, useEffect, useRef } from "react";
+import { NavLink, Link } from "react-router";
 import NavLikeIcon from "../assets/icons/Like.svg";
 import NavSettingIcon from "../assets/icons/Settings.svg";
 import NavCartIcon from "../assets/icons/Cart.svg";
 import NavProfileIcon from "../assets/icons/Profil.svg";
 import NavMenuIcon from "../assets/icons/Menu.svg";
 import NavFilterIcon from "../assets/icons/Filter.svg";
+import NavAddRecipeIcon from "../assets/icons/addRecipeSideBar.svg";
+import NavMyRecipesIcon from "../assets/icons/addRecipe.svg";
 
 import SearchBar from "./SearchBar";
 import Sidebar from "./Sidebar";
 import SearchContext from "../contexts/SearchContext";
+import { AdminFilterContext } from "../contexts/AdminFilterContext";
+import UserContext from "../contexts/UserContext";
 import FilterForm from "./FilterForm";
+import AdminNavigation from "./AdminNavigation";
 
 const icons = [
+  {
+    src: NavAddRecipeIcon,
+    alt: "add recipe Icon",
+    pagename: "AddRecipe",
+    path: "/addRecipe",
+  },
   { src: NavLikeIcon, alt: "like Icon", pagename: "Like", path: "/favourite" },
+  {
+    src: NavMyRecipesIcon,
+    alt: "my recipes Icon",
+    pagename: "My Recipes",
+    path: "/myrecipes",
+  },
   {
     src: NavSettingIcon,
     alt: "setting Icon",
@@ -37,34 +54,67 @@ const icons = [
 const Navigation = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isFilterFormOpen, setIsFilterFormOpen] = useState(false);
-  const { setDraftQuery, setCurrentQuery, setFilters } = useContext(SearchContext);
+
+  const { setDraftQuery, setCurrentQuery, setFilters } =
+    useContext(SearchContext);
+  const { setAdminFilters, setAdminPage } = useContext(AdminFilterContext);
+  const { user } = useContext(UserContext);
+
+  const sidebarRef = useRef(null); // Ref to track the sidebar element
 
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
-  
-  // Funkcija filtravimo formos atidarymui/uždarymui
+
+  // Function to handle clicks outside the sidebar
+  const handleClickOutside = (event) => {
+    if (
+      sidebarRef.current &&
+      !sidebarRef.current.contains(event.target) &&
+      isSidebarOpen
+    ) {
+      setSidebarOpen(false); // Close the sidebar
+    }
+  };
+
+  // Add event listener for clicks outside the sidebar
+  useEffect(() => {
+    if (isSidebarOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isSidebarOpen]);
+
+  // Function to handle filter form open/close
   const toggleFilterForm = () => {
     setIsFilterFormOpen(!isFilterFormOpen);
-    // Jei forma uždaroma, išvalome filtrus
     if (isFilterFormOpen) {
       setFilters({
         type: "",
-        product: ""
+        product: "",
       });
     }
   };
 
-  // Funkcija, kuri išvalo paieškos lauką ir rezultatus
+  // Function to clear search field and results
   const handleLogoClick = () => {
     setDraftQuery("");
     setCurrentQuery("");
     setFilters({
       type: "",
-      product: ""
+      product: "",
     });
+    if (user?.role === "admin") {
+      setAdminPage("recipes");
+      setAdminFilters({
+        name: "approved",
+        value: "all",
+      });
+    }
   };
 
   const iconStyle =
-    "mx-[0.625rem] transition-transform duration-300 hover:scale-110 active:scale-90";
+    "mx-[0.625rem] transition-transform duration-300 text-2xl hover:scale-110 active:scale-90";
 
   return (
     <nav className="relative">
@@ -83,8 +133,10 @@ const Navigation = () => {
         <div className="2xl:max-w-[1000px] md:max-w-[600px] w-full mt-4 flex md:mt-0 md:ml-[4rem] search-bar-container items-center flex-grow md:pr-[2rem]">
           <SearchBar />
           <div className="ml-[1rem] mr-[1.563rem]">
-            <button 
-              className={`${isFilterFormOpen ? 'bg-gray-200 rounded-full' : ''}`} 
+            <button
+              className={`${
+                isFilterFormOpen ? "bg-gray-200 rounded-full" : ""
+              }`}
               onClick={toggleFilterForm}
             >
               <img
@@ -96,28 +148,28 @@ const Navigation = () => {
           </div>
         </div>
 
-        <div className="hidden md:flex md:ml-auto md:justify-end md:mr-[3.75rem]  desktop-icons flex-shrink-0">
+        <div className="hidden md:flex  md:ml-auto md:justify-end md:mr-[1rem] desktop-icons flex-shrink-0">
           {icons.map((icon, index) => (
-            <Link to={icon.path} key={index}>
-              <button className={iconStyle}>
-                <img src={icon.src} alt={icon.alt} width="44" height="44" />
-              </button>
+            <Link to={icon.path} key={index} className={iconStyle}>
+              {/* <button className={iconStyle}> */}
+              <img src={icon.src} alt={icon.alt} width="44" height="44" />
+              {/* </button> */}
             </Link>
           ))}
         </div>
       </div>
-      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-      
-      {/* Pridedame filtravimo formą */}
-      <div className="relative">
-        <FilterForm 
-          isOpen={isFilterFormOpen} 
-          onClose={toggleFilterForm} 
-        />
+      <div ref={sidebarRef}>
+        <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       </div>
-      
-      {/* Pridedame papildomą margin, kai filtravimo forma yra atidaryta */}
+
+      {/* Add the filter form */}
+      <div className="relative">
+        <FilterForm isOpen={isFilterFormOpen} onClose={toggleFilterForm} />
+      </div>
+
+      {/* Add extra margin when the filter form is open */}
       {isFilterFormOpen && <div className="h-[350px] md:h-[200px]"></div>}
+      <AdminNavigation />
     </nav>
   );
 };

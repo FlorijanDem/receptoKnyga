@@ -30,9 +30,45 @@ const createDBtables = async () => {
             height FLOAT,
             weight FLOAT,
             age INTEGER,
-            gender VARCHAR(25)
+            date_of_birth DATE,
+            gender VARCHAR(25),
+            activity_level_id INTEGER REFERENCES activity_levels(id),
+            my_goals VARCHAR(30)
         )
     `;
+
+    // Create characteristics_history_weight table
+    await sql`
+    CREATE TABLE IF NOT EXISTS characteristics_history_weight (
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+      weight FLOAT NOT NULL,
+      date DATE NOT NULL DEFAULT CURRENT_DATE,
+      UNIQUE(user_id, date) -- Prevents duplicate entries for same user on same date
+    )
+  `;
+
+    // Create activity_levels table
+    await sql`
+  CREATE TABLE IF NOT EXISTS activity_levels (
+    id SERIAL PRIMARY KEY,
+    label VARCHAR(255) NOT NULL UNIQUE,
+    description TEXT NOT NULL UNIQUE,
+    multiplier FLOAT NOT NULL UNIQUE
+  )
+  `;
+
+    // Insert default activity levels
+    await sql`
+    INSERT INTO activity_levels (label, description, multiplier)
+    VALUES 
+      ('Sedentary', 'Little or no exercise', 1.2),
+      ('Light', 'Light exercise/sports 1-3 days/week', 1.375),  
+      ('Moderate', 'Moderate exercise/sports 3-5 days/week', 1.55),
+      ('Active', 'Hard exercise/sports 6-7 days a week', 1.725),
+      ('Very Active', 'Very hard exercise/sports & physical job or 2x training per day', 1.9)
+    ON CONFLICT (label) DO NOTHING
+  `;
 
     // Create recipes table
     // The "type" field represents the recipe category, such as "Vegetarian" or "Vegan".
@@ -53,17 +89,50 @@ const createDBtables = async () => {
         )
     `;
 
-    // Create products table,
-    // every product have own id who putted into "recipes.products" array
+    // Create products table with all nutritional fields
     await sql`
-        CREATE TABLE IF NOT EXISTS products (
-            id SERIAL PRIMARY KEY,
-            title TEXT NOT NULL,
-            amount NUMERIC,
-            units_of_meassurement VARCHAR
-        )
-    `;
-
+    CREATE TABLE IF NOT EXISTS products(
+    id SERIAL PRIMARY KEY,
+    title TEXT,
+    othername TEXT,
+    category TEXT,
+    potassium INTEGER,
+    selenium DOUBLE PRECISION,
+    sodium INTEGER,
+    zinc DOUBLE PRECISION,
+    calories INTEGER,
+    carbohydrates DOUBLE PRECISION,
+    fiber DOUBLE PRECISION,
+    netcarbs DOUBLE PRECISION,
+    fats DOUBLE PRECISION,
+    saturated DOUBLE PRECISION,
+    mufa DOUBLE PRECISION,
+    pufa DOUBLE PRECISION,
+    pufa_w6 DOUBLE PRECISION,
+    pufa_w3 DOUBLE PRECISION,
+    protein DOUBLE PRECISION,
+    vit_a_rae INTEGER,
+    vit_b1 DOUBLE PRECISION,
+    vit_b2 DOUBLE PRECISION,
+    vit_b3 DOUBLE PRECISION,
+    vit_b5 DOUBLE PRECISION,
+    vit_b6 DOUBLE PRECISION,
+    vit_b9 INTEGER,
+    vit_b12 DOUBLE PRECISION,
+    vit_c DOUBLE PRECISION,
+    vit_d DOUBLE PRECISION,
+    vit_e DOUBLE PRECISION,
+    vit_k DOUBLE PRECISION,
+    choline DOUBLE PRECISION,
+    betaine DOUBLE PRECISION,
+    calcium INTEGER,
+    copper DOUBLE PRECISION,
+    fluoride DOUBLE PRECISION,
+    iron DOUBLE PRECISION,
+    magnesium INTEGER,
+    manganese DOUBLE PRECISION,
+    phoshorus INTEGER
+);`;
     // If I understand correctly, the amount inside can be anything
     await sql`
         CREATE TABLE IF NOT EXISTS recipes_products (
@@ -73,13 +142,68 @@ const createDBtables = async () => {
             product_id INTEGER REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE
         )
     `;
+
+    await sql`
+    CREATE TABLE IF NOT EXISTS favorite_recipes (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE ON UPDATE CASCADE,
+UNIQUE (user_id, recipe_id)
+)
+`;
+
+    // Create reviews table
+    await sql`
+CREATE TABLE IF NOT EXISTS reviews (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    rating INTEGER NOT NULL,
+    review_text TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    approved BOOLEAN DEFAULT FALSE,
+    UNIQUE (user_id, recipe_id)
+)
+`;
+
+    // Consumed table
+    await sql`
+CREATE TABLE IF NOT EXISTS consumed (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+)
+`;
+   // Create shopping_lists table
+await sql`
+CREATE TABLE IF NOT EXISTS shopping_lists (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  title VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+`;
+
+// Create shopping_list_items table
+await sql`
+CREATE TABLE IF NOT EXISTS shopping_list_items (
+  id SERIAL PRIMARY KEY,
+  list_id INTEGER REFERENCES shopping_lists(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  is_checked BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+`;
   } catch (err) {
     console.error("Failed to create tables:", err);
   }
 };
 
 const dbSettings = async () => {
-    // Aktyvuoja pg_trgm plėtinį postgreSQL duomenų bazėje, kurio pagrindu realizuota netiksli paieska pagal fragmentą
+  // Aktyvuoja pg_trgm plėtinį postgreSQL duomenų bazėje, kurio pagrindu realizuota netiksli paieska pagal fragmentą
   try {
     const trgmCheck = await sql`
         SELECT EXISTS (
@@ -94,10 +218,13 @@ const dbSettings = async () => {
 
     console.log("pg_trgm plėtinys sėkmingai įdiegtas ir aktyvuotas.");
 
-    //  indeksai recipes products lentelei
+    // indeksai recipes products lentelei
     await sql`CREATE INDEX IF NOT EXISTS recipes_title_trgm_idx ON recipes USING gin (title gin_trgm_ops)`;
     await sql`CREATE INDEX IF NOT EXISTS recipes_description_trgm_idx ON recipes USING gin (description gin_trgm_ops)`;
     await sql`CREATE INDEX IF NOT EXISTS products_title_trgm_idx ON products USING gin (title gin_trgm_ops)`;
+
+    // Index for favorite_recipes table to optimize user-based queries
+    await sql`CREATE INDEX IF NOT EXISTS favorite_recipes_user_id_idx ON favorite_recipes (user_id)`;
 
     // await sql`ALTER TABLE recipes SET (autovacuum_enabled = true)`;
     // await sql`ALTER TABLE recipes SET (autovacuum_analyze_scale_factor = 0.1)`;

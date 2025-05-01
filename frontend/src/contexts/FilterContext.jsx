@@ -5,7 +5,8 @@ const FilterContext = createContext();
 export const FilterProvider = ({ children }) => {
   const [filters, setFilters] = useState({
     type: "",
-    product: ""
+    product: "",
+    order: "",
   });
 
   return (

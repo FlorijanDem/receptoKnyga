@@ -1,9 +1,13 @@
 import React, { useContext, useEffect } from "react";
 import SearchContext from "../contexts/SearchContext";
-import { validateSearchQuery, MIN_SEARCH_LENGTH } from "../utils/validation/searchValidation";
+import {
+  validateSearchQuery,
+  MIN_SEARCH_LENGTH,
+} from "../utils/validation/searchValidation";
 
 const SearchBar = () => {
-  const { draftQuery, setDraftQuery, setCurrentQuery } = useContext(SearchContext);
+  const { draftQuery, setDraftQuery, setCurrentQuery } =
+    useContext(SearchContext);
 
   // Naujas useEffect, kuris reaguoja į draftQuery pasikeitimus
   useEffect(() => {
@@ -25,7 +29,7 @@ const SearchBar = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    
+
     // Validate search query first
     const validation = validateSearchQuery(draftQuery);
     if (!validation.isValid) {
@@ -56,7 +60,13 @@ const SearchBar = () => {
       className="relative flex items-center bg-white border border-[#C3D4E9] rounded-full shadow-sm focus-within:ring-2 focus-within:ring-recipe-primary
       w-full h-[44px]"
     >
-      <button type="button" className="p-4 text-gray-500" onClick={handleSearch}>
+      <button
+        type="button"
+        className="p-4 text-gray-500"
+        onClick={handleSearch}
+        arial-label="Search"
+        title="Search"
+      >
         <svg
           className="w-5 h-5"
           fill="none"
