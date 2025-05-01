@@ -200,7 +200,7 @@ const ShoppingLists = () => {
                   onClick={() => handleAddItem(list.id)}
                   className="text-gray-600 hover:text-gray-800 w-8 h-8 flex items-center justify-center"
                 >
-                  Add
+                  +
                 </button>
               </div>
             </div>
