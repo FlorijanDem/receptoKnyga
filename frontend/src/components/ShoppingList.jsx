@@ -122,6 +122,10 @@ const ShoppingLists = () => {
     }
   };
 
+  const isListCompleted = (list) => {
+    return list.items && list.items.length > 0 && list.items.every(item => item.is_checked);
+  };
+
   if (error) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -168,10 +172,14 @@ const ShoppingLists = () => {
           {lists.map((list) => (
             <div
               key={list.id}
-              className="rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow flex flex-col relative"
+              className={`rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow flex flex-col relative ${
+                isListCompleted(list) ? 'opacity-75' : ''
+              }`}
             >
               <div className="flex justify-center mb-4">
-                <h2 className="text-xl font-semibold">{list.title}</h2>
+                <h2 className={`text-xl font-semibold ${isListCompleted(list) ? 'line-through text-gray-700' : ''}`}>
+                  {list.title}
+                </h2>
                 <button
                   onClick={() => handleDeleteList(list.id)}
                   className="text-gray-600 hover:text-gray-800 absolute right-4"
