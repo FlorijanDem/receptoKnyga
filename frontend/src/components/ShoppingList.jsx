@@ -123,7 +123,11 @@ const ShoppingLists = () => {
   };
 
   const isListCompleted = (list) => {
-    return list.items && list.items.length > 0 && list.items.every(item => item.is_checked);
+    return (
+      list.items &&
+      list.items.length > 0 &&
+      list.items.every((item) => item.is_checked)
+    );
   };
 
   if (error) {
@@ -173,11 +177,15 @@ const ShoppingLists = () => {
             <div
               key={list.id}
               className={`rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow flex flex-col relative ${
-                isListCompleted(list) ? 'opacity-75' : ''
+                isListCompleted(list) ? "opacity-75" : ""
               }`}
             >
               <div className="flex justify-center mb-4">
-                <h2 className={`text-xl font-semibold ${isListCompleted(list) ? 'line-through text-gray-700' : ''}`}>
+                <h2
+                  className={`text-xl font-semibold ${
+                    isListCompleted(list) ? "line-through text-gray-700" : ""
+                  }`}
+                >
                   {list.title}
                 </h2>
                 <button
