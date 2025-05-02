@@ -8,7 +8,7 @@ import settingsIcon from "../assets/icons/setting.svg";
 import profileIcon from "../assets/icons/profile-circle.svg";
 import briefcaseIcon from "../assets/icons/briefcase.svg";
 import addRecipeIcon from "../assets/icons/addRecipeSideBar.svg";
-import myRecipesIcon from "../assets/icons/addRecipe.svg";
+import myRecipesIcon from "../assets/icons/forkSpoon.svg";
 
 const SIDEBAR_LINKS_CLASS = [
   "flex items-center justify-start ml-[16px]",
