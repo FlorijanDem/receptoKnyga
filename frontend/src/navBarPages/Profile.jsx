@@ -8,7 +8,7 @@ const Profile = () => {
     <>
       <CharacteristicsForm />
       <LogoutButton setError={setError} />
-      <div className="w-[800px] h-[400px]">
+      <div className="w-full max-w-[800px] h-[400px] mx-auto">
         <WeightChart />
       </div>
     </>
