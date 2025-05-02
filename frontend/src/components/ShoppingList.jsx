@@ -198,36 +198,41 @@ const ShoppingLists = () => {
 
               <div className="space-y-0.5 mb-4 flex-grow">
                 {list.items &&
-                  list.items.map((item) => (
-                    <div
-                      key={item.id}
-                      className="flex items-center justify-between py-1 px-2 hover:bg-gray-50 rounded"
-                    >
-                      <div className="flex items-center space-x-2 min-w-0">
-                        <input
-                          type="checkbox"
-                          checked={item.is_checked}
-                          onChange={() =>
-                            handleToggleItem(item.id, item.is_checked)
-                          }
-                          className="h-4 w-4 text-blue-600 rounded border-gray-300 flex-shrink-0"
-                        />
-                        <span
-                          className={`truncate ${
-                            item.is_checked ? "line-through text-gray-500" : ""
-                          }`}
+                  list.items.map(
+                    (item) =>
+                      item.id && (
+                        <div
+                          key={item.id}
+                          className="flex items-center justify-between py-1 px-2 hover:bg-gray-50 rounded"
                         >
-                          {item.name}
-                        </span>
-                      </div>
-                      <button
-                        onClick={() => handleDeleteItem(item.id)}
-                        className="text-gray-600 hover:text-gray-800 flex-shrink-0 ml-2"
-                      >
-                        ×
-                      </button>
-                    </div>
-                  ))}
+                          <div className="flex items-center space-x-2 min-w-0">
+                            <input
+                              type="checkbox"
+                              checked={item.is_checked}
+                              onChange={() =>
+                                handleToggleItem(item.id, item.is_checked)
+                              }
+                              className="h-4 w-4 text-blue-600 rounded border-gray-300 flex-shrink-0"
+                            />
+                            <span
+                              className={`truncate ${
+                                item.is_checked
+                                  ? "line-through text-gray-500"
+                                  : ""
+                              }`}
+                            >
+                              {item.name}
+                            </span>
+                          </div>
+                          <button
+                            onClick={() => handleDeleteItem(item.id)}
+                            className="text-gray-600 hover:text-gray-800 flex-shrink-0 ml-2"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      )
+                  )}
               </div>
 
               <div className="flex items-center mt-2 space-x-2">
