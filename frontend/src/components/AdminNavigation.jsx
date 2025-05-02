@@ -63,6 +63,13 @@ const AdminNavigation = () => {
             >
               Reviews
             </NavLink>
+            <NavLink
+              onClick={() => setAdminPage("activityLogs")}
+              className={({ isActive }) => (isActive ? "underline" : "")}
+              to="/activityLogs"
+            >
+              Activity logs
+            </NavLink>
           </div>
           {(window.location.pathname === "/" ||
             window.location.pathname === "/users" ||
