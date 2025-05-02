@@ -32,7 +32,6 @@ const ShoppingLists = () => {
             )
           : [],
       }));
-      console.log(sortedLists);
 
       setLists(sortedLists);
       setError(null);
