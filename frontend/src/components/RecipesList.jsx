@@ -131,7 +131,9 @@ const RecipesList = ({ filter, setFilter }) => {
         <p className="error">{error}</p>
       ) : (
         <section className="recipes-list-container">
-          <h1 className="mb-4">Recipes List</h1>
+          <h1 className="text-recipe-secondary font-jakarta font-[500] text-[16px] pb-[27px]">
+            Recipe List
+          </h1>
           {user?.role === "admin" && (
             <div>
               <p>
