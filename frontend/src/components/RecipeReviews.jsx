@@ -53,7 +53,8 @@ const RecipeReviews = ({ refresh }) => {
   }, [id, refresh]);
 
   const isZalgo = (value) => {
-    const zalgoRegex = /[\u0300-\u036F\u1AB0-\u1AFF\u1DC0-\u1DFF\uFE20-\uFE2F]/;
+    const zalgoRegex =
+      /[\u0300-\u0320\u0321-\u0330\u0331-\u0340\u0341-\u0350\u0351-\u036F\u1AB0\u1AC0\u1DC0\uFE20]/u;
     return !zalgoRegex.test(value) || "Special characters are not allowed!";
   };
 
@@ -110,6 +111,10 @@ const RecipeReviews = ({ refresh }) => {
     setVisibleReviews(2);
   };
 
+  const filteredReviews = reviews.filter(
+    (review) => user?.role === "admin" || review.approved
+  );
+
   if (loading) return <p>Loading reviews...</p>;
   if (error)
     return <p className="text-[var(--color-recipe-fourth)]">{error}</p>;
@@ -123,7 +128,7 @@ const RecipeReviews = ({ refresh }) => {
             No reviews yet.
           </p>
         ) : null}
-        {reviews.slice(0, visibleReviews).map((review) => (
+        {filteredReviews.slice(0, visibleReviews).map((review) => (
           <div
             key={review.id}
             className="border-b-[var(--color-recipe-third)] bg-white pb-3 mb-3 shadow-md rounded-lg p-4"
@@ -171,7 +176,8 @@ const RecipeReviews = ({ refresh }) => {
                     required: "Review text is required",
                     maxLength: {
                       value: 500,
-                      message: "Review cannot exceed 500 characters and cannot contain special characters",
+                      message:
+                        "Review cannot exceed 500 characters and cannot contain special characters",
                     },
                   })}
                   className="border border-[var(--color-recipe-secondary)] bg-[var(--color-recipe-fifth)] rounded-md p-2 w-full"
@@ -220,6 +226,7 @@ const RecipeReviews = ({ refresh }) => {
                     <button
                       onClick={() => handleEditClick(review)}
                       className="bg-[var(--color-recipe-primary)] text-[var(--color-recipe-fifth)] px-4 py-1 rounded-lg"
+                      disabled={user?.banned}
                     >
                       Edit
                     </button>

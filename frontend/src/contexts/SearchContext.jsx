@@ -7,18 +7,19 @@ export const SearchProvider = ({ children }) => {
   const [draftQuery, setDraftQuery] = useState("");
   const [filters, setFilters] = useState({
     type: "",
-    product: ""
+    product: "",
+    order: "",
   });
 
   return (
-    <SearchContext.Provider 
-      value={{ 
-        currentQuery, 
+    <SearchContext.Provider
+      value={{
+        currentQuery,
         setCurrentQuery,
         draftQuery,
         setDraftQuery,
         filters,
-        setFilters
+        setFilters,
       }}
     >
       {children}

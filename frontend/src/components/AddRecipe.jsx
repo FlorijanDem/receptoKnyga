@@ -1,46 +1,49 @@
 import { useContext, useEffect, useState, useRef, useCallback } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import UserContext from "../contexts/UserContext";
 import axios from "axios";
 import { useForm, useFieldArray } from "react-hook-form";
 import RecipeFormLayout from "./layout/RecipeFormLayout";
 import {
   NON_VEGETARIAN_CATEGORIES,
-  NON_VEGETARIAN_KEYWORDS
+  NON_VEGETARIAN_KEYWORDS,
 } from "../utils/validation/recipeValidation";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-function AddRecipe() {
+function AddRecipe({ action }) {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchResults, setSearchResults] = useState({ data: [], index: -1 });
   const [isSearching, setIsSearching] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
   const dropdownRef = useRef(null);
   const [error, setError] = useState(null);
 
+  const recipe = location.state?.recipe || null;
+
   const methods = useForm({
-    defaultValues: {
-      title: "",
-      description: "",
-      method: "",
-      preparation_time: "",
-      servings: "",
-      type: "non-veg",
-      photo: "",
-      products: [{ title: "", amount: "" }]
-    },
-    mode: "onBlur"
+    // defaultValues: {
+    //   title: "",
+    //   description: "",
+    //   method: "",
+    //   preparation_time: "",
+    //   servings: "",
+    //   type: "non-veg",
+    //   photo: "",
+    //   products: [{ title: "", amount: "" }],
+    // },
+    mode: "onBlur",
   });
 
-  const { control, watch, setValue, trigger } = methods;
+  const { control, watch, setValue, trigger, reset } = methods;
 
   const recipeType = watch("type");
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "products"
+    name: "products",
   });
 
   useEffect(() => {
@@ -172,9 +175,14 @@ function AddRecipe() {
       setError(null);
 
       try {
-        const response = await axios.post(`${API_URL}/recipes`, data, {
-          withCredentials: true,
-        });
+        const response =
+          action === "edit"
+            ? await axios.patch(`${API_URL}/recipes/${recipe.id}`, data, {
+                withCredentials: true,
+              })
+            : await axios.post(`${API_URL}/recipes`, data, {
+                withCredentials: true,
+              });
         navigate(`/recipe/${response.data.data.id}`);
       } catch (err) {
         setError(
@@ -186,6 +194,33 @@ function AddRecipe() {
     },
     [navigate]
   );
+  useEffect(() => {
+    if (action === "edit") {
+      reset({
+        title: recipe?.title,
+        description: recipe?.description,
+        method: recipe?.method,
+        preparation_time: recipe?.preparation_time,
+        servings: recipe?.servings,
+        type: recipe?.type,
+        photo: recipe?.photo,
+        products: recipe?.products,
+      });
+    } else {
+      reset({
+        title: "",
+        description: "",
+        method: "",
+        preparation_time: "",
+        servings: "",
+        type: "non-veg",
+        photo: "",
+        products: [{ title: "", amount: "" }],
+      });
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [action]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -225,6 +260,8 @@ function AddRecipe() {
       remove={remove}
       fields={fields}
       recipeType={recipeType}
+      action={action}
+      reset={reset}
     />
   );
 }

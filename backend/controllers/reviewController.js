@@ -3,6 +3,9 @@ const {
   deleteReview,
   addReview,
   updateReview,
+  getAllReviews,
+  countReviews,
+  getReviewsStats,
 } = require("../models/reviewModel");
 
 exports.getReviewsByRecipe = async (req, res, next) => {
@@ -42,12 +45,15 @@ exports.addReview = async (req, res, next) => {
 
 exports.updateReview = async (req, res, next) => {
   try {
-    const { rating, review_text } = req.body;
+    const { rating, review_text, approved } = req.body;
     const updatedReview = await updateReview(
       req.user.id,
-      { rating, review_text },
+      { rating, review_text, approved },
       req.params.review_id
     );
+
+    // console.log(updatedReview);
+
     return res.status(200).json({
       status: "success",
       data: updatedReview,
@@ -59,10 +65,40 @@ exports.updateReview = async (req, res, next) => {
 
 exports.deleteReview = async (req, res, next) => {
   try {
-    const deletedReview = await deleteReview(req.params.review_id, req.user.role !== "admin" ? req.user.id : null);
+    const deletedReview = await deleteReview(
+      req.params.review_id,
+      req.user.role !== "admin" ? req.user.id : null
+    );
     return res.status(200).json({
       status: "success",
       data: deletedReview,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getAllReviews = async (req, res, next) => {
+  try {
+    const reviews = await getAllReviews(req.query);
+    const count = await countReviews(req.query);
+
+    return res.status(200).json({
+      status: "success",
+      count,
+      data: reviews,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getReviewsStats = async (req, res, next) => {
+  try {
+    const stats = await getReviewsStats();
+    return res.status(200).json({
+      status: "success",
+      data: stats,
     });
   } catch (error) {
     next(error);

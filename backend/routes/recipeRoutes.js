@@ -5,8 +5,10 @@ const {
   createRecipeHandler,
   updateRecipeHandler,
   deleteRecipeHandler,
+  getRecipeStats,
+  getRecipesByUserIdHandler,
 } = require("../controllers/recipeController");
-const { protect } = require("../controllers/userController");
+const { protect, allowAccessTo } = require("../controllers/userController");
 const {
   checkCreateRecipesBody,
   checkUpdateRecipesBody,
@@ -16,18 +18,32 @@ const {
   checkRecipeCreator,
 } = require("../validators/checkRecipesParams");
 const { checkRecipeQuery } = require("../validators/checkRecipesQuery");
+const { checkUserBanned } = require("../validators/checkUserBanned");
 const validate = require("../validators/validate");
 
 recipeRouter
   .route("/")
   .get(checkRecipeQuery, validate, getAllRecipesHandler)
-  .post(protect, checkCreateRecipesBody, validate, createRecipeHandler);
+  .post(
+    protect,
+    checkUserBanned,
+    checkCreateRecipesBody,
+    validate,
+    createRecipeHandler
+  );
+
+recipeRouter
+  .route("/stats")
+  .get(protect, allowAccessTo("admin"), getRecipeStats);
+
+recipeRouter.route("/myrecipes").get(protect, getRecipesByUserIdHandler);
 
 recipeRouter
   .route("/:id")
   .all(protect, checkRecipeParams, validate)
   .get(getRecipeByIdHandler)
   .patch(
+    checkUserBanned,
     checkRecipeCreator,
     checkUpdateRecipesBody,
     validate,

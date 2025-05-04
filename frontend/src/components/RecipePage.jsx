@@ -24,10 +24,10 @@ const TEXT_STYLES = {
 
 const RecipePage = () => {
   const [recipe, setRecipe] = useState(null);
+  const [refresh, setRefresh] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showMethod, setShowMethod] = useState(false);
-  const [refresh, setRefresh] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
 

@@ -2,10 +2,19 @@ const {
   getCharacteristicsById,
   updateCharacteristic,
 } = require("../models/characteristicsModel");
+const {
+  getWeightHistoryByUserId,
+  addWeightEntry,
+} = require("../models/characteristicsHistoryModel");
 
 exports.getUserCharacteristicsMy = async (req, res, next) => {
   try {
     const characteristics = await getCharacteristicsById(req.user?.id);
+
+    characteristics.weightHistory = await getWeightHistoryByUserId(
+      req.user?.id
+    );
+
     if (characteristics === undefined) {
       res.status(404).json({});
     } else {
@@ -24,6 +33,10 @@ exports.updateCharacteristic = async (req, res, next) => {
   const id = req.user?.id;
   try {
     const characteristic = await updateCharacteristic(data, id);
+
+    if (data.weight) {
+      characteristic.weightHistory = [await addWeightEntry(id, data.weight)];
+    }
 
     res.status(200).json({
       status: "success",

@@ -8,6 +8,7 @@ import settingsIcon from "../assets/icons/setting.svg";
 import profileIcon from "../assets/icons/profile-circle.svg";
 import briefcaseIcon from "../assets/icons/briefcase.svg";
 import addRecipeIcon from "../assets/icons/addRecipeSideBar.svg";
+import myRecipesIcon from "../assets/icons/forkSpoon.svg";
 
 const SIDEBAR_LINKS_CLASS = [
   "flex items-center justify-start ml-[16px]",
@@ -18,7 +19,7 @@ const SIDEBAR_LINKS_CLASS = [
 ].join(" ");
 
 const SIDEBAR_ICONS_CLASS = [
-  "mr-[0.75rem]",
+  "mr-[0.75rem] w-[24px] h-[24px]",
   "group-hover:filter group-hover:brightness-0 group-hover:invert",
 ].join(" ");
 
@@ -26,6 +27,7 @@ const MENU_ITEMS = {
   main: [
     { to: "/dashboard", icon: dashboardIcon, text: "Dashboard" },
     { to: "/favourite", icon: favouriteIcon, text: "Favorite" },
+    { to: "/myrecipes", icon: myRecipesIcon, text: "My Recipes" },
     { to: "/shoppingList", icon: shoppingIcon, text: "Shopping List" },
     { to: "/addRecipe", icon: addRecipeIcon, text: "Add recipe" },
   ],
@@ -41,7 +43,7 @@ const MenuSection = ({ title, items, toggleSidebar }) => (
     <h1 className="text-jakarta text-recipe-seventh font-semibold text-[12px] tracking-[0.2rem] opacity-40 pb-[2.625rem] pl-[2rem]">
       {title}
     </h1>
-    {items.map((item, index) => (
+    {items.map((item) => (
       <Link
         key={item.text}
         to={item.to}
@@ -66,7 +68,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
   return (
     <div
-      className="fixed inset-0 bg-recipe-fifth w-[17.875rem] h-[100vh] flex flex-col justify-between"
+      className="fixed inset-0 bg-recipe-fifth w-[17.875rem] h-[100vh] flex flex-col justify-between z-50"
       onClick={handleSidebarClick}
     >
       <div className="pt-[2.25rem] pr-[2rem] space-y-[1.75rem]">

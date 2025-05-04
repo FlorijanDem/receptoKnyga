@@ -1,17 +1,21 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
-import { Link } from "react-router";
+import { NavLink, Link } from "react-router";
 import NavLikeIcon from "../assets/icons/Like.svg";
 import NavSettingIcon from "../assets/icons/Settings.svg";
 import NavCartIcon from "../assets/icons/Cart.svg";
 import NavProfileIcon from "../assets/icons/Profil.svg";
 import NavMenuIcon from "../assets/icons/Menu.svg";
 import NavFilterIcon from "../assets/icons/Filter.svg";
-import NavAddRecipeIcon from "../assets/icons/AddRecipe.svg";
+import NavAddRecipeIcon from "../assets/icons/addRecipeSideBar.svg";
+import NavMyRecipesIcon from "../assets/icons/addRecipe.svg";
 
 import SearchBar from "./SearchBar";
 import Sidebar from "./Sidebar";
 import SearchContext from "../contexts/SearchContext";
+import { AdminFilterContext } from "../contexts/AdminFilterContext";
+import UserContext from "../contexts/UserContext";
 import FilterForm from "./FilterForm";
+import AdminNavigation from "./AdminNavigation";
 
 const icons = [
   {
@@ -21,6 +25,12 @@ const icons = [
     path: "/addRecipe",
   },
   { src: NavLikeIcon, alt: "like Icon", pagename: "Like", path: "/favourite" },
+  {
+    src: NavMyRecipesIcon,
+    alt: "my recipes Icon",
+    pagename: "My Recipes",
+    path: "/myrecipes",
+  },
   {
     src: NavSettingIcon,
     alt: "setting Icon",
@@ -44,8 +54,11 @@ const icons = [
 const Navigation = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isFilterFormOpen, setIsFilterFormOpen] = useState(false);
+
   const { setDraftQuery, setCurrentQuery, setFilters } =
     useContext(SearchContext);
+  const { setAdminFilters, setAdminPage } = useContext(AdminFilterContext);
+  const { user } = useContext(UserContext);
 
   const sidebarRef = useRef(null); // Ref to track the sidebar element
 
@@ -75,7 +88,6 @@ const Navigation = () => {
   // Function to handle filter form open/close
   const toggleFilterForm = () => {
     setIsFilterFormOpen(!isFilterFormOpen);
-    // Clear filters when closing the form
     if (isFilterFormOpen) {
       setFilters({
         type: "",
@@ -92,10 +104,17 @@ const Navigation = () => {
       type: "",
       product: "",
     });
+    if (user?.role === "admin") {
+      setAdminPage("recipes");
+      setAdminFilters({
+        name: "approved",
+        value: "all",
+      });
+    }
   };
 
   const iconStyle =
-    "mx-[0.625rem] transition-transform duration-300 hover:scale-110 active:scale-90";
+    "mx-[0.625rem] transition-transform duration-300 text-2xl hover:scale-110 active:scale-90";
 
   return (
     <nav className="relative">
@@ -129,12 +148,12 @@ const Navigation = () => {
           </div>
         </div>
 
-        <div className="hidden md:flex md:ml-auto md:justify-end md:mr-[3.75rem] desktop-icons flex-shrink-0">
+        <div className="hidden md:flex  md:ml-auto md:justify-end md:mr-[1rem] desktop-icons flex-shrink-0">
           {icons.map((icon, index) => (
-            <Link to={icon.path} key={index}>
-              <button className={iconStyle}>
-                <img src={icon.src} alt={icon.alt} width="44" height="44" />
-              </button>
+            <Link to={icon.path} key={index} className={iconStyle}>
+              {/* <button className={iconStyle}> */}
+              <img src={icon.src} alt={icon.alt} width="44" height="44" />
+              {/* </button> */}
             </Link>
           ))}
         </div>
@@ -150,6 +169,7 @@ const Navigation = () => {
 
       {/* Add extra margin when the filter form is open */}
       {isFilterFormOpen && <div className="h-[350px] md:h-[200px]"></div>}
+      <AdminNavigation />
     </nav>
   );
 };
