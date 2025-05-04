@@ -1,9 +1,9 @@
-import React from 'react';
-import { useFormContext } from 'react-hook-form';
+import React from "react";
+import { useFormContext } from "react-hook-form";
 
 /**
  * Universal form field component
- * 
+ *
  * @param {Object} props - Component properties
  * @param {string} props.name - Form field name
  * @param {string} props.label - Form field label
@@ -15,28 +15,38 @@ import { useFormContext } from 'react-hook-form';
  * @param {function} [props.onKeyDown] - onKeyDown event handler
  * @returns {JSX.Element} Form field component
  */
-const FormField = ({ 
-  name, 
-  label, 
-  type = "text", 
-  rows, 
+const FormField = ({
+  name,
+  label,
+  type = "text",
+  rows,
   validation = {},
   placeholder,
   onChange,
   onKeyDown,
   ...props
 }) => {
-  const { register, formState: { errors } } = useFormContext();
-  
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
+
   // Set min attribute to 0 for number inputs to prevent negative values
   const inputProps = type === "number" ? { min: 0, ...props } : props;
-  
+
   return (
     <div>
-      {label && <p className="text-gray-600">{label}</p>}
+      {label && (
+        <label htmlFor={name} className="text-[var(--color-recipe-secondary)]">
+          {label}
+        </label>
+      )}
       {type === "textarea" ? (
         <textarea
-          className={`w-full p-2 border rounded ${errors[name] ? 'border-red-500' : ''}`}
+          id={name}
+          className={`w-full p-2 border rounded ${
+            errors[name] ? "border-[var(--color-recipe-fourth)]" : ""
+          }`}
           rows={rows || 3}
           placeholder={placeholder}
           {...register(name, validation)}
@@ -46,7 +56,10 @@ const FormField = ({
         />
       ) : type === "select" ? (
         <select
-          className={`w-full p-2 border rounded ${errors[name] ? 'border-red-500' : ''}`}
+          id={name}
+          className={`w-full p-2 border rounded ${
+            errors[name] ? "border-[var(--color-recipe-fourth)]" : ""
+          }`}
           {...register(name, validation)}
           onChange={onChange}
           {...inputProps}
@@ -55,8 +68,11 @@ const FormField = ({
         </select>
       ) : (
         <input
+          id={name}
           type={type}
-          className={`w-full p-2 border rounded ${errors[name] ? 'border-red-500' : ''}`}
+          className={`w-full p-2 border rounded ${
+            errors[name] ? "border-[var(--color-recipe-fourth)]" : ""
+          }`}
           placeholder={placeholder}
           {...register(name, validation)}
           onChange={onChange}
@@ -65,7 +81,9 @@ const FormField = ({
         />
       )}
       {errors[name] && (
-        <p className="text-red-500 text-sm mt-1">{errors[name].message}</p>
+        <p className="text-[var(--color-recipe-fourth)] text-sm mt-1">
+          {errors[name].message}
+        </p>
       )}
     </div>
   );

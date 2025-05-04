@@ -34,6 +34,7 @@ exports.getAllRecipesHandler = async (req, res, next) => {
       limit: limitNum,
       offset: offset,
       order: order?.toLowerCase(),
+      approved: "true",
     };
 
     if (req.cookies?.jwt) {
@@ -46,8 +47,6 @@ exports.getAllRecipesHandler = async (req, res, next) => {
 
       if (user?.role === "admin") {
         filters.approved = approved;
-      } else {
-        filters.approved = "true";
       }
     }
 
@@ -62,15 +61,19 @@ exports.getAllRecipesHandler = async (req, res, next) => {
       });
     }
 
-    const result = await Promise.all(
-      recipes.map(async (recipe) => {
-        const calories = await getAllMacros(recipe.id);
-        return {
-          ...recipe,
-          calories: calories[0]?.calories || 0,
-        };
-      })
-    );
+    // Surenkame visų receptų ID į masyvą
+    const ids = recipes.map((recipe) => recipe.id);
+
+    // Gauname visų receptų makroelementus viena užklausa
+    const macrosList = await getAllMacros(ids);
+    // Sudarome žemėlapį pagal recipe_id
+    const macrosMap = new Map(macrosList.map((m) => [m.recipe_id, m]));
+
+    // Susiejame makroelementus su receptais
+    const result = recipes.map((recipe) => ({
+      ...recipe,
+      calories: macrosMap.get(recipe.id)?.calories || 0,
+    }));
 
     res.status(200).json({
       status: "success",

@@ -195,8 +195,6 @@ function AddRecipe({ action }) {
     [navigate]
   );
   useEffect(() => {
-    console.log(action);
-
     if (action === "edit") {
       reset({
         title: recipe?.title,

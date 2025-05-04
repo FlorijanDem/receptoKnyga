@@ -8,6 +8,7 @@ exports.getReviewsByRecipe = async (recipe_id) => {
         reviews.rating, 
         reviews.review_text, 
         reviews.created_at,
+        reviews.approved,
         users.username
         FROM reviews
         LEFT JOIN users
@@ -38,12 +39,13 @@ exports.addReview = async (data) => {
 
 exports.updateReview = async (user_id, data, review_id) => {
   // console.log(data);
-  data.approved =
-    data.approved === "true"
-      ? true
-      : data.approved === "false"
-        ? false
-        : data.approved;
+  data.approved = data.approved === "true";
+  // ? true
+  // : data.approved === "false"
+  //   ? false
+  //   : data.approved;
+
+  console.log(data);
 
   // const rating = Number(data.rating);
   const [review] = await sql`

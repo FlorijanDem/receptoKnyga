@@ -3,13 +3,12 @@
 @theme {
   --font-jakarta: "Plus Jakarta Sans", sans-serif;
   --color-recipe-primary: #3563e9;
-  --color-recipe-secondary: #90a3bf;
+  --color-recipe-secondary: #60738f;
   --color-recipe-third: #1a202c;
-  --color-recipe-fourth: #ed3f3f;
+  --color-recipe-fourth: #cd2f2f;
   --color-recipe-fifth: #ffffff;
   --color-recipe-sixth: #f6f7f9;
   --color-recipe-seventh: #94a7cb;
-  --color-recipe-eighth: #596780;
 }
 
 body {
@@ -26,6 +25,10 @@ main {
   h1 {
     @apply text-center text-3xl mb-6;
   }
+}
+
+button {
+  @apply cursor-pointer disabled:cursor-not-allowed;
 }
 
 .recipes-list,
@@ -54,7 +57,7 @@ main {
   }
 
   .recipe-preview-card__title {
-    @apply text-2xl text-gray-800 font-bold mb-2 px-4 break-words;
+    @apply text-2xl text-[var(--color-recipe-third)] font-bold mb-2 px-4 break-words;
   }
 
   .recipe-preview-card__line {
@@ -225,14 +228,14 @@ main {
 }
 
 .dashboard-recipe__date {
-  @apply text-sm text-[var(--color-recipe-seventh)];
+  @apply text-sm text-[var(--color-recipe-secondary)];
 }
 
 .dashboard-recipe__delete {
   @apply text-[var(--color-recipe-fourth)] hover:underline cursor-pointer;
 }
 
-// DashboarDailyMacros
+/* DashboarDailyMacros */
 
 .daily-macros {
   @apply bg-[var(--color-recipe-fifth)] rounded-lg mb-4 shadow-md p-4;

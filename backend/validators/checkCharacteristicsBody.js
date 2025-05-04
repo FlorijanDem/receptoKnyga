@@ -35,6 +35,12 @@ exports.checkUpdateCharacteristicsBody = [
     .isInt({ min: 1 })
     .withMessage("Activity level ID must be a positive integer"),
 
+    body("my_goals")
+    .optional()
+    .trim()
+    .isString()
+    .withMessage("My goals"),
+
   checkExact([], {
     message: (fields) =>
       fields.map((field) => `Invalid field: ${field.path}`).join("; "),

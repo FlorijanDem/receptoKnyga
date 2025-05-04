@@ -45,7 +45,6 @@ const UsersList = () => {
         console.log(error);
       }
     };
-    fetchUsers();
 
     const fetchStats = async () => {
       try {
@@ -58,7 +57,10 @@ const UsersList = () => {
         console.log(err);
       }
     };
-    fetchStats();
+    if (user?.role === "admin") {
+      fetchStats();
+      fetchUsers();
+    }
   }, [adminFilters, filter]);
 
   return (

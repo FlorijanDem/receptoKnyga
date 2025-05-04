@@ -10,20 +10,15 @@ import { ErrorBoundary } from "react-error-boundary";
 import { SearchProvider } from "./contexts/SearchContext";
 import { Routes, Route } from "react-router";
 import { AdminFilterContextProvider } from "./contexts/AdminFilterContext";
+import { FavoritesProvider } from "./contexts/FavoritesContext";
 
 function AppContent() {
   const { user } = useContext(UserContext);
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Routes>
-        <Route
-          path="/reset-password/:token"
-          element={<ResetPassword />}
-        />
-        <Route
-          path="/*"
-          element={user ? <Layout /> : <GuestLayout />}
-        />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/*" element={user ? <Layout /> : <GuestLayout />} />
       </Routes>
     </Suspense>
   );
@@ -37,7 +32,9 @@ function App() {
         <UserContextProvider>
           <AdminFilterContextProvider>
             <SearchProvider>
-              <AppContent />
+              <FavoritesProvider>
+                <AppContent />
+              </FavoritesProvider>
             </SearchProvider>
           </AdminFilterContextProvider>
         </UserContextProvider>
@@ -45,5 +42,4 @@ function App() {
     </>
   );
 }
-
 export default App;

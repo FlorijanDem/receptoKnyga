@@ -15,7 +15,6 @@ const RecipePageControls = ({ recipe, setRecipe, setRefresh }) => {
 
   const editRecipe = async () => {
     navigate(`/editRecipe`, { state: { recipe } });
-    console.log("Edit recipe");
   };
 
   const deleteRecipe = async () => {
@@ -90,6 +89,7 @@ const RecipePageControls = ({ recipe, setRecipe, setRefresh }) => {
             <button
               className="bg-[var(--color-recipe-primary)] text-[var(--color-recipe-fifth)] px-4 py-1 rounded-lg"
               onClick={editRecipe}
+              disabled={user?.banned}
             >
               Edit
             </button>

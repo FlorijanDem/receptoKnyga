@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { format } from "date-fns";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
-
+import { differenceInYears } from "date-fns";
+import { calculateAllMetrics } from "../utils/calculator";
 const API_URL = import.meta.env.VITE_API_URL;
 
 const DashboardDailyMacros = ({ selectedDate, refreshKey }) => {
@@ -13,7 +14,56 @@ const DashboardDailyMacros = ({ selectedDate, refreshKey }) => {
     calories: 0,
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingCharacteristics, setIsLoadingCharacteristics] =
+    useState(true);
+  const [isLoadingActivityLevels, setIsLoadingActivityLevels] = useState(true);
   const [error, setError] = useState(null);
+  const [result, setResult] = useState(null);
+  const [activityLevels, setActivityLevels] = useState();
+  const [characteristicsData, setCharacteristicsData] = useState({
+    height: "",
+    weight: "",
+    age: "",
+    date_of_birth: "",
+    gender: "",
+    activity_level_id: "",
+    my_goals: "",
+  });
+
+  const fetchActivityLevels = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/activity`, {
+        withCredentials: true,
+      });
+      setActivityLevels(response.data.data);
+    } catch (err) {
+      console.error("Failed to fetch activity levels", err);
+    } finally {
+      setIsLoadingActivityLevels(false);
+    }
+  };
+
+  const fetchCharacteristics = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/characteristics`, {
+        withCredentials: true,
+      });
+      const { user_id: _, ...filteredData } = response.data.data;
+
+      setCharacteristicsData({
+        ...filteredData,
+        age: differenceInYears(
+          new Date(),
+          new Date(filteredData.date_of_birth)
+        ),
+        weight: filteredData.weightHistory[0].weight,
+      });
+    } catch (err) {
+      console.error("Failed to fetch characteristics", err);
+    } finally {
+      setIsLoadingCharacteristics(false);
+    }
+  };
 
   const fetchDailyMacros = async () => {
     setIsLoading(true);
@@ -48,6 +98,28 @@ const DashboardDailyMacros = ({ selectedDate, refreshKey }) => {
     fetchDailyMacros();
   }, [selectedDate, refreshKey]);
 
+  useEffect(() => {
+    if (characteristicsData && activityLevels && activityLevels.length > 0) {
+      const metrics = calculateAllMetrics(
+        parseFloat(characteristicsData.weight),
+        parseFloat(characteristicsData.height),
+        parseInt(characteristicsData.age),
+        characteristicsData.gender,
+        activityLevels.find(
+          (level) => level.id === +characteristicsData.activity_level_id
+        )?.multiplier || 1,
+        String(characteristicsData.my_goals)
+      );
+
+      setResult(metrics);
+    }
+  }, [characteristicsData, activityLevels]);
+
+  useEffect(() => {
+    fetchActivityLevels();
+    fetchCharacteristics();
+  }, [userMacros]);
+
   const pieData = [
     { name: "Fats", value: userMacros.fat, color: "#0D3559" },
     { name: "Carbs", value: userMacros.carbs, color: "#175D9C" },
@@ -56,7 +128,7 @@ const DashboardDailyMacros = ({ selectedDate, refreshKey }) => {
 
   return (
     <div className="daily-macros">
-      {isLoading ? (
+      {isLoading || isLoadingCharacteristics || isLoadingActivityLevels ? (
         <p className="daily-macros__loading">Loading...</p>
       ) : error ? (
         <p className="daily-macros__error">Error: {error}</p>
@@ -102,6 +174,7 @@ const DashboardDailyMacros = ({ selectedDate, refreshKey }) => {
               </PieChart>
             </ResponsiveContainer>
           </div>
+
           <div className="daily-macros__details">
             <p>
               <span
@@ -127,6 +200,44 @@ const DashboardDailyMacros = ({ selectedDate, refreshKey }) => {
           </div>
         </div>
       )}
+      <div className="bg-[var(--color-recipe-fifth)] rounded-lg mb-4 shadow-md p-4 flex flex-col items-center">
+        {(() => {
+          const calorieDifference =
+            Number(result?.dailyCalories.toFixed(0)) -
+            Math.round(userMacros.calories);
+
+          if (calorieDifference <= 0) {
+            return (
+              <>
+                <p className="text-red-600 font-semibold">
+                  You've reached your daily calorie goal.
+                </p>
+                <p className="text-base text-gray-500">
+                  Limit exceeded by{" "}
+                  <span className=" text-red-500 font-bold text-lg">
+                    {Math.abs(calorieDifference)}
+                  </span>{" "}
+                  calories.
+                </p>
+              </>
+            );
+          } else {
+            return (
+              <>
+                <p className="text-blue-800 font-bold text-lg">
+                  You've still got some calories left for today!
+                </p>
+                <p className="text-base text-gray-500">
+                  Remaining calories:{" "}
+                  <span className="font-semibold text-blue-800">
+                    {Math.abs(calorieDifference)}
+                  </span>{" "}
+                </p>
+              </>
+            );
+          }
+        })()}
+      </div>
     </div>
   );
 };

@@ -123,11 +123,11 @@ const FavList = ({ userId = null, showAll = false }) => {
             : userId && `Favorite Recipes`}
         </h1>
         {loading ? (
-          <p className="text-center text-gray-500">Loading...</p>
+          <p className="text-center text-recipe-secondary">Loading...</p>
         ) : error ? (
-          <p className="text-center text-red-500">{error}</p>
+          <p className="text-center text-recipe-fourth">{error}</p>
         ) : favoriteRecipes.length === 0 ? (
-          <p className="text-center text-gray-500">
+          <p className="text-center text-recipe-secondary">
             {showAll
               ? "No favorite recipes found for any user."
               : userId

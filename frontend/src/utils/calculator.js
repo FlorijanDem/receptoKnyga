@@ -37,8 +37,12 @@ export const calculateBMR = (weight, height, age, gender) => {
   }
 };
 
-export const calculateDailyCalories = (bmr, activityLevel) => {
-  return bmr * activityLevel;
+export const calculateDailyCalories = (bmr, activityLevel, my_goals) => {
+  let goals = 0;
+  if (my_goals === "lose_fat") goals -= 500;
+  else if (my_goals == "gain_fat") goals += 500;
+  else goals = 0;
+  return bmr * activityLevel + goals;
 };
 
 export const calculateBMI = (weight, height) => {
@@ -58,10 +62,11 @@ export const calculateAllMetrics = (
   height,
   age,
   gender,
-  activityLevel
+  activityLevel,
+  my_goals
 ) => {
   const bmr = calculateBMR(weight, height, age, gender);
-  const dailyCalories = calculateDailyCalories(bmr, activityLevel);
+  const dailyCalories = calculateDailyCalories(bmr, activityLevel, my_goals);
   const bmi = calculateBMI(weight, height);
   const bmiCategory = getBMICategory(bmi);
 

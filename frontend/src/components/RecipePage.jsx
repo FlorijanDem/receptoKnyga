@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
+import {
+  FaHeart,
+  FaRegHeart,
+  FaStar,
+  FaStarHalfAlt,
+  FaRegStar,
+} from "react-icons/fa";
 import { useParams, useNavigate } from "react-router";
 import axios from "axios";
 import RecipePageControls from "./RecipePageControls";
 import WriteReview from "./WriteReview";
 import RecipeReviews from "./RecipeReviews";
 import { useErrorBoundary } from "react-error-boundary";
+import { useFavorite } from "../hooks/useFavorite"; // Adjust path if needed
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-// Style constants
 const TEXT_STYLES = {
   macro: "text-[16px] 2xl:text-[24px] font-semibold text-recipe-eighth",
   label: "text-[16px] 2xl:text-[24px] text-recipe-secondary",
@@ -25,14 +31,17 @@ const TEXT_STYLES = {
 
 const RecipePage = () => {
   const [recipe, setRecipe] = useState(null);
-  const [isFavorite, setIsFavorite] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showMethod, setShowMethod] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [averageRating, setAverageRating] = useState(null);
+  const [reviewCount, setReviewCount] = useState(0);
   const { id } = useParams();
   const navigate = useNavigate();
   const { showBoundary } = useErrorBoundary();
+
+  const { isFavorite, toggleFavorite } = useFavorite(id);
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -41,7 +50,6 @@ const RecipePage = () => {
           withCredentials: true,
         });
         setRecipe(response.data);
-        setIsFavorite(response.data.data.isFavorite || false);
         setError(null);
       } catch (error) {
         handleError(error);
@@ -49,7 +57,42 @@ const RecipePage = () => {
         setLoading(false);
       }
     };
+
+    const fetchReviews = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/reviews/${id}`, {
+          withCredentials: true,
+        });
+        const { data: reviews } = response.data;
+
+        if (!Array.isArray(reviews)) {
+          setAverageRating(null);
+          setReviewCount(0);
+          return;
+        }
+
+        const approved = reviews.filter(
+          (r) => r.approved === true && typeof r.rating === "number"
+        );
+
+        if (approved.length > 0) {
+          const total = approved.reduce((sum, r) => sum + r.rating, 0);
+          const avg = total / approved.length;
+          setAverageRating(avg);
+          setReviewCount(approved.length);
+        } else {
+          setAverageRating(null);
+          setReviewCount(0);
+        }
+      } catch (error) {
+        console.error("Failed to fetch reviews:", error);
+        setAverageRating(null);
+        setReviewCount(0);
+      }
+    };
+
     fetchRecipe();
+    fetchReviews();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [id, refresh]);
 
@@ -66,25 +109,10 @@ const RecipePage = () => {
   const handleFavoriteClick = async (e) => {
     e.stopPropagation();
     try {
-      if (isFavorite) {
-        await axios.delete(`${API_URL}/favorites/${recipe.data.id}`, {
-          withCredentials: true,
-        });
-        setIsFavorite(false);
-      } else {
-        const payload = { recipeId: String(recipe.data.id) };
-        await axios.post(`${API_URL}/favorites`, payload, {
-          withCredentials: true,
-          headers: { "Content-Type": "application/json" },
-        });
-        setIsFavorite(true);
-      }
-    } catch (error) {
-      console.error("Axios Error:", {
-        status: error.response?.status,
-        data: error.response?.data,
-      });
-      showBoundary(error);
+      await toggleFavorite();
+    } catch (err) {
+      console.error("Error toggling favorite:", err);
+      showBoundary(err);
     }
   };
 
@@ -92,9 +120,9 @@ const RecipePage = () => {
 
   const NutritionGrid = () => {
     const macros = [
-      { label: "Protein", value: recipe?.data?.protein || "N/A" },
-      { label: "Fat", value: recipe?.data?.fat || "N/A" },
-      { label: "Carbs", value: recipe?.data?.carbs || "N/A" },
+      { label: "Protein", value: recipe?.data?.proteins || "N/A" },
+      { label: "Fat", value: recipe?.data?.fats || "N/A" },
+      { label: "Carbs", value: recipe?.data?.carbohydrates || "N/A" },
       { label: "Serving", value: recipe?.data?.servings || "N/A" },
     ];
 
@@ -130,10 +158,38 @@ const RecipePage = () => {
           <div className="relative flex justify-between items-center pb-2.5">
             <div>
               <h2 className={TEXT_STYLES.title}>{recipe.data.title}</h2>
-              {/* temp */}
-              <h2 className={TEXT_STYLES.calories}>440+ Reviewers</h2>
+              <div className="flex items-center">
+                {averageRating !== null ? (
+                  <>
+                    <div className="flex">
+                      {Array.from({ length: 5 }, (_, i) => {
+                        const ratingValue = i + 1;
+                        if (averageRating >= ratingValue) {
+                          return <FaStar key={i} className="text-yellow-400" />;
+                        } else if (averageRating >= ratingValue - 0.5) {
+                          return (
+                            <FaStarHalfAlt
+                              key={i}
+                              className="text-yellow-400"
+                            />
+                          );
+                        } else {
+                          return (
+                            <FaRegStar key={i} className="text-yellow-400" />
+                          );
+                        }
+                      })}
+                    </div>
+                    <span className="ml-2">
+                      ({averageRating.toFixed(1)}) {reviewCount} reviews
+                    </span>
+                  </>
+                ) : (
+                  <span>No reviews yet</span>
+                )}
+              </div>
             </div>
-            <button
+            {/* <button
               className="hover:scale-110 transition-transform duration-200"
               onClick={handleFavoriteClick}
             >
@@ -142,7 +198,7 @@ const RecipePage = () => {
               ) : (
                 <FaRegHeart className="text-gray-500 text-2xl" />
               )}
-            </button>
+            </button> */}
           </div>
           <p className={TEXT_STYLES.description}>{recipe.data.description}</p>
 

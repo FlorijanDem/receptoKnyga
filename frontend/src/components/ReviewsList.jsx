@@ -47,7 +47,6 @@ const ReviewsList = () => {
         console.log(error);
       }
     };
-    fetchReviews();
 
     const fetchStats = async () => {
       try {
@@ -59,7 +58,10 @@ const ReviewsList = () => {
         console.log(err);
       }
     };
-    fetchStats();
+    if (user?.role === "admin") {
+      fetchStats();
+      fetchReviews();
+    }
   }, [adminFilters, filter, refresh]);
 
   return (
