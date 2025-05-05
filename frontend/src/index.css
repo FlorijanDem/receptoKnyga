@@ -17,8 +17,20 @@ body {
   @apply font-jakarta text-[var(--color-recipe-third)];
 }
 
+.guest-layout-container {
+  @apply min-h-[100dvh] grid grid-cols-1 grid-rows-[1fr_max-content];
+}
+
+.layout-container {
+  @apply min-h-[100dvh] grid grid-cols-1 grid-rows-[max-content_1fr_max-content];
+}
+
 main {
   @apply bg-[var(--color-recipe-sixth)];
+}
+
+footer {
+  @apply py-4 mx-auto;
 }
 
 .recipes-list-container {
