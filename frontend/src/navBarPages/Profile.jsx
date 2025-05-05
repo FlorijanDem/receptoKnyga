@@ -6,11 +6,16 @@ const Profile = () => {
   const [setError] = useState(null);
   return (
     <>
-      <CharacteristicsForm />
-      <LogoutButton setError={setError} />
-      <div className="w-full max-w-[800px] h-[400px] mx-auto">
-        <WeightChart />
+
+      <div className="flex flex-col md:flex-row w-full max-w-[1200px] mx-auto gap-4 mt-4">
+        <div className="md:w-1/2">
+          <CharacteristicsForm />
+        </div>
+        <div className="md:w-1/2 h-[400px]">
+          <WeightChart />
+        </div>
       </div>
+      <LogoutButton setError={setError} />
     </>
   );
 };

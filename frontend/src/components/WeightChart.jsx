@@ -111,7 +111,8 @@ const WeightChart = () => {
 
   // Jei duomenys sėkmingai užkrauti, rodome grafiką
   return (
-    <ResponsiveContainer width="100%" height="100%">
+    <>
+    <ResponsiveContainer width="100%" height="100%" className="p-6 bg-[var(--color-recipe-fifth)] rounded-lg shadow-md">
       <LineChart
         width={500} // Grafiko plotis
         height={300} // Grafiko aukštis
@@ -142,6 +143,7 @@ const WeightChart = () => {
         />
       </LineChart>
     </ResponsiveContainer>
+    </>
   );
 };
 
