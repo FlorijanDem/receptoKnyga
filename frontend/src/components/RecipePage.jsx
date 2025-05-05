@@ -142,12 +142,12 @@ const RecipePage = () => {
                   <img
                     src={recipe.data.photo || null}
                     alt={recipe.data.title}
-                    className="w-full h-full object-cover rounded-lg mb-2.5 lg:mb-0"
+                    className="w-full max-h-[30rem] object-cover rounded-lg mb-2.5 lg:mb-0"
                   />
                 </div>
 
                 {/* Details Section */}
-                <div className="lg:flex-1 bg-recipe-fifth px-5 pt-5 rounded-lg flex flex-col">
+                <div className="lg:flex-1 bg-recipe-fifth px-5 pt-5 rounded-lg flex flex-col pb-5">
                   <div className="relative flex justify-between items-center pb-2.5">
                     <div>
                       <h2 className={TEXT_STYLES.title}>{recipe.data.title}</h2>
