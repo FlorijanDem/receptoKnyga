@@ -236,6 +236,25 @@ const RecipePage = () => {
                   </button>
                 </div>
 
+                {recipe.data.products.length > 0 && (
+                  <div className="lg:flex-1 bg-gray-100 px-5 py-5 rounded-lg">
+                    <h3 className="text-xl font-semibold mb-2">Ingredients</h3>
+                    <ul className="w-full">
+                      {recipe?.data?.products.map((ingredient) => (
+                        <li
+                          key={ingredient.title}
+                          className="flex items-center"
+                        >
+                          {ingredient.title}{" "}
+                          <span className="ml-auto  ">
+                            {ingredient.amount} g
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
                 {/* Instructions Side */}
                 <div className="lg:flex-1 bg-gray-100 px-5 py-5 rounded-lg">
                   <h3 className="text-xl font-semibold mb-2">Instructions</h3>
