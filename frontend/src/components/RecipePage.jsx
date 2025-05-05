@@ -129,117 +129,135 @@ const RecipePage = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="px-3 md:px-5 pt-5">
-      <div className="lg:flex lg:gap-x-8">
-        {!showMethod ? (
-          <>
-            {/* Image Section */}
-            <div className="lg:flex-1">
-              <img
-                src={recipe.data.photo || null}
-                alt={recipe.data.title}
-                className="w-full h-full object-cover rounded-lg mb-2.5 lg:mb-0"
-              />
-            </div>
-
-            {/* Details Section */}
-            <div className="lg:flex-1 bg-recipe-fifth px-5 pt-5 rounded-lg flex flex-col">
-              <div className="relative flex justify-between items-center pb-2.5">
-                <div>
-                  <h2 className={TEXT_STYLES.title}>{recipe.data.title}</h2>
-                  <div className="flex items-center">
-                    {averageRating !== null ? (
-                      <>
-                        <div className="flex">
-                          {Array.from({ length: 5 }, (_, i) => {
-                            const ratingValue = i + 1;
-                            if (averageRating >= ratingValue) {
-                              return (
-                                <FaStar key={i} className="text-yellow-400" />
-                              );
-                            } else if (averageRating >= ratingValue - 0.5) {
-                              return (
-                                <FaStarHalfAlt
-                                  key={i}
-                                  className="text-yellow-400"
-                                />
-                              );
-                            } else {
-                              return (
-                                <FaRegStar
-                                  key={i}
-                                  className="text-yellow-400"
-                                />
-                              );
-                            }
-                          })}
-                        </div>
-                        <span className="ml-2">
-                          ({averageRating.toFixed(1)}) {reviewCount} reviews
-                        </span>
-                      </>
-                    ) : (
-                      <span>No reviews yet</span>
-                    )}
-                  </div>
+    <>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="px-3 md:px-5 pt-5">
+          <div className="lg:flex lg:gap-x-8">
+            {!showMethod ? (
+              <>
+                {/* Image Section */}
+                <div className="lg:flex-1">
+                  <img
+                    src={recipe.data.photo || null}
+                    alt={recipe.data.title}
+                    className="w-full h-full object-cover rounded-lg mb-2.5 lg:mb-0"
+                  />
                 </div>
-              </div>
-              <p className={TEXT_STYLES.description}>
-                {recipe.data.description}
-              </p>
 
-              <div className="flex-1">
-                <NutritionGrid />
-                <div className="pb-5 flex justify-between items-center">
+                {/* Details Section */}
+                <div className="lg:flex-1 bg-recipe-fifth px-5 pt-5 rounded-lg flex flex-col">
+                  <div className="relative flex justify-between items-center pb-2.5">
+                    <div>
+                      <h2 className={TEXT_STYLES.title}>{recipe.data.title}</h2>
+                      <div className="flex items-center">
+                        {averageRating !== null ? (
+                          <>
+                            <div className="flex">
+                              {Array.from({ length: 5 }, (_, i) => {
+                                const ratingValue = i + 1;
+                                if (averageRating >= ratingValue) {
+                                  return (
+                                    <FaStar
+                                      key={i}
+                                      className="text-yellow-400"
+                                    />
+                                  );
+                                } else if (averageRating >= ratingValue - 0.5) {
+                                  return (
+                                    <FaStarHalfAlt
+                                      key={i}
+                                      className="text-yellow-400"
+                                    />
+                                  );
+                                } else {
+                                  return (
+                                    <FaRegStar
+                                      key={i}
+                                      className="text-yellow-400"
+                                    />
+                                  );
+                                }
+                              })}
+                            </div>
+                            <span className="ml-2">
+                              ({averageRating.toFixed(1)}) {reviewCount} reviews
+                            </span>
+                          </>
+                        ) : (
+                          <span>No reviews yet</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <p className={TEXT_STYLES.description}>
+                    {recipe.data.description}
+                  </p>
+
+                  <div className="flex-1">
+                    <NutritionGrid />
+                    <div className="pb-5 flex justify-between items-center">
+                      <p className={TEXT_STYLES.calories}>
+                        {recipe.data.calories} Cals
+                      </p>
+                      <button
+                        className={`${TEXT_STYLES.button} px-6 py-4 2xl:px-8 2xl:py-6 rounded`}
+                        onClick={() => setShowMethod(true)}
+                      >
+                        Instructions
+                      </button>
+                    </div>
+                  </div>
+                  <RecipePageControls
+                    recipe={recipe.data}
+                    setRecipe={setRecipe}
+                    setRefresh={setRefresh}
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                {/* Description Side */}
+                <div className="lg:flex-1 bg-recipe-fifth px-5 pt-5 rounded-lg flex flex-col">
+                  <h2 className={TEXT_STYLES.title}>{recipe.data.title}</h2>
+                  <p className={TEXT_STYLES.description}>
+                    {recipe.data.description}
+                  </p>
+                  <NutritionGrid />
                   <p className={TEXT_STYLES.calories}>
                     {recipe.data.calories} Cals
                   </p>
                   <button
-                    className={`${TEXT_STYLES.button} px-6 py-4 2xl:px-8 2xl:py-6 rounded`}
-                    onClick={() => setShowMethod(true)}
+                    className={`${TEXT_STYLES.button} mt-4`}
+                    onClick={() => setShowMethod(false)}
                   >
-                    Instructions
+                    Back
                   </button>
                 </div>
-              </div>
-            </div>
-          </>
-        ) : (
-          <>
-            {/* Description Side */}
-            <div className="lg:flex-1 bg-recipe-fifth px-5 pt-5 rounded-lg flex flex-col">
-              <h2 className={TEXT_STYLES.title}>{recipe.data.title}</h2>
-              <p className={TEXT_STYLES.description}>
-                {recipe.data.description}
-              </p>
-              <NutritionGrid />
-              <p className={TEXT_STYLES.calories}>
-                {recipe.data.calories} Cals
-              </p>
-              <button
-                className={`${TEXT_STYLES.button} mt-4`}
-                onClick={() => setShowMethod(false)}
-              >
-                Back
-              </button>
-            </div>
 
-            {/* Instructions Side */}
-            <div className="lg:flex-1 bg-gray-100 px-5 py-5 rounded-lg">
-              <h3 className="text-xl font-semibold mb-2">Instructions</h3>
-              <p className={TEXT_STYLES.method}>{recipe.data.method}</p>
-            </div>
-          </>
-        )}
-      </div>
+                {/* Instructions Side */}
+                <div className="lg:flex-1 bg-gray-100 px-5 py-5 rounded-lg">
+                  <h3 className="text-xl font-semibold mb-2">Instructions</h3>
+                  <p className={TEXT_STYLES.method}>{recipe.data.method}</p>
+                </div>
+              </>
+            )}
+          </div>
 
-      <button className={`${TEXT_STYLES.button} my-2`} onClick={backToList}>
-        Back to recipe list
-      </button>
+          <button className={`${TEXT_STYLES.button} my-2`} onClick={backToList}>
+            Back to recipe list
+          </button>
 
-      <RecipeReviews refresh={refresh} />
-      <WriteReview recipe_id={id} setRefresh={setRefresh} isLoggedIn={true} />
-    </div>
+          <RecipeReviews refresh={refresh} />
+          <WriteReview
+            recipe_id={id}
+            setRefresh={setRefresh}
+            isLoggedIn={true}
+          />
+        </div>
+      )}
+    </>
   );
 };
 
