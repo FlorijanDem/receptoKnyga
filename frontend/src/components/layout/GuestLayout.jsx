@@ -6,7 +6,7 @@ import { Routes, Route } from "react-router";
 import ForgotPassword from "../ForgotPassword";
 function GuestLayout() {
   return (
-    <>
+    <div className="guest-layout-container">
       <main>
         <Routes>
           <Route path="/" element={<WelcomePage />} />
@@ -16,7 +16,7 @@ function GuestLayout() {
         </Routes>
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
 export default GuestLayout;

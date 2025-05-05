@@ -12,12 +12,12 @@ import AddRecipe from "../AddRecipe";
 import Dashboard from "../../navBarPages/Dashboard";
 import UsersList from "../UsersList";
 import ReviewsList from "../ReviewsList";
-import AdminLog from "../AdminActivityLogs"; 
+import AdminLog from "../AdminActivityLogs";
 import UserRecipesList from "../UserRecipesList";
 
 function Layout() {
   return (
-    <>
+    <div className="layout-container">
       <SearchProvider>
         <Nav />
         <main>
@@ -40,7 +40,7 @@ function Layout() {
         </main>
       </SearchProvider>
       <Footer />
-    </>
+    </div>
   );
 }
 export default Layout;

@@ -27,8 +27,8 @@ const ReviewCard = ({ review, setRefresh }) => {
         </p>
       </div>
 
-      <div className="flex justify-between">
-        <p className="text-[var(--color-recipe-third)] pl-1">
+      <div className="flex justify-between gap-2">
+        <p className="text-[var(--color-recipe-third)] pl-1 break-all">
           {currentReview.review_text}
         </p>
         <p className="flex">

@@ -1,0 +1,6 @@
+
+1st card component
+2nd recomended recipes
+change the way pagination functions on the site
+
+3rd change the focus recipe 

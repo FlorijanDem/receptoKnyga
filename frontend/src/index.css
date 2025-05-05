@@ -10,22 +10,31 @@
   --color-recipe-sixth: #f6f7f9;
   --color-recipe-seventh: #94a7cb;
   --color-bookmark-bg: #40404099;
+  --color-recipe-eighth: #596780;
 }
 
 body {
   @apply font-jakarta text-[var(--color-recipe-third)];
 }
 
+.guest-layout-container {
+  @apply min-h-[100dvh] grid grid-cols-1 grid-rows-[1fr_max-content];
+}
+
+.layout-container {
+  @apply min-h-[100dvh] grid grid-cols-1 grid-rows-[max-content_1fr_max-content];
+}
+
 main {
-  @apply bg-[var(--color-recipe-sixth)];
+  @apply bg-[var(--color-recipe-sixth)] pb-4;
+}
+
+footer {
+  @apply py-4 mx-auto;
 }
 
 .recipes-list-container {
-  @apply py-10 w-max mx-auto;
-
-  h1 {
-    @apply text-center text-3xl mb-6;
-  }
+  @apply py-10 mx-[10px] md:mx-[68px] xl:mx-[56px];
 }
 
 button {
@@ -39,13 +48,13 @@ button {
 }
 
 .recipe-preview-card {
-  @apply w-[300px] text-[var(--color-recipe-secondary)] rounded-lg bg-[var(--color-recipe-fifth)] overflow-hidden;
+  @apply min-w-[18.75rem] md:min-w-[18.75rem] lg:min-w-[18.75rem] xl:min-w-[18.75rem] 2xl:min-w-[18.75rem]  text-[var(--color-recipe-secondary)] rounded-lg bg-[var(--color-recipe-fifth)] overflow-hidden;
 
   .recipe-preview-card__image-container {
-    @apply w-full h-[200px];
+    @apply w-full min-w-[300px];
 
     .recipe-preview-card__image {
-      @apply object-cover w-full;
+      @apply object-cover  min-h-[200px];
     }
   }
 
