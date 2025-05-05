@@ -19,7 +19,6 @@ const MENU_ITEMS = {
   ],
   preferences: [
     { to: "/profile", icon: profileIcon, text: "Profile" },
-    { to: "#", icon: briefcaseIcon, text: "Dark Mode" },
   ],
 };
 
