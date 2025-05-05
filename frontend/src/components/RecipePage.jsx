@@ -138,7 +138,7 @@ const RecipePage = () => {
               <img
                 src={recipe.data.photo || null}
                 alt={recipe.data.title}
-                className="w-full h-full object-cover rounded-lg mb-2.5 lg:mb-0"
+                className="w-full max-h-[30rem] object-cover rounded-lg mb-2.5 lg:mb-0"
               />
             </div>
 
