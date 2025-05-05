@@ -26,7 +26,7 @@ body {
 }
 
 main {
-  @apply bg-[var(--color-recipe-sixth)];
+  @apply bg-[var(--color-recipe-sixth)] pb-4;
 }
 
 footer {
