@@ -114,14 +114,28 @@ exports.getRecipesByUserIdHandler = async (req, res, next) => {
     const userId = req.user?.id;
     const recipes = await getRecipesByUserId(userId);
 
+    // Surenkame visų receptų ID į masyvą
+    const ids = recipes.map((recipe) => recipe.id);
+
+    // Gauname visų receptų makroelementus viena užklausa
+    const macrosList = await getAllMacros(ids);
+    // Sudarome žemėlapį pagal recipe_id
+    const macrosMap = new Map(macrosList.map((m) => [m.recipe_id, m]));
+
+    // Susiejame makroelementus su receptais
+    const result = recipes.map((recipe) => ({
+      ...recipe,
+      calories: macrosMap.get(recipe.id)?.calories || 0,
+    }));
+
     res.status(200).json({
       status: "success",
-      data: recipes,
+      data: result,
     });
   } catch (error) {
     next(error);
   }
-}
+};
 
 exports.createRecipeHandler = async (req, res, next) => {
   // Add default image (in the future can be change)
