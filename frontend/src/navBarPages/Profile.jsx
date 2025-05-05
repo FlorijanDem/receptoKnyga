@@ -7,7 +7,7 @@ const Profile = () => {
   return (
     <>
 
-      <div className="flex flex-col md:flex-row w-full max-w-[1200px] mx-auto gap-4">
+      <div className="flex flex-col md:flex-row w-full max-w-[1200px] mx-auto gap-4 mt-4">
         <div className="md:w-1/2">
           <CharacteristicsForm />
         </div>
