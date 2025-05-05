@@ -59,8 +59,8 @@ const ReviewsList = () => {
       }
     };
     if (user?.role === "admin") {
-      fetchStats();
       fetchReviews();
+      fetchStats();
     }
   }, [adminFilters, filter, refresh]);
 
