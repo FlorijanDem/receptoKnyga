@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 const ListPagination = ({ filter, setFilter, count }) => {
-  const totalPages = Math.ceil(count / filter.limit);
+  const totalPages = Math.floor(count / filter.limit) + 1;
 
   const goToPage = (page) => setFilter((prev) => ({ ...prev, page }));
   const goFirst = () => goToPage(1);
